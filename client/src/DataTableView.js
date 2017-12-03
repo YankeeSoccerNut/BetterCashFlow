@@ -29,7 +29,7 @@ class DataTableView extends Component {
 		<BootstrapTable data={this.props.transactions}
 	    selectRow={ selectRow }
             remote={ this.remote }
-            insertRow deleteRow search pagination
+            insertRow={true} deleteRow search
             cellEdit={ cellEditProp }
 	    options={ {
                 onCellEdit: this.props.onCellEdit,

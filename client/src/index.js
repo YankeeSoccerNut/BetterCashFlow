@@ -26,9 +26,6 @@ const _app = ({
 	return (
 	    <div>
 	      <div>
-		<img src="https://www.planwallpaper.com/static/images/9-credit-1.jpg" height="42" width="42"/>
-	      </div>
-	      <div>
 		<DataChartView seriesStruct={seriesStruct} />		
 	      </div>
 	      <div>
