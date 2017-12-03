@@ -1,104 +1,75 @@
 import React, {Component} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import {typeTypes, accountNameTypes, payeeTypes} from './data.mock';
 
-const transactions = [];
+var GLOBAL_DATA;
+var GLOBAL_DATA_CALLBACK;
 
-const typeTypes = ['Expense', 'Income'];
-const accountNameTypes = ['VISAB2B', 'USBANK'];
-const payeeTypes = [
-  'MyLandlord',
-  'MyElectricity',
-  'MyWater',
-  'MyCleaning',
-  'MyPayroll',
-  '+NewPayee'
-];
 //TODO: add new payee
-function addTransactions(quantity) {
-  const startId = transactions.length;
-  for (let i = 1; i < quantity; i++) {
-    const id = startId + i;
-    var type = typeTypes[0];
-    if (id % 2) {
-      type = typeTypes[1];
-    }
-    var accountName = accountNameTypes[0];
-    if (id % 3) {
-      accountName = accountNameTypes[1]
-    }
-    var day = Math.floor(i) % 30;
-    if (day < 10) {
-      day = '0' + day;
-    }
-    const date = '2017-12-' + day;
 
-    // const date = '12/' + Math.floor(i) + '/2017';
-    transactions.push({
-      id: id,
-      type: type,
-      accountName: accountName,
-      payee: payeeTypes[i % payeeTypes.length],
-      scheduledDate: date,
-      dueDate: date,
-      amount: i * 100
-    });
-  }
+function onAfterInsertRow(row) {
+    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
+}
+function onAfterDeleteRow(rowKeys) {
+    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
+}
+function afterSaveCell(row, cellName, cellValue) {
+    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
 }
 
-addTransactions(30);
-
-const options = {};
+const options = {
+    afterInsertRow: onAfterInsertRow,   // A hook for after insert rows
+    afterDeleteRow: onAfterDeleteRow  // A hook for after droping rows.
+};
 
 const cellEditProp = {
-  mode: 'click',
-  blurToSave: true
-
+    mode: 'click',
+    blurToSave: true,
+    afterSaveCell: afterSaveCell
 };
 // If you want to enable deleteRow, you must enable row selection also.
 const selectRowProp = {
-  mode: 'checkbox'
+    mode: 'checkbox'
 };
 
 class DataTableView extends Component {
-  constructor(props) {
-    super(props);
-    this.formatType = this.formatType.bind(this);
-  }
-  formatType(cell) {
-    return `TYPE_${cell}`;
-  }
+    constructor(props) {
+	super(props);
+	GLOBAL_DATA = props.transactions;
+	GLOBAL_DATA_CALLBACK = props.onDataChanged;
+    }
 
-  render() {
-    return (<BootstrapTable data={transactions} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
-      <TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
-      <TableHeaderColumn dataField='type' hidden={true} editable={{
-          type: 'select',
-          options: {
-            values: typeTypes
-          }
-        }}>Type</TableHeaderColumn>
-      <TableHeaderColumn dataField='dueDate' editable={{
-          type: 'date'
-        }}>Due Date</TableHeaderColumn>
-      <TableHeaderColumn dataField='accountName' editable={{
-          type: 'select',
-          options: {
-            values: accountNameTypes
-          }
-        }}>Source</TableHeaderColumn>
-      <TableHeaderColumn dataField='payee' editable={{
-          type: 'select',
-          options: {
-            values: payeeTypes
-          }
-        }}>Payee</TableHeaderColumn>
-      <TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
+    render() {
+	return (<BootstrapTable data={GLOBAL_DATA} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
+		<TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
+		<TableHeaderColumn dataField='type' hidden={true} editable={{
+		    type: 'select',
+		    options: {
+			values: typeTypes
+		    }
+		}}>Type</TableHeaderColumn>
+		<TableHeaderColumn dataField='dueDate' editable={{
+		    type: 'date'
+		}}>Due Date</TableHeaderColumn>
+		<TableHeaderColumn dataField='accountName' editable={{
+		    type: 'select',
+		    options: {
+			values: accountNameTypes
+		    }
+		}}>Source</TableHeaderColumn>
+		<TableHeaderColumn dataField='payee' editable={{
+		    type: 'select',
+		    options: {
+			values: payeeTypes
+		    }
+		}}>Payee</TableHeaderColumn>
+		<TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
 
-      <TableHeaderColumn dataField='scheduledDate' editable={{
-          type: 'date'
-        }}>Scheduled Date</TableHeaderColumn>
-    </BootstrapTable>);
-  }
+		<TableHeaderColumn dataField='scheduledDate' editable={{
+		    type: 'date'
+		}}>Scheduled Date</TableHeaderColumn>
+		</BootstrapTable>);
+    }
 }
 
 export default DataTableView;

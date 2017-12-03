@@ -10,6 +10,7 @@ const payeeTypes = [
 ];
 
 function addTransactions(quantity) {
+    const transactions = [];
     const startId = transactions.length;
     for (let i = 1; i < quantity; i++) {
 	const id = startId + i;
@@ -32,16 +33,17 @@ function addTransactions(quantity) {
 	    id: id,
 	    type: type,
 	    accountName: accountName,
-	    payee: payeeTypes[i % payeeTypes.length],
+	    payee: payeeTypes[i % (payeeTypes.length - 1)],
 	    scheduledDate: date,
 	    dueDate: date,
 	    amount: i * 100
 	});
     }
+    return transactions;
 }
 
 function getTransactions() {
     return addTransactions(30);
 }
 
-export {generateReducer, newState, applyName};
+export {getTransactions, typeTypes, accountNameTypes, payeeTypes};
