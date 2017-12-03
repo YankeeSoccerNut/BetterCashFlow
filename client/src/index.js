@@ -26,6 +26,9 @@ const _app = ({
 	return (
 	    <div>
 	      <div>
+		<img src="https://www.planwallpaper.com/static/images/9-credit-1.jpg" height="42" width="42"/>
+	      </div>
+	      <div>
 		<DataChartView seriesStruct={seriesStruct} />		
 	      </div>
 	      <div>
@@ -52,8 +55,10 @@ const App = connect((state) => ({
     seriesStruct: state[AppRedux.Name].seriesStruct
 }), (dispatch) => ({
     onCellEdit: (row, fieldName, value) => dispatch(AppRedux.Action.onCellEdit({row, fieldName, value})),
-    onDeleteRow: (row) => dispatch(AppRedux.Action.onDeleteRow({row})),
-    onAddRow: (row) => dispatch(AppRedux.Action.onAddRow({row}))
+    onDeleteRow: (row) => {
+	return dispatch(AppRedux.Action.onDeleteRow(row));
+    },
+    onAddRow: (row) => dispatch(AppRedux.Action.onAddRow(row))
 }))(_app);
 
 ///////////fire it up

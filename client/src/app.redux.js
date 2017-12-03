@@ -47,6 +47,15 @@ const Reducer = generateReducer(
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});
+	},
+	[AT.ONDELETEROW] : (state, action) => {
+	    console.log(action.payload);
+	    state.transactions = state.transactions.filter((tran) => {
+		return tran.id !== action.payload[0];
+	    })
+	    return newState(state,
+			    {transactions: state.transactions,
+			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});
 	}
 	// (
 	//     newState(state,
