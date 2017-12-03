@@ -28,6 +28,9 @@ const CURRENT_DATE = new Date();
 CURRENT_DATE.setHours(0, 0, 0, 0);
 
 
+function sortTrans(trans) {
+    trans.sort((a, b) => (createDate(a.scheduleDate) - createDate(b.sheduleDate)))
+}
 ///////////reducers and inital state
 const Reducer = generateReducer(
     {
@@ -44,6 +47,7 @@ const Reducer = generateReducer(
 		targetRow[action.payload.fieldName] = parseInt(action.payload.value);
 		state.transactions[rowIdx] = targetRow;
 	    }
+	    sortTrans(state.transactions)
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});
@@ -53,6 +57,7 @@ const Reducer = generateReducer(
 	    state.transactions = state.transactions.filter((tran) => {
 		return tran.id !== action.payload[0];
 	    })
+	    sortTrans(state.transactions)
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});
@@ -62,6 +67,7 @@ const Reducer = generateReducer(
       const row = action.payload;
       row.amount = parseInt(row.amount)
 	    state.transactions.push(row)
+	    sortTrans(state.transactions)	    
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});

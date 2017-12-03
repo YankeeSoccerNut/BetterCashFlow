@@ -3,6 +3,8 @@ const typeTypes = ['Expense', 'Income'];
 const accountNameTypes = ['USBANK', 'VISAB2B'];
 const payeeTypes = [
     'MyLandlord',
+    'MyContrator',
+    'MySupplier',
     'MyElectricity',
     'MyWater',
     'MyCleaning',
