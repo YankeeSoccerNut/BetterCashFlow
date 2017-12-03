@@ -18,14 +18,11 @@ function addProducts(quantity) {
 
 addProducts(5);
 
-function onAfterDeleteRow(rowKeys, rows) {
-  alert('The rowkey you drop: ' + rowKeys);
-}
+const options = {};
 
-const options = {
-  afterDeleteRow: onAfterDeleteRow  // A hook for after droping rows.
+const cellEditProp = {
+  mode: 'dbclick'
 };
-
 // If you want to enable deleteRow, you must enable row selection also.
 const selectRowProp = {
   mode: 'checkbox'
@@ -34,7 +31,7 @@ const selectRowProp = {
 class DataTable extends Component {
   render() {
     return (
-      <BootstrapTable data={ products } deleteRow={ true } selectRow={ selectRowProp } options={ options }>
+      <BootstrapTable data={ products } deleteRow={ true } selectRow={ selectRowProp } cellEdit={ cellEditProp } insertRow={true} options={ options }>
           <TableHeaderColumn dataField='id' isKey={ true }>Product ID</TableHeaderColumn>
           <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
           <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
