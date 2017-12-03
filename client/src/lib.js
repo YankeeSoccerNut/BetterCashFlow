@@ -43,7 +43,11 @@ function getDates(startDate, days) {
 }
 
 function formatDate(date) {
-    return date.getYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    var day = date.getDate();
+    if (day < 10) {
+	day = '0' + day;
+    }
+    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + day;
 }
 
 function getBalanceSeriesStruct(transactions, balance, currentDate) {
@@ -53,12 +57,16 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
     var min = 0;
     var max = 0;
     _.forEach(getDates(currentDate, 90), function(date) {
-	while(i < transactions.length && date > new Date(transactions[i].scheduledDate)) {
+	const targetDate = new Date(transactions[i].scheduledDate);
+	targetDate.setHours(0, 0, 0, 0);
+	date.setHours(0, 0, 0, 0);
+	while(i < transactions.length - 1 && date > targetDate) {
 	    i = i + 1;
 	}
 	if (i < transactions.length) {
 	    const tran = transactions[i];
-	    if (date == new Date(tran.scheduledDate)) {
+	    console.log(formatDate(date)+tran.scheduledDate);
+	    if (formatDate(date) == tran.scheduledDate) {
 		var balanceIndex = 0;
 		if (tran.accountName == accountNameTypes[1]) {
 		    balanceIndex = 1;
