@@ -11,8 +11,8 @@ import {
 } from "react-timeseries-charts";
 
 const style = styler([
-    { key: accountNameTypes[0], color: "#A5C8E1" , selected: "#2CB1CF"},
-    { key: accountNameTypes[1], color: "#FFCC9E", selected: "#2CB1CF"  }
+    { key: accountNameTypes[0], color: "blue"},
+    { key: accountNameTypes[1], color: "red"}
 ]);
 
 class DataChartView extends Component {
