@@ -19,7 +19,7 @@ const AT = applyName(Name, {
 const Action = {
     onCellEdit: (payload) => ({type: AT.ONCELLEDIT, payload: payload}),
     onDeleteRow: (payload) => ({type: AT.ONDELETEROW, payload: payload}),
-    onAddRow: (payload) => ({type: AT.ONADDROW, payload: payload})    
+    onAddRow: (payload) => ({type: AT.ONADDROW, payload: payload})
 };
 
 const initTransactions = getTransactions();
@@ -59,7 +59,9 @@ const Reducer = generateReducer(
 	},
 	[AT.ONADDROW] : (state, action) => {
 	    console.log(action.payload);
-	    state.transactions.push(action.payload)
+      const row = action.payload;
+      row.amount = parseInt(row.amount)
+	    state.transactions.push(row)
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});
