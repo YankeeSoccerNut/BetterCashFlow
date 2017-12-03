@@ -1,21 +1,35 @@
 import React, {Component} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
-const products = [];
+const transactions = [];
 
-function addProducts(quantity) {
-  const startId = products.length;
-  for (let i = 0; i < quantity; i++) {
+const typeTypes = [ 'Expense', 'Income' ];
+const accountNameTypes = ['VISAB2B', 'USBANK'];
+function addTransactions(quantity) {
+  const startId = transactions.length;
+  for (let i = 1; i < quantity; i++) {
     const id = startId + i;
-    products.push({
+    var type = typeTypes[0];
+    if(id % 2) {
+      type = typeTypes[1];
+    }
+    var accountName = accountNameTypes[0];
+    if (id % 3) {
+      accountName = accountNameTypes[1]
+    }
+    const date = '2017' + '-12-' + Math.floor(i);
+    transactions.push({
       id: id,
-      name: 'Item name ' + id,
-      price: 2100 + i
+      type: type,
+      accountName: accountName,
+      scheduledDate: date,
+      dueDate: date,
+      amount: i * 100
     });
   }
 }
 
-addProducts(5);
+addTransactions(50);
 
 const options = {};
 
@@ -29,10 +43,13 @@ const selectRowProp = {
 
 class DataTable extends Component {
   render() {
-    return (<BootstrapTable data={products} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
+    return (<BootstrapTable data={transactions} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
       <TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
-      <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
-      <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
+      <TableHeaderColumn dataField='type'>Type</TableHeaderColumn>
+      <TableHeaderColumn dataField='accountName'>Account Name</TableHeaderColumn>
+      <TableHeaderColumn dataField='scheduledDate'>Scheduled Date</TableHeaderColumn>
+      <TableHeaderColumn dataField='dueDate'>Due Date</TableHeaderColumn>
+      <TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
     </BootstrapTable>);
   }
 }
