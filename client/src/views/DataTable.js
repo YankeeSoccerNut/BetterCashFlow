@@ -5,6 +5,15 @@ const transactions = [];
 
 const typeTypes = ['Expense', 'Income'];
 const accountNameTypes = ['VISAB2B', 'USBANK'];
+const payeeTypes = [
+  'MyLandlord',
+  'MyElectricity',
+  'MyWater',
+  'MyCleaning',
+  'MyPayroll',
+  '+NewPayee'
+];
+//TODO: add new payee
 function addTransactions(quantity) {
   const startId = transactions.length;
   for (let i = 1; i < quantity; i++) {
@@ -28,6 +37,7 @@ function addTransactions(quantity) {
       id: id,
       type: type,
       accountName: accountName,
+      payee: payeeTypes[i % payeeTypes.length],
       scheduledDate: date,
       dueDate: date,
       amount: i * 100
@@ -61,25 +71,32 @@ class DataTable extends Component {
   render() {
     return (<BootstrapTable data={transactions} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
       <TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
-      <TableHeaderColumn dataField='type' editable={{
+      <TableHeaderColumn dataField='type' hidden={true} editable={{
           type: 'select',
           options: {
             values: typeTypes
           }
         }}>Type</TableHeaderColumn>
+      <TableHeaderColumn dataField='dueDate' editable={{
+          type: 'date'
+        }}>Due Date</TableHeaderColumn>
       <TableHeaderColumn dataField='accountName' editable={{
           type: 'select',
           options: {
             values: accountNameTypes
           }
-        }}>Account Name</TableHeaderColumn>
+        }}>Source</TableHeaderColumn>
+      <TableHeaderColumn dataField='payee' editable={{
+          type: 'select',
+          options: {
+            values: payeeTypes
+          }
+        }}>Payee</TableHeaderColumn>
+      <TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
+
       <TableHeaderColumn dataField='scheduledDate' editable={{
           type: 'date'
         }}>Scheduled Date</TableHeaderColumn>
-      <TableHeaderColumn dataField='dueDate' editable={{
-          type: 'date'
-        }}>Due Date</TableHeaderColumn>
-      <TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
     </BootstrapTable>);
   }
 }
