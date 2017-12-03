@@ -30,14 +30,14 @@ Date.prototype.addDays = function(days) {
     return date;
 };
 
-function date() {
+function dateToday() {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
     return d;
 }
 
 function getDates(startDate, days) {
-    var stopDate = date();
+    var stopDate = dateToday();
     stopDate.setDate(startDate.getDate() + days);
     var dateArray = new Array();
     var currentDate = startDate;
@@ -118,5 +118,5 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
     };
 }
 
-export {generateReducer, newState, applyName, getBalanceSeriesStruct, formatDate, createDate};
+export {generateReducer, newState, applyName, getBalanceSeriesStruct, formatDate, createDate, dateToday};
 

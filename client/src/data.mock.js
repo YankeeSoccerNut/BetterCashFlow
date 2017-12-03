@@ -1,3 +1,4 @@
+import {dateToday, createDate} from './lib'
 const typeTypes = ['Expense', 'Income'];
 const accountNameTypes = ['USBANK', 'VISAB2B'];
 const payeeTypes = [
@@ -29,15 +30,17 @@ function addTransactions(quantity) {
 	const date = '2017-12-' + day;
 
 	// const date = '12/' + Math.floor(i) + '/2017';
-	transactions.push({
-	    id: id,
-	    type: type,
-	    accountName: accountName,
-	    payee: payeeTypes[i % (payeeTypes.length - 1)],
-	    scheduledDate: date,
-	    dueDate: date,
-	    amount: i * 100
-	});
+	if (createDate(date) >= dateToday()) {
+	    transactions.push({
+		id: id,
+		type: type,
+		accountName: accountName,
+		payee: payeeTypes[i % (payeeTypes.length - 1)],
+		scheduledDate: date,
+		dueDate: date,
+		amount: i * 100
+	    });
+	}
     }
     return transactions;
 }
