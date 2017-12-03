@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 const products = [];
 
@@ -30,13 +29,11 @@ const selectRowProp = {
 
 class DataTable extends Component {
   render() {
-    return (
-      <BootstrapTable data={ products } deleteRow={ true } selectRow={ selectRowProp } cellEdit={ cellEditProp } insertRow={true} options={ options }>
-          <TableHeaderColumn dataField='id' isKey={ true }>Product ID</TableHeaderColumn>
-          <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
-          <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
-      </BootstrapTable>
-    );
+    return (<BootstrapTable data={products} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
+      <TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
+      <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
+      <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
+    </BootstrapTable>);
   }
 }
 
