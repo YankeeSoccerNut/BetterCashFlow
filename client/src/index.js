@@ -13,7 +13,9 @@ const LOG_REDUX = false;
 ////////////components
 
 const _app = ({
-    onTransactionsUpdated,
+    onCellEdit,
+    onDeleteRow,
+    onAddRow,
     transactions,
     currentView,
     seriesStruct
@@ -24,18 +26,20 @@ const _app = ({
 	return (
 	    <div>
 	      <div>
-	      <DataChartView seriesStruct={seriesStruct} />		
-	    </div>
-	    <div>
-	      <DataTableView transactions={transactions} onDataChanged={onTransactionsUpdated} />
-	    </div>
+		<DataChartView seriesStruct={seriesStruct} />		
+	      </div>
+	      <div>
+		<DataTableView transactions={transactions} onCellEdit={onCellEdit} onDeleteRow={onDeleteRow} onAddRow={onAddRow} />
+	      </div>
 	    </div>
 	);
     }
 };
 console.log(PropTypes);
 _app.propTypes = {
-    onTransactionsUpdated: PropTypes.func.isRequired,
+    onCellEdit: PropTypes.func.isRequired,
+    onDeleteRow: PropTypes.func.isRequired,
+    onAddRow: PropTypes.func.isRequired,
     transactions: PropTypes.array.isRequired,
     currentView: PropTypes.string.isRequired,
     seriesStruct: PropTypes.object.isRequired
@@ -47,11 +51,9 @@ const App = connect((state) => ({
     currentView: state[AppRedux.Name].vt,
     seriesStruct: state[AppRedux.Name].seriesStruct
 }), (dispatch) => ({
-    onTransactionsUpdated: (transactions) => dispatch(AppRedux.Action.transactionsUpdated(transactions))
-    // onCamPermissionGranted: (granted) => dispatch(AppRedux.Action.camPermission(granted)),
-    // onQrCodeDecoded: onQrCodeDecoded(dispatch),
-    // onStartQrViewButtonClicked: () => dispatch(AppRedux.Action.qrview()),
-    // onSendQrCodeButtonClicked: () => dispatch(AppRedux.Action.sendcode())
+    onCellEdit: (row, fieldName, value) => dispatch(AppRedux.Action.onCellEdit({row, fieldName, value})),
+    onDeleteRow: (row) => dispatch(AppRedux.Action.onDeleteRow({row})),
+    onAddRow: (row) => dispatch(AppRedux.Action.onAddRow({row}))
 }))(_app);
 
 ///////////fire it up

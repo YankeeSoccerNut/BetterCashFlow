@@ -2,46 +2,41 @@ import React, {Component} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {typeTypes, accountNameTypes, payeeTypes} from './data.mock';
 
-var GLOBAL_DATA;
-var GLOBAL_DATA_CALLBACK;
-
-//TODO: add new payee
-
-function onAfterInsertRow(row) {
-    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
-}
-function onAfterDeleteRow(rowKeys) {
-    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
-}
-function afterSaveCell(row, cellName, cellValue) {
-    GLOBAL_DATA_CALLBACK(GLOBAL_DATA);
-}
-
-const options = {
-    afterInsertRow: onAfterInsertRow,   // A hook for after insert rows
-    afterDeleteRow: onAfterDeleteRow  // A hook for after droping rows.
-};
-
 const cellEditProp = {
-    mode: 'click',
-    blurToSave: true,
-    afterSaveCell: afterSaveCell
+    mode: 'click'
 };
-// If you want to enable deleteRow, you must enable row selection also.
-const selectRowProp = {
-    mode: 'checkbox'
+
+const selectRow = {
+    mode: 'checkbox',
+    cliclToSelct: true
 };
 
 class DataTableView extends Component {
     constructor(props) {
 	super(props);
-	GLOBAL_DATA = props.transactions;
-	GLOBAL_DATA_CALLBACK = props.onDataChanged;
     }
 
+    remote(remoteObj) {
+	// Only cell editing, insert and delete row will be handled by remote store
+	remoteObj.cellEdit = true;
+	remoteObj.insertRow = true;
+	remoteObj.dropRow = true;
+	return remoteObj;
+    }
+    
     render() {
-	return (<BootstrapTable data={GLOBAL_DATA} deleteRow={true} selectRow={selectRowProp} cellEdit={cellEditProp} insertRow={true} options={options}>
-		<TableHeaderColumn dataField='id' hidden={true} isKey={true}>Product ID</TableHeaderColumn>
+	return (
+		<BootstrapTable data={this.props.transactions}
+	    selectRow={ selectRow }
+            remote={ this.remote }
+            insertRow deleteRow search pagination
+            cellEdit={ cellEditProp }
+	    options={ {
+                onCellEdit: this.props.onCellEdit,
+                onDeleteRow: this.props.onDeleteRow,
+                onAddRow: this.props.onAddRow
+            }}>
+		<TableHeaderColumn dataField='id' hidden={true} isKey={true}>Transaction ID</TableHeaderColumn>
 		<TableHeaderColumn dataField='type' hidden={true} editable={{
 		    type: 'select',
 		    options: {

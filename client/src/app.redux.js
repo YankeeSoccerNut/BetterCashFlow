@@ -9,18 +9,21 @@ const VT = {
 };
 //redux action type
 const AT = applyName(Name, {
-    TRANSACTIONS_UPDATED: 'TRANSACTIONS_UPDATED'
+    ONCELLEDIT: 'ONCELLEDIT',
+    ONDELETEROW: 'ONDELETEROW',
+    ONADDROW: 'ONADDROW'
 });
 
 ////////////action creators
 //loosely following https://github.com/acdlite/redux-actions for action format
 const Action = {
-    transactionsUpdated: (transactions) => ({type: AT.TRANSACTIONS_UPDATED, payload: transactions})
+    onCellEdit: (payload) => ({type: AT.ONCELLEDIT, payload: payload}),
+    onDeleteRow: (payload) => ({type: AT.ONDELETEROW, payload: payload}),
+    onAddRow: (payload) => ({type: AT.ONADDROW, payload: payload})    
 };
 
 const initTransactions = getTransactions();
 const CURRENT_BALANCE = getBalances();
-
 const CURRENT_DATE = new Date();
 CURRENT_DATE.setHours(0, 0, 0, 0);
 
@@ -28,9 +31,25 @@ CURRENT_DATE.setHours(0, 0, 0, 0);
 ///////////reducers and inital state
 const Reducer = generateReducer(
     {
-        [AT.TRANSACTIONS_UPDATED] : (state, action) => (newState(state,
-								 {transactions: action.payload,
-								  seriesStruct: getBalanceSeriesStruct(action.payload, CURRENT_BALANCE, CURRENT_DATE)}))
+        [AT.ONCELLEDIT] : (state, action) => {
+	    let rowIdx;
+	    const targetRow = state.transactions.find((tran, i) => {
+		if (tran.id == action.payload.row.id) {
+		    rowIdx = i;
+		    return true;
+		}
+		return false;
+	    });
+	    if (targetRow) {
+		targetRow[action.payload.fieldName] = action.payload.value;
+		state.transactions[rowIdx] = targetRow;
+	    }
+	    return state;
+	}
+	// (
+	//     newState(state,
+	// 							 {transactions: action.payload,
+	// 							  seriesStruct: getBalanceSeriesStruct(action.payload, CURRENT_BALANCE, CURRENT_DATE)}))
         // [AT.MENU] : (state, action) => (newState(state, {op: OT.MENU})),
         // [AT.QRVIEW] : (state, action) => (newState(state, {op: OT.QRVIEW})),
         // [AT.QRCODE] : (state, action) => (newState(state, {qrcode: action.payload, op: OT.MENU})),

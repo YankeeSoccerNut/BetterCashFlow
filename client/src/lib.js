@@ -85,8 +85,6 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
 	    const targetDate = createDate(tran.scheduledDate);
 	    targetDate.setHours(0, 0, 0, 0);
 	    if (date - targetDate == 0) {
-		console.log(formatDate(date)+tran.scheduledDate);
-		console.log(date, targetDate);
 		var balanceIndex = 0;
 		if (tran.accountName == accountNameTypes[1]) {
 		    balanceIndex = 1;
