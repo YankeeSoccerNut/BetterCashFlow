@@ -8,6 +8,8 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import React, {Component, PropTypes} from 'react';
 import {connect, Provider} from 'react-redux';
 import createLogger from 'redux-logger';
+import DataTable from './views/DataTable';
+
 // import QRView from './qrview.js';
 // import SCPView from './scpview.js'
 
@@ -16,7 +18,7 @@ const LOG_REDUX = false;
 ////////////components
 
 const _app = ({}) => {
-  return (<div>hello</div>)
+  return (<DataTable/>)
 };
 
 _app.propTypes = {
@@ -30,8 +32,8 @@ _app.propTypes = {
 };
 
 // const onQrCodeDecoded = dispatch => msg => {
-//   // dispatch(AppRedux.Action.qrcode(msg)),
-//   // dispatch(SCPViewRedux.Action.init(msg))
+//    dispatch(AppRedux.Action.qrcode(msg)),
+//    dispatch(SCPViewRedux.Action.init(msg))
 // };
 
 const App = connect((state) => ({
