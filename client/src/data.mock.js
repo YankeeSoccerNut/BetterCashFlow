@@ -1,5 +1,5 @@
 const typeTypes = ['Expense', 'Income'];
-const accountNameTypes = ['VISAB2B', 'USBANK'];
+const accountNameTypes = ['USBANK', 'VISAB2B'];
 const payeeTypes = [
     'MyLandlord',
     'MyElectricity',
@@ -46,4 +46,8 @@ function getTransactions() {
     return addTransactions(30);
 }
 
-export {getTransactions, typeTypes, accountNameTypes, payeeTypes};
+function getBalances() {
+    return [10000, 8000];
+}
+
+export {getBalances, getTransactions, typeTypes, accountNameTypes, payeeTypes};

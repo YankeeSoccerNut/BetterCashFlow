@@ -22,7 +22,11 @@ const _app = ({
     switch(currentView) {
     case AppRedux.VT.DASHBOARD:
     default:
-	return (<DataTableView transactions={transactions} onDataChanged={onTransactionsUpdated} />);
+	return (
+	    <div>
+	      <DataTableView transactions={transactions} onDataChanged={onTransactionsUpdated} />
+	    </div>
+	);
     }
 };
 console.log(PropTypes);

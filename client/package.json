@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
+    "pondjs": "^0.8.8",
     "react": "^16.2.0",
     "react-bootstrap-table": "^4.2.0",
     "react-datasheet": "^1.2.14",
@@ -16,6 +17,7 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
+    "react-timeseries-charts": "^0.12.8",
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6"
