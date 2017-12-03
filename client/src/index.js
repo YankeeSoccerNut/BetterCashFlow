@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
 import {connect, Provider} from 'react-redux';
 import createLogger from 'redux-logger';
 import DataTableView from './DataTableView';
-
-// import QRView from './qrview.js';
-// import SCPView from './scpview.js'
+import DataChartView from './DataChartView';
 
 ////////////control flags
 const LOG_REDUX = false;
@@ -17,14 +15,20 @@ const LOG_REDUX = false;
 const _app = ({
     onTransactionsUpdated,
     transactions,
-    currentView
+    currentView,
+    seriesStruct
 }) => {
     switch(currentView) {
     case AppRedux.VT.DASHBOARD:
     default:
 	return (
 	    <div>
+	      <div>
+	      <DataChartView seriesStruct={seriesStruct} />		
+	    </div>
+	    <div>
 	      <DataTableView transactions={transactions} onDataChanged={onTransactionsUpdated} />
+	    </div>
 	    </div>
 	);
     }
@@ -33,29 +37,15 @@ console.log(PropTypes);
 _app.propTypes = {
     onTransactionsUpdated: PropTypes.func.isRequired,
     transactions: PropTypes.array.isRequired,
-    currentView: PropTypes.string.isRequired    
-    // camPermissionGranted: PropTypes.bool.isRequired,
-    // currentOperation: PropTypes.string.isRequired,
-    // qrcodeText: PropTypes.string.isRequired,
-    // onCamPermissionGranted: PropTypes.func.isRequired,
-    // onQrCodeDecoded: PropTypes.func.isRequired,
-    // onStartQrViewButtonClicked: PropTypes.func.isRequired,
-    // onSendQrCodeButtonClicked: PropTypes.func.isRequired
+    currentView: PropTypes.string.isRequired,
+    seriesStruct: PropTypes.object.isRequired
 };
 
-// const onQrCodeDecoded = dispatch => msg => {
-//    dispatch(AppRedux.Action.qrcode(msg)),
-//    dispatch(SCPViewRedux.Action.init(msg))
-// };
 
 const App = connect((state) => ({
     transactions: state[AppRedux.Name].transactions,
-    currentView: state[AppRedux.Name].vt
-    // camPermissionGranted: state[AppRedux.Name].camPerm,
-    // currentOperation: state[AppRedux.Name].op,
-    // qrcodeText: state[AppRedux.Name].qrcode === null
-    //   ? 'No qrcode scanned'
-    //   : `last scanned qrcode: ${state[AppRedux.Name].qrcode}`
+    currentView: state[AppRedux.Name].vt,
+    seriesStruct: state[AppRedux.Name].seriesStruct
 }), (dispatch) => ({
     onTransactionsUpdated: (transactions) => dispatch(AppRedux.Action.transactionsUpdated(transactions))
     // onCamPermissionGranted: (granted) => dispatch(AppRedux.Action.camPermission(granted)),
