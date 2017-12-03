@@ -1,5 +1,7 @@
-import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import React, {Component, PropTypes} from 'react';
+import { connect, Provider } from 'react-redux';
 
 import Home from './views/Home';
 
