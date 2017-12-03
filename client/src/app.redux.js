@@ -41,7 +41,7 @@ const Reducer = generateReducer(
 		return false;
 	    });
 	    if (targetRow) {
-		targetRow[action.payload.fieldName] = action.payload.value;
+		targetRow[action.payload.fieldName] = parseInt(action.payload.value);
 		state.transactions[rowIdx] = targetRow;
 	    }
 	    return newState(state,
