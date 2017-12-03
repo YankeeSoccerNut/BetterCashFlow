@@ -44,7 +44,7 @@ const Reducer = generateReducer(
 		targetRow[action.payload.fieldName] = action.payload.value;
 		state.transactions[rowIdx] = targetRow;
 	    }
-	    return state;
+	    return newState(state, {transactions: state.transactions, seriesStruct: getBalanceSeriesStruct(action.payload, CURRENT_BALANCE, CURRENT_DATE)});
 	}
 	// (
 	//     newState(state,
