@@ -37,7 +37,7 @@ class DataTableView extends Component {
                 onAddRow: this.props.onAddRow
             }}>
 		<TableHeaderColumn dataField='id' hidden={true} isKey={true}>Transaction ID</TableHeaderColumn>
-		<TableHeaderColumn dataField='type' hidden={true} editable={{
+		<TableHeaderColumn dataField='type' hidden={false} editable={{
 		    type: 'select',
 		    options: {
 			values: typeTypes
