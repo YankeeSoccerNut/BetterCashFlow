@@ -30,11 +30,18 @@ Date.prototype.addDays = function(days) {
     return date;
 };
 
+function date() {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
 function getDates(startDate, days) {
-    var stopDate = new Date();
+    var stopDate = date();
     stopDate.setDate(startDate.getDate() + days);
     var dateArray = new Array();
     var currentDate = startDate;
+    currentDate.setHours(0, 0, 0, 0);
     while (currentDate <= stopDate) {
         dateArray.push(new Date (currentDate));
         currentDate = currentDate.addDays(1);
@@ -50,6 +57,12 @@ function formatDate(date) {
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + day;
 }
 
+function createDate(dateString) {
+    var d = new Date(dateString+'T00:00:00-0500');
+    d.setHours(0, 0, 0, 0);
+    return d;
+}
+
 function getBalanceSeriesStruct(transactions, balance, currentDate) {
     balance = balance.slice();
     const points = [];
@@ -57,16 +70,23 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
     var min = 0;
     var max = 0;
     _.forEach(getDates(currentDate, 90), function(date) {
-	const targetDate = new Date(transactions[i].scheduledDate);
-	targetDate.setHours(0, 0, 0, 0);
 	date.setHours(0, 0, 0, 0);
-	while(i < transactions.length - 1 && date > targetDate) {
-	    i = i + 1;
+	while(i < transactions.length - 1) {
+	    const targetDate = createDate(transactions[i].scheduledDate);
+	    targetDate.setHours(0, 0, 0, 0);
+	    if(date - targetDate > 0) {
+		i = i + 1;
+	    } else {
+		break;
+	    }
 	}
 	if (i < transactions.length) {
 	    const tran = transactions[i];
-	    console.log(formatDate(date)+tran.scheduledDate);
-	    if (formatDate(date) == tran.scheduledDate) {
+	    const targetDate = createDate(tran.scheduledDate);
+	    targetDate.setHours(0, 0, 0, 0);
+	    if (date - targetDate == 0) {
+		console.log(formatDate(date)+tran.scheduledDate);
+		console.log(date, targetDate);
 		var balanceIndex = 0;
 		if (tran.accountName == accountNameTypes[1]) {
 		    balanceIndex = 1;
@@ -100,5 +120,5 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
     };
 }
 
-export {generateReducer, newState, applyName, getDates, getBalanceSeriesStruct};
+export {generateReducer, newState, applyName, getBalanceSeriesStruct, formatDate, createDate};
 

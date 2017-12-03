@@ -1,4 +1,4 @@
-import {generateReducer, newState, applyName, getDates, getBalanceSeriesStruct} from './lib.js';
+import {generateReducer, newState, applyName, getBalanceSeriesStruct, createDate} from './lib.js';
 import {getTransactions, getBalances, accountNameTypes, typeTypes} from './data.mock.js';
 
 // following design guides here: https://github.com/reactjs/redux/blob/master/docs/basics/UsageWithReact.md
@@ -22,6 +22,7 @@ const initTransactions = getTransactions();
 const CURRENT_BALANCE = getBalances();
 
 const CURRENT_DATE = new Date();
+CURRENT_DATE.setHours(0, 0, 0, 0);
 
 
 ///////////reducers and inital state
