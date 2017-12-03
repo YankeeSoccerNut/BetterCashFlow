@@ -8,7 +8,7 @@ import {createStore, combineReducers, applyMiddleware} from 'redux';
 import React, {Component, PropTypes} from 'react';
 import {connect, Provider} from 'react-redux';
 import createLogger from 'redux-logger';
-import DataTable from './views/DataTable';
+import DataTableView from './DataTableView';
 
 // import QRView from './qrview.js';
 // import SCPView from './scpview.js'
@@ -18,7 +18,7 @@ const LOG_REDUX = false;
 ////////////components
 
 const _app = ({}) => {
-  return (<DataTable/>)
+  return (<DataTableView/>)
 };
 
 _app.propTypes = {

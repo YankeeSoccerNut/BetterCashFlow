@@ -59,7 +59,7 @@ const selectRowProp = {
   mode: 'checkbox'
 };
 
-class DataTable extends Component {
+class DataTableView extends Component {
   constructor(props) {
     super(props);
     this.formatType = this.formatType.bind(this);
@@ -101,4 +101,4 @@ class DataTable extends Component {
   }
 }
 
-export default DataTable;
+export default DataTableView;
