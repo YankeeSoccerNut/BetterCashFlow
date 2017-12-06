@@ -18,40 +18,50 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const user = () => {
-  const options = {
-    method: 'POST',
-    url: 'http://api119525live.gateway.akana.com:80/user/accounts',
-    headers: {
-      'postman-token': 'f97a0999-45f1-03af-b141-70af03fe754e',
-      'cache-control': 'no-cache'
-    },
-    body: '{\n    "LegalParticipantIdentifier": "913996201744144603"\n}'
-  };
+app.get('/api', (req, res) => {
+  res.send("Invalid API route")
+});
 
-  request(options, function(error, response, body) {
-    if (error) throw new Error(error);
+app.get('/api/getUSBankUserInfo', (req, res) => {
+  console.log("hit /getUSBankUserInfo route");
 
-    console.log(body);
-  });
-};
+  var request = require('request');
 
-app.get('/', (req, res) => {
-  const options = {
-    method: 'POST',
-    url: 'http://api119525live.gateway.akana.com:80/user/accounts',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: '{"LegalParticipantIdentifier": "913996201744144603"}'
-  };
+  // Set the headers
+  var headers = {
+      'Content-Type':'application/json'
+  }
 
-  request(options, function(error, response, body) {
-    if (error) console.log(error);
+  //Hard Code to our Use Case Account for now....could be a variable later.
+  var body =  JSON.stringify({'LegalParticipantIdentifier':'913996201744144603'});
 
-    res.json(body);
+  // Configure the request
+  var options = {
+      url: 'https://api119525live.gateway.akana.com:443/user/accounts',
+      method: 'POST',
+      headers: headers,
+      body: body
+  }
+
+  // Start the request
+  request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+          let USBankUserInfo = JSON.parse(body);
+
+          console.log(USBankUserInfo.AccessibleAccountDetailList[0].BasicAccountDetail);
+          // Print out the response body
+          res.send(JSON.parse(body));
+          // Loop through the account list....
+          // for (var account in body.AccessibleAccountDetailList) {
+          //   console.log (account.ProductCode, account.BasicAccountDetail.Balances);
+          // }
+
+      } else {
+        console.log(error)
+      }
   });
 });
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {

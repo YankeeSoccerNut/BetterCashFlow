@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {accountNameTypes} from './data.mock';
+import {accountNameTypes} from '../util/data.mock';
 import {
     Charts,
     ChartContainer,
