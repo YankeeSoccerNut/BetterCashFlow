@@ -3,40 +3,18 @@ import DataTableView from './DataTableView';
 import DataChartView from './DataChartView';
 import FinAccount from './FinAccount';
 
-//mock transactions for now...
-import {addTransactions, getTransactions} from '../util/data.mock.js';
-const TRANSACTIONS = getTransactions();
-
 class BetterCashFlow extends Component{
-
-  constructor(){
-    super();
-  };
-
-  onCellEdit(){
-    console.log("onCellEdit");
-    return;
-  }
-
-  onAddRow(){
-    console.log("onAddRow");
-    return;
-  }
-
-  onDeleteRow(){
-    console.log("onDeleteRow");
-    return;
-  }
 
   render(){
     return(
-      <div>
-        <div>
+      <div className="container">
+        <div className="col-sm-12">
           <FinAccount institution="USBANK" />
+          <FinAccount institution="VISAB2B" />
           {/* <DataChartView seriesStruct={seriesStruct} /> */}
         </div>
         <div>
-          <DataTableView transactions={TRANSACTIONS} onCellEdit={this.onCellEdit} onDeleteRow={this.onDeleteRow} onAddRow={this.onAddRow} />
+          <DataTableView dataTable={this.props.dataTable}/>
         </div>
       </div>
     );

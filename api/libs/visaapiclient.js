@@ -25,7 +25,7 @@ function getBasicAuthHeader(userId, password) {
 }
 
 function VisaAPIClient() {
-	
+
 }
 
 function getXPayToken(resourcePath , queryParams , postBody) {
@@ -36,17 +36,17 @@ function getXPayToken(resourcePath , queryParams , postBody) {
 	var preHashString2 = resourcePath + queryParams + postBody;
 	var hashString2 = crypto.createHmac('SHA256', sharedSecret).update(preHashString2).digest('hex');
 	var xPayToken = 'xv2:' + timestamp + ':' + hashString;
-	return xPayToken;	
+	return xPayToken;
 }
 
 VisaAPIClient.prototype.doMutualAuthRequest = function(path, requestBody, methodType, headers, callback) {
-	
+
 	var userId = config.userId ;
 	var password = config.password;
 	var keyFile = config.key;
 	var certificateFile = config.cert;
 	logRequest(requestBody, path);
-	
+
 	if (methodType === 'POST' || methodType === 'PUT') {
 		headers['Content-Type'] = 'application/json';
 	}
@@ -65,7 +65,7 @@ VisaAPIClient.prototype.doMutualAuthRequest = function(path, requestBody, method
 	}, function(error, response, body) {
 		if (!error) {
 			logResponseBody(response, body);
-			callback(null, response.statusCode);
+			callback(null, response);
 		} else {
 			console.log(error);
 			callback(error);
@@ -75,11 +75,11 @@ VisaAPIClient.prototype.doMutualAuthRequest = function(path, requestBody, method
 
 VisaAPIClient.prototype.doXPayRequest = function(baseUri, resourcePath, queryParams, requestBody, methodType, headers, callback) {
 	logRequest(requestBody, baseUri + resourcePath + '?' + queryParams);
-	
+
 	if (methodType === 'POST' || methodType === 'PUT') {
 		headers['Content-Type'] = 'application/json';
 	}
-	
+
 	headers['Accept'] = 'application/json';
 	headers['x-pay-token'] = getXPayToken(resourcePath, queryParams, requestBody);
 	headers['ex-correlation-id'] = randomstring.generate({length:12, charset: 'alphanumeric'}) + '_SC'

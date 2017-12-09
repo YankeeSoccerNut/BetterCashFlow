@@ -9,7 +9,7 @@ const payeeTypes = [
     'MyWater',
     'MyCleaning',
     'MyPayroll',
-    'Elavon',    
+    'Elavon',
     '+NewPayee'
 ];
 
@@ -49,7 +49,7 @@ function addTransactions(quantity) {
 }
 
 function getTransactions() {
-    return addTransactions(10);
+    return addTransactions(20);
 }
 
 function getBalances() {

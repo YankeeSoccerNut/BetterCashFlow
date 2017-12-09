@@ -1,5 +1,5 @@
-export default function(state, action){
+export default function(state=null, action){
   console.log(action);
   console.log(state);
-  return null;
+  return state;
 };

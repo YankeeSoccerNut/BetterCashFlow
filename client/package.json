@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta.2",
+    "html-react-parser": "^0.4.1",
+    "lodash.findindex": "^4.6.0",
     "pondjs": "^0.8.8",
     "react": "^16.2.0",
     "react-bootstrap-table": "^4.2.0",

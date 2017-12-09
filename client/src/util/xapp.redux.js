@@ -67,7 +67,7 @@ const Reducer = generateReducer(
       const row = action.payload;
       row.amount = parseInt(row.amount)
 	    state.transactions.push(row)
-	    sortTrans(state.transactions)	    
+	    sortTrans(state.transactions)
 	    return newState(state,
 			    {transactions: state.transactions,
 			     seriesStruct: getBalanceSeriesStruct(state.transactions, CURRENT_BALANCE, CURRENT_DATE)});

@@ -11,9 +11,9 @@ import DataTableReducer from './DataTableReducer';
 // Build the rootReducer using the combineReducer function...1 arg {}
 // {} can have multiple properties..1 per reducer
 const rootReducer = combineReducers(
-  {finaccount: FinAccountReducer,
-  datachart: DataChartReducer,
-  datatable: DataTableReducer}
+  {accountObjects: FinAccountReducer,
+  dataChart: DataChartReducer,
+  dataTable: DataTableReducer}
 );
 
 export default rootReducer;
