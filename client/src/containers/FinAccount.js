@@ -14,9 +14,9 @@ class FinAccount extends Component {
 // each finInstitution will have an array of accounts at that finInstitution
   constructor(props) {
      super(props);
-     this.state = {
-       accountObjects: []
-     };
+     // this.state = {
+     //   accountObjects: []
+     // };
   }
 
   componentDidMount(props){

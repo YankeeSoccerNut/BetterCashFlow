@@ -5,31 +5,26 @@ import { connect } from 'react-redux';
 // react-bootstrap-table...
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
+
 // mock data
 import {getTransactions, payeeTypes, getBalances, accountNameTypes, typeTypes} from '../util/data.mock.js';
 
-import dataCellEdit from '../actions/dataCellEdit';
-import dataRowAdd from '../actions/dataCellEdit';
-import dataRowDelete from '../actions/dataRowDelete';
+import onCellEdit from '../actions/onCellEdit';
+import onAddRow from '../actions/onAddRow';
+import onDeleteRow from '../actions/onDeleteRow';
 import loadTransactions from '../actions/loadTransactions';
 
-const cellEditProp = {
-    mode: 'click'
-};
-const selectRow = {
-    mode: 'checkbox',
-    cliclToSelct: true
-};
 
 
 class DataTableView extends Component {
 
   constructor(props) {
     super(props);
-    this.onCellEdit = this.onCellEdit.bind(this);
-    this.onAddRow = this.onAddRow.bind(this);
-    this.onDeleteRow = this.onDeleteRow.bind(this);
-    this.state = {transactions: []};
+    // this.onCellEdit = this.onCellEdit.bind(this);
+    this.beforeSaveCell = this.beforeSaveCell.bind(this);
+    this.afterSaveCell = this.afterSaveCell.bind(this);
+    this.onModalAddRow = this.onModalAddRow.bind(this);
+    // this.onDeleteRow = this.onDeleteRow.bind(this);
   }
 
   componentDidMount(){
@@ -39,51 +34,95 @@ class DataTableView extends Component {
     this.props.loadTransactions(transactions);
   };
 
-  onCellEdit(e){    // e is shorthand for event
-    console.log("onCellEdit");
-    console.log(e);
-    this.props.dataCellEdit(e);
-    return;
-  }
+  beforeSaveCell(row, cellName, cellValue){
+    console.log("beforeSaveCell.........");
+    console.log(row, cellName, cellValue);
+    // this.props.onCellEdit({
+    //   row: row,
+    //   cellName: cellName,
+    //   cellValue: cellValue
+    // });
 
-  onAddRow(e){
-    console.log("onAddRow");
-    console.log(e);
-    this.props.dataRowAdd(e);
-    return;
-  }
+    return(true);
+  };
 
-  onDeleteRow(e){
-    console.log("onDeleteRow");
-    console.log(e);
-    this.props.dataRowDelete(e);
+  // onCellEdit(e){    // e is shorthand for event
+  //   console.log("onCellEdit");
+  //   console.log(e);
+  //   this.props.onCellEdit(e);
+  //   return;
+  // }
+
+  afterSaveCell(row, cellName, cellValue){
+    console.log("afterSaveCell.........");
+    console.log(row, cellName, cellValue);
+    this.props.onCellEdit({
+      row: row,
+      cellName: cellName,
+      cellValue: cellValue
+    });
+
+    return(true);
+  };
+
+
+  onModalAddRow(e){
+    // This function gets invoked after the user adds a row via the default Add Modal.  There were issues with trying to invoke our action directly from the modal callback so invoke our action here....
+    this.props.onAddRow(e);
     return;
   }
+  //
+  // onDeleteRow(e){
+  //   console.log("onDeleteRow");
+  //   console.log(e);
+  //   this.props.onDeleteRow(e);
+  //   return;
+  // }
+
+  remote(remoteObj) {
+    remoteObj.cellEdit = true;
+    remoteObj.insertRow = true;
+    remoteObj.dropRow = true;
+    return(remoteObj);
+  };
 
   render() {
+
+    const cellEditProp = {
+        mode: 'dbclick'
+    };
+
+    const selectRow = {
+        mode: 'checkbox',
+        bgColor: 'pink',
+        clickToSelect: true
+    };
+
+    const options={
+              clearSearch: true,
+              onCellEdit: this.afterSaveCell,
+              onDeleteRow: this.props.onDeleteRow,
+              onAddRow: this.onModalAddRow,
+              exportCSVText: 'my_export',
+              insertText: 'my_insert',
+              deleteText: 'my_delete',
+              saveText: 'my_save',
+              closeText: 'my_close'
+          };
 
     // Initial render won't have anything....
     if (this.props.dataTable === null){
       return null;
     };
-    console.log("DataTableView....this.props NOT NULL in render()");
-
-    console.log(this.props.dataTable);
-    console.log(this.props.dataTable.transactions);
 
     return(
       <div id="payables-table" className="col-sm-12">
-        <BootstrapTable data={this.props.dataTable.transactions}
+        <BootstrapTable data={this.props.dataTable} search={ true } options={ options }
           selectRow={ selectRow }
-                remote={ true }
-                insertRow={true} deleteRow search
-                cellEdit={ cellEditProp }
-          options={ {
-                    onCellEdit: this.onCellEdit,
-                    onDeleteRow: this.onDeleteRow,
-                    onAddRow: this.onAddRow
-                }}>
-        <TableHeaderColumn dataField='id' hidden={true} isKey={true} autoValue={true}>Transaction ID</TableHeaderColumn>
+                remote={ this.remote }
+                insertRow={ true } deleteRow={ true }
+                cellEdit={ cellEditProp }>
+        <TableHeaderColumn dataField='id' hidden={false} isKey={true} autoValue={true}>Transaction ID</TableHeaderColumn>
         <TableHeaderColumn dataField='type' hidden={false} editable={{
             type: 'select',
             options: {
@@ -118,8 +157,6 @@ function mapStateToProps(state){
   // state in this context is the root reducers
   // this function's only job is to map props to pieces of state that THIS component is interested in
   // in this scenario it is the whole dataTable
-  console.log("mapStateToProps....")
-  console.log(state);
   return{
     dataTable: state.dataTable
   }
@@ -128,9 +165,9 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     loadTransactions: loadTransactions,
-    dataCellEdit: dataCellEdit,
-    dataRowAdd: dataRowAdd,
-    dataRowDelete: dataRowDelete
+    onCellEdit: onCellEdit,
+    onAddRow: onAddRow,
+    onDeleteRow: onDeleteRow
   }, dispatch);
 };
 

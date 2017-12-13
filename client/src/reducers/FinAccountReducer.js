@@ -6,6 +6,7 @@
   // 1.  Initial fetch from Financial institution
   // 2.  Local changes from other components.  In this application these changes come from manipulating the DataTableView.
 
+
   export default function(state=null, action){
     // console.log("<<<<<<<<<<<<<reducer.FinAccount");
     // console.log(action);
@@ -17,18 +18,27 @@
       console.log("state", state);
 
       if (state === null){
-        return ({accountObjects: [action.payload]});
+        return ([action.payload]);
       }
       else {
-        // let newState = {...state}; //es6 spread
-        // console.log("copy state to newState: ", newState);
-        // newState.accountObjects.push(action.payload);
-        // console.log("newState after push: ", newState);
-        state.accountObjects.push(action.payload);
-        console.log("state:" , state);
-        return (state.accountObjects);
+        let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
+        console.log("newState:" , newState);
+        return (newState);
       }
       break;
+    case 'CELL-EDIT':
+      console.log("+++++++------- CELL-EDIT in FIN-ACCOUNT");
+      console.log("action payload", action.payload);
+      console.log("state", state);
+
+      if (state === null){
+        return (state);
+      }
+      else {
+        return (state);  // temp for now...
+      }
+      break;
+
     default:
       return state;
     };
