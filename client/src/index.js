@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import reducers from './reducers/index';
 
 // now make theStore!
-const theStore = createStore(reducers);
+const theStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 // import AppRedux from './app.redux.js';

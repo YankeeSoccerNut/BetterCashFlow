@@ -21,7 +21,7 @@ class DataTableView extends Component {
   constructor(props) {
     super(props);
     // this.onCellEdit = this.onCellEdit.bind(this);
-    this.beforeSaveCell = this.beforeSaveCell.bind(this);
+    // this.beforeSaveCell = this.beforeSaveCell.bind(this);
     this.afterSaveCell = this.afterSaveCell.bind(this);
     this.onModalAddRow = this.onModalAddRow.bind(this);
     // this.onDeleteRow = this.onDeleteRow.bind(this);
@@ -34,17 +34,17 @@ class DataTableView extends Component {
     this.props.loadTransactions(transactions);
   };
 
-  beforeSaveCell(row, cellName, cellValue){
-    console.log("beforeSaveCell.........");
-    console.log(row, cellName, cellValue);
-    // this.props.onCellEdit({
-    //   row: row,
-    //   cellName: cellName,
-    //   cellValue: cellValue
-    // });
-
-    return(true);
-  };
+  // beforeSaveCell(row, cellName, cellValue){
+  //   console.log("beforeSaveCell.........");
+  //   console.log(row, cellName, cellValue);
+  //   // this.props.onCellEdit({
+  //   //   row: row,
+  //   //   cellName: cellName,
+  //   //   cellValue: cellValue
+  //   // });
+  //
+  //   return(true);
+  // };
 
   // onCellEdit(e){    // e is shorthand for event
   //   console.log("onCellEdit");
@@ -71,6 +71,7 @@ class DataTableView extends Component {
     this.props.onAddRow(e);
     return;
   }
+
   //
   // onDeleteRow(e){
   //   console.log("onDeleteRow");
@@ -143,7 +144,9 @@ class DataTableView extends Component {
           values: payeeTypes
             }
         }}>Payee</TableHeaderColumn>
-        <TableHeaderColumn dataField='amount'>Amount</TableHeaderColumn>
+        <TableHeaderColumn dataField='amount' editable={{
+            type: 'number'
+        }}>Amount</TableHeaderColumn>
 
         <TableHeaderColumn dataField='scheduledDate' editable={{
             type: 'date'

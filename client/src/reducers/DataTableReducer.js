@@ -32,16 +32,22 @@ export default function(state=null, action){
     console.log("rowIndex: ", rowIndex);
     console.log("BEFORE\n", newState[rowIndex]);
 
+    let netChange = parseFloat(newState[rowIndex][action.payload.cellName]) - parseFloat(action.payload.cellValue)
+
+    console.log("netChange: ", netChange);
+    
     newState[rowIndex][action.payload.cellName] = action.payload.cellValue;
 
     console.log("AFTER\n", newState[rowIndex]);
     return(newState);
     break;
+
   case 'ADD-ROW':
     newState = [...state, action.payload];  //es6 destructuring with new item
     console.log("reducer.ADD-ROW\n", action);
     return(newState);
     break;
+
   case 'DELETE-ROW':
     console.log(action);
     console.log("DELETE-ROW state: \n", state);

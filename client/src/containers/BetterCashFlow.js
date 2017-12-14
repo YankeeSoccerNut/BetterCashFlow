@@ -11,10 +11,10 @@ class BetterCashFlow extends Component{
         <div className="col-sm-12">
           <FinAccount institution="USBANK" />
           <FinAccount institution="VISAB2B" />
-          {/* <DataChartView seriesStruct={seriesStruct} /> */}
         </div>
         <div>
           <DataTableView dataTable={this.props.dataTable}/>
+          <DataChartView />
         </div>
       </div>
     );
