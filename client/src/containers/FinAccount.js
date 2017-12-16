@@ -20,7 +20,7 @@ class FinAccount extends Component {
   }
 
   componentDidMount(props){
-    console.log("+++++++++++++FinAccount.componentDidMount");
+    // console.log("+++++++++++++FinAccount.componentDidMount");
     let accountObject = {
       finInstitution: '',
       accounts: []
@@ -47,7 +47,7 @@ class FinAccount extends Component {
   };
 
   getUSBankUserInfo(){
-    console.log("in getUSBankUserInfo");
+    // console.log("in getUSBankUserInfo");
 
     let getUSBankUserInfoPromise =
     new Promise(function(resolve, reject) {
@@ -67,7 +67,7 @@ class FinAccount extends Component {
   };
 
   getVisaVirtualAcctInfo(){
-    console.log("in getUSBankUserInfo");
+    // console.log("in getUSBankUserInfo");
 
     let getVisaVirtualAcctInfoPromise =
     new Promise(function(resolve, reject) {
@@ -119,8 +119,8 @@ class FinAccount extends Component {
 
 
   render() {
-    console.log("RENDERING>>>>>>FinAccount props:")
-    console.log(this.props);
+    // console.log("RENDERING>>>>>>FinAccount props:")
+    // console.log(this.props);
 
     // Initial render won't have anything....
     if (this.props.accountObjects === null){
@@ -129,10 +129,10 @@ class FinAccount extends Component {
 
     // use lodash function to find index of each financial instititution....
     let USBANKindex = findIndex(this.props.accountObjects, { finInstitution: 'USBANK' });
-    console.log("USBANKindex: ", USBANKindex);
+    // console.log("USBANKindex: ", USBANKindex);
 
     let visaB2Bindex = findIndex(this.props.accountObjects, { finInstitution: 'VISAB2B' });
-    console.log("visaB2Bindex: ", visaB2Bindex);
+    // console.log("visaB2Bindex: ", visaB2Bindex);
 
     if (USBANKindex >=0 && this.props.institution === 'USBANK'){
 
@@ -155,8 +155,8 @@ class FinAccount extends Component {
         </div>
       );
     } else {
-      console.log("returning NULLLLLLLL from Render-------");
-      console.log(this.props);
+      // console.log("returning NULLLLLLLL from Render FinAccount-------");
+      // console.log(this.props);
       return null;
     };
   };
@@ -167,8 +167,8 @@ function mapStateToProps(state){
   // state in this context is the root reducers
   // this function's only job is to map props to pieces of state that THIS component is interested in
   // in this component it is the bank account info
-  console.log("mapStateToProps....FinAccount")
-  console.log(state);
+  // console.log("mapStateToProps....FinAccount")
+  // console.log(state);
   return{
     accountObjects: state.accountObjects
   }

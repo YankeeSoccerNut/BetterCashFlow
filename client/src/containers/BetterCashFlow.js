@@ -13,8 +13,10 @@ class BetterCashFlow extends Component{
           <FinAccount institution="VISAB2B" />
         </div>
         <div>
-          <DataTableView dataTable={this.props.dataTable}/>
           <DataChartView />
+        </div>
+        <div>
+          <DataTableView />
         </div>
       </div>
     );

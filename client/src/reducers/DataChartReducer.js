@@ -13,20 +13,19 @@ export default function(state=null, action){
   // initialCreditBalance: state.initialCreditBalance,
   // projectedBalances: state.projectedBalances
 
-  console.log("+++++++++++++++++WILL NEED TO CALC TIME SERIES");
 
   switch (action.type){
   case 'LOAD-TXNS':
     console.log("LOAD-TXNS DataChartReducer action payload", action.payload);
     console.log("state", state);
-    let newState = {};
+    let projections = {};
     // tranform transactions into a TimeSeries we can use
     // TODO: reevaluate...beginning balances?
 
     if (state === null){
       console.log("State is null...setting balances to 0");
-      newState.initialCashBalance = 0;
-      newState.initialCreditBalance = 0;
+      projections.initialCashBalance = 0;
+      projections.initialCreditBalance = 0;
     };
 
     let seriesTrans = action.payload.map((t) => {  //(t)ransaction
@@ -34,16 +33,17 @@ export default function(state=null, action){
     });
     console.log("reformatted transactions for series\n", seriesTrans)
 
-    newState.timeSeries = new TimeSeries({
+    projections.timeSeries = new TimeSeries({
         name: "Balances",
-        utc: false,
         columns: ["index", "account", "type", "amount"],
+        utc: true,
         points: seriesTrans
     });
 
-    console.log("seriesStruct:\n", newState.timeSeries);
+    console.log("timeSeries: \n", projections.timeSeries);
+    console.log("returning newState LOAD-TXNS:\n", projections);
 
-    return newState;
+    return projections;
     break;
 
   case 'INIT-FIN-ACCT':
@@ -53,7 +53,8 @@ export default function(state=null, action){
     console.log("DataChartReducer action payload", action.payload);
     console.log("state", state);
     let newBalance = state.initialCashBalance += 1;
-    return {...state, initialCashBalance: newBalance};
+    // return {...state, projections.initialCashBalance: newBalance};
+    return state;
     break;
 
   default:

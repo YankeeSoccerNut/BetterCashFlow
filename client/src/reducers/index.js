@@ -12,8 +12,8 @@ import DataTableReducer from './DataTableReducer';
 // {} can have multiple properties..1 per reducer
 const rootReducer = combineReducers(
   {accountObjects: FinAccountReducer,
-  dataChart: DataChartReducer,
-  dataTable: DataTableReducer}
+  projections: DataChartReducer,
+  transactions: DataTableReducer}
 );
 
 export default rootReducer;

@@ -28,7 +28,6 @@ class DataTableView extends Component {
   }
 
   componentDidMount(){
-    console.log("++++++++++ DataTableView.componentDidMount ++++++++++")
     const transactions = getTransactions();
 
     this.props.loadTransactions(transactions);
@@ -54,8 +53,8 @@ class DataTableView extends Component {
   // }
 
   afterSaveCell(row, cellName, cellValue){
-    console.log("afterSaveCell.........");
-    console.log(row, cellName, cellValue);
+    // console.log("afterSaveCell.........");
+    // console.log(row, cellName, cellValue);
     this.props.onCellEdit({
       row: row,
       cellName: cellName,
@@ -118,7 +117,7 @@ class DataTableView extends Component {
 
     return(
       <div id="payables-table" className="col-sm-12">
-        <BootstrapTable data={this.props.dataTable} search={ true } options={ options }
+        <BootstrapTable data={this.props.transactions} search={ true } options={ options }
           selectRow={ selectRow }
                 remote={ this.remote }
                 insertRow={ true } deleteRow={ true }
@@ -161,7 +160,7 @@ function mapStateToProps(state){
   // this function's only job is to map props to pieces of state that THIS component is interested in
   // in this scenario it is the whole dataTable
   return{
-    dataTable: state.dataTable
+    transactions: state.transactions
   }
 };
 
