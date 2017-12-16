@@ -17,13 +17,9 @@ import {
 
 import { TimeSeries } from 'pondjs';
 
-const style = styler([
-    { key: accountNameTypes[0], color: "red"},
-    { key: accountNameTypes[1], color: "blue"}
-]);
-
 
 class DataChartView extends Component {
+
 
   constructor(props) {
 	   super(props);
@@ -34,11 +30,18 @@ class DataChartView extends Component {
 
     console.log("IN render() IN DatachartView*********", this.props);
 
+
     if (this.props.projections === null){
       console.log("this.props.projections === undefined...No RENDER")
       console.log(this.props);
       return null;
     };
+
+    const style = styler([
+        { key: "amount", color: "#A5C8E1"},
+    ]);
+
+    console.log("style: \n", style);
 
     let balances = this.props.projections.timeSeries;  //some shorthand
 
@@ -50,8 +53,8 @@ class DataChartView extends Component {
           >
           <ChartRow height="150">
             <YAxis
-              id="amount"
-              label="Balance"
+              id="balances"
+              label="Projected Balances"
               min={-100}
               max={3000}
               width="70"
@@ -59,10 +62,10 @@ class DataChartView extends Component {
               />
             <Charts>
               <BarChart
-                axis="amount"
-                style={style}
-                spacing={3}
-                columns={accountNameTypes}
+                axis="balances"
+                // style={style}
+                spacing={2}
+                columns={["amount"]}
                 series={balances}
                 />
             </Charts>
