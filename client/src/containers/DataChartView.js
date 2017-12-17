@@ -38,7 +38,8 @@ class DataChartView extends Component {
     };
 
     const style = styler([
-        { key: "amount", color: "#A5C8E1"},
+        { key: accountNameTypes[0], color: "blue"},
+        { key: accountNameTypes[1], color: "red"},
     ]);
 
     console.log("style: \n", style);
@@ -48,25 +49,25 @@ class DataChartView extends Component {
     return (
       <Resizable>
         <ChartContainer
-          timeRange={balances.range()}
+          timeRange={balances.dailyBalances.range()}
           format="day"
           >
           <ChartRow height="150">
             <YAxis
               id="balances"
               label="Projected Balances"
-              min={-100}
-              max={3000}
+              min={balances.min}
+              max={balances.max}
               width="70"
               type="linear"
               />
             <Charts>
               <BarChart
                 axis="balances"
-                // style={style}
+                style={style}
                 spacing={2}
-                columns={["amount"]}
-                series={balances}
+                columns={[accountNameTypes[0],accountNameTypes[1]]}
+                series={balances.dailyBalances}
                 />
             </Charts>
           </ChartRow>

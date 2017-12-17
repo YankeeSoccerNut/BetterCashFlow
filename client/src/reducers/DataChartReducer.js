@@ -1,4 +1,5 @@
 import { TimeSeries } from 'pondjs';
+import { dateToday, getBalanceSeriesStruct } from '../util/generateProjections';
 
 export default function(state=null, action){
 
@@ -28,17 +29,30 @@ export default function(state=null, action){
       projections.initialCreditBalance = 0;
     };
 
-    let seriesTrans = action.payload.map((t) => {  //(t)ransaction
-      return [t.scheduledDate, t.accountName, t.type, t.amount]
-    });
-    console.log("reformatted transactions for series\n", seriesTrans)
+    // Make sure transactions are in ascending date order...
 
-    projections.timeSeries = new TimeSeries({
-        name: "Balances",
-        columns: ["index", "account", "type", "amount"],
-        utc: true,
-        points: seriesTrans
-    });
+
+    // create an initial 30-day projection table...TODO:  expand to 90-day
+    let today = dateToday();
+
+    //iterate across all transactions and project daily balances for each account...begining with TODAY.  Resulting table should be:
+    // date, acct1 balance, acct 2 balance
+    // NOTE:  it's possible that a given transaction has no impact to any given date...e.g. a future transaction won't impact TODAY.  Put another way
+
+
+    projections.timeSeries = getBalanceSeriesStruct(action.payload, [100000,100000], today, 60);
+
+    // let seriesTrans = action.payload.map((t) => {  //(t)ransaction
+    //   return [t.scheduledDate, t.accountName, t.type, t.amount]
+    // });
+    // console.log("reformatted transactions for series\n", seriesTrans)
+    //
+    // projections.timeSeries = new TimeSeries({
+    //     name: "Balances",
+    //     columns: ["index", "account", "type", "amount"],
+    //     utc: true,
+    //     points: seriesTrans
+    // });
 
     console.log("timeSeries: \n", projections.timeSeries);
     console.log("returning newState LOAD-TXNS:\n", projections);
