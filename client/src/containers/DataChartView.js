@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {accountNameTypes} from '../util/data.mock';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 
 import newProjection from '../actions/newProjection';
 
@@ -24,11 +25,38 @@ class DataChartView extends Component {
   constructor(props) {
 	   super(props);
      console.log("props in DataChartView constructor\n", props);
+
+     this.handleChartHighlight = this.handleChartHighlight.bind(this);
+
+     this.state = {chartObject: {},
+                   chartInfoBox: []};
   };
 
   componentWillReceiveProps(nextProps){
     console.log("nextProps in DataChartView\n", nextProps);
   };
+
+  handleChartHighlight(chartObject){
+
+    if (chartObject === {} || chartObject === null){
+      return
+    };
+
+    const balText = (chartObject.event.get(chartObject.column)).toString();
+
+    let dateText = chartObject.event.indexAsString(chartObject.event);
+
+    dateText = moment(dateText).format("ddd, MMM D");
+
+    const colText = chartObject.column;
+
+    let hoverTextObjs = [{label: "Date: ", value: dateText},{label: "Acct: ", value: colText},{label: "Bal: ", value: balText}];
+
+    this.setState({chartObject: chartObject,
+                  chartInfoBox: hoverTextObjs});
+
+  };
+
 
   render() {
 
@@ -40,6 +68,8 @@ class DataChartView extends Component {
       console.log(this.props);
       return null;
     };
+
+    console.log("chartObject: \n", this.state.chartObject);
 
     // we're rendering a new projection....let every reducer know via an Action...
     this.props.newProjection(this.props.projections);
@@ -63,11 +93,11 @@ class DataChartView extends Component {
             <YAxis
               id="balances"
               label="Projected Balances"
-              min={balances.min}
-              max={balances.max}
+              min={balances.creditMin}
+              max={balances.endingCash}
               width="70"
               type="linear"
-              />
+            />
             <Charts>
               <BarChart
                 axis="balances"
@@ -75,7 +105,12 @@ class DataChartView extends Component {
                 spacing={2}
                 columns={[accountNameTypes[0],accountNameTypes[1]]}
                 series={balances.dailyBalances}
-                />
+                highlighted={this.state.chartObject}
+                onHighlightChange={this.handleChartHighlight}
+                info={this.state.chartInfoBox}
+                infoHeight={28}
+                infoWidth={110}
+              />
             </Charts>
           </ChartRow>
         </ChartContainer>

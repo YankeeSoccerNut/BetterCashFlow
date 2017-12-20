@@ -3,7 +3,7 @@ import {accountNameTypes } from './data.mock.js';
 import _ from "lodash";
 
 Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
+    let date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
     return date;
 };
@@ -18,10 +18,10 @@ function dateToday() {
 function getDates(startDate, days) {
   // build an array of x elements based on startDate and number of days.  Date will be the key value for the array.
 
-  var stopDate = dateToday();
+  let stopDate = dateToday();
   stopDate.setDate(startDate.getDate() + days);
-  var dateArray = new Array();
-  var currentDate = startDate;
+  let dateArray = new Array();
+  let currentDate = startDate;
   currentDate.setHours(0, 0, 0, 0);
   while (currentDate <= stopDate) {
       dateArray.push(new Date (currentDate));
@@ -31,76 +31,101 @@ function getDates(startDate, days) {
 }
 
 function formatDate(date) {
-    var day = date.getDate();
+    let day = date.getDate();
     if (day < 10) {
-	day = '0' + day;
+  day = '0' + day;
     }
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + day;
 }
 
 function createDate(dateString) {
-    var d = new Date(dateString+'T00:00:00-0500');
+    let d = new Date(dateString+'T00:00:00-0500');
     d.setHours(0, 0, 0, 0);
     return d;
 }
 
 function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
-    balance = balance.slice();
-    const points = [];
-    var i = 0;
-    var min = 0;
-    var max = 0;
-    _.forEach(getDates(currentDate, numDays), function(date) {
-	date.setHours(0, 0, 0, 0);
-	while(i < transactions.length - 1) {
-	    const targetDate = createDate(transactions[i].scheduledDate);
-	    targetDate.setHours(0, 0, 0, 0);
-	    if(date - targetDate > 0) {
-		i = i + 1;
-	    } else {
-		break;
-	    }
-	}
-	if (i < transactions.length) {
-	    const tran = transactions[i];
-	    const targetDate = createDate(tran.scheduledDate);
-	    targetDate.setHours(0, 0, 0, 0);
-	    if (date - targetDate === 0) {
-		var balanceIndex = 0;
-		if (tran.accountName === accountNameTypes[1]) {
-		    balanceIndex = 1;
-		}
-		if (tran.type === 'Expense') {
-		    balance[balanceIndex] = balance[balanceIndex] - tran.amount;
-		} else {
-		    balance[balanceIndex] = balance[balanceIndex] + tran.amount;
-		}
-	    }
 
-	}
-	const total = balance[0] + balance[1];
-	if (total > max) {
-	    max = total;
-	}
-	if (total < min) {
-	    min = total;
-	}
-	points.push([formatDate(date), balance[0], balance[1]]);
-    });
+  //balance[0] is Cash....balance[1] is Credit
+  balance = balance.slice();
+  const points = [];
+  let i = 0;
+  let cashMin = 0;
+  let cashMax = 0;
+  let creditMin = 0;
+  let creditMax = 0;
 
-    console.log("data points: \n", points);
-    return {
-	dailyBalances: new TimeSeries({
-	    name: 'Balances',
-	    utc: false,
-	    columns: ["index", accountNameTypes[0], accountNameTypes[1]],
-	    points: points
-	}),
-	max: max,
-	min: min,
-  endingCash: points[points.length-1][1],
-  endingCredit: points[points.length-1][2]
+  _.forEach(getDates(currentDate, numDays), function(date) {
+    date.setHours(0, 0, 0, 0);
+    while(i < transactions.length - 1) {
+      const targetDate = createDate(transactions[i].scheduledDate);
+      targetDate.setHours(0, 0, 0, 0);
+      if(date - targetDate > 0) {
+        i++;
+      } else {
+        break;
+      };
     };
-}
+
+    // calculate this transactions impact to appropriate balance (Cash or Credit)
+    if (i < transactions.length) {
+      const tran = transactions[i];
+      const targetDate = createDate(tran.scheduledDate);
+      targetDate.setHours(0, 0, 0, 0);
+      if (date - targetDate === 0) { //dates match
+        let balanceIndex = 0;  //assume Cash
+        if (tran.accountName === accountNameTypes[1]) {  // unless Credit!
+            balanceIndex = 1;
+        };
+        // impact is different for cash v credit
+        // expenses draw down on Cash (Asset), increase Credit (Liability)...
+        if (tran.type === 'Expense' && balanceIndex === 0) {
+            balance[balanceIndex] = balance[balanceIndex] - tran.amount;
+        } else if (tran.type === 'Income' && balanceIndex === 0){
+          balance[balanceIndex] = balance[balanceIndex] + tran.amount;
+        } else if (tran.type === 'Expense' && balanceIndex === 1) {
+          balance[balanceIndex] = balance[balanceIndex] + tran.amount;
+        } else if (tran.type === 'Income' && balanceIndex === 1){
+            balance[balanceIndex] = balance[balanceIndex] - tran.amount;
+        } else {
+          console.log("!!!!!!!! INVALID TRANS TYPE !!!!!!!!!!!!"); // should never happen :-)
+        };
+      };
+    };
+  const total = balance[0] + balance[1];
+  if (balance[0] > cashMax) {
+      cashMax = balance[0];
+  };
+  if (balance[0] < cashMin) {
+      cashMin = balance[0];
+  };
+
+  if (balance[1] > creditMax) {
+      creditMax = balance[0];
+  };
+  if (balance[1] < creditMin) {
+      creditMin = balance[1];
+  };
+
+
+  points.push([formatDate(date), balance[0], (balance[1]*-1)]);
+  });
+
+  console.log("data points: \n", points);
+  return {
+    dailyBalances: new TimeSeries({
+      name: 'Balances',
+      utc: false,
+      columns: ["index", accountNameTypes[0], accountNameTypes[1]],
+      points: points
+    }),
+    cashMax: cashMax,
+    cashMin: cashMin,
+    creditMax: creditMax,
+    creditMin: creditMin,
+    endingCash: points[points.length-1][1],
+    endingCredit: points[points.length-1][2]
+  };
+};
 
 export {getBalanceSeriesStruct, formatDate, createDate, getDates, dateToday };
