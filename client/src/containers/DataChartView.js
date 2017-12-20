@@ -127,7 +127,6 @@ function mapStateToProps(state){
   };
 };
 
-// I don't think I need this.....
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     newProjection: newProjection

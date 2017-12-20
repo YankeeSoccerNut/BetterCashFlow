@@ -8,8 +8,6 @@
 
 
   export default function(state=null, action){
-    // console.log("<<<<<<<<<<<<<reducer.FinAccount");
-    // console.log(action);
 
     switch (action.type){
     case 'INIT-FIN-ACCT':
@@ -24,18 +22,6 @@
         let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
         // console.log("newState:" , newState);
         return (newState);
-      };
-
-    case 'CELL-EDIT':
-      // console.log("+++++++------- CELL-EDIT in FIN-ACCOUNT");
-      // console.log("action payload", action.payload);
-      // console.log("state", state);
-
-      if (state === null){
-        return (state);
-      }
-      else {
-        return (state);  // temp for now...
       };
 
     default:
