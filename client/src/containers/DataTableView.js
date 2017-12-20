@@ -7,12 +7,13 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 
 // mock data
-import {getTransactions, payeeTypes, getBalances, accountNameTypes, typeTypes} from '../util/data.mock.js';
+import {getTransactions, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
 
 import onCellEdit from '../actions/onCellEdit';
 import onAddRow from '../actions/onAddRow';
 import onDeleteRow from '../actions/onDeleteRow';
 import loadTransactions from '../actions/loadTransactions';
+import newDataTable from '../actions/newDataTable';
 
 
 
@@ -27,6 +28,12 @@ class DataTableView extends Component {
     // this.onDeleteRow = this.onDeleteRow.bind(this);
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log("DataTableView nextProps\n", nextProps);
+
+    nextProps.newDataTable(nextProps.transactions);
+
+  };
   componentDidMount(){
     const transactions = getTransactions();
 
@@ -169,7 +176,8 @@ function mapDispatchToProps(dispatch){
     loadTransactions: loadTransactions,
     onCellEdit: onCellEdit,
     onAddRow: onAddRow,
-    onDeleteRow: onDeleteRow
+    onDeleteRow: onDeleteRow,
+    newDataTable: newDataTable
   }, dispatch);
 };
 

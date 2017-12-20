@@ -1,5 +1,4 @@
-import {connect} from 'react-redux';
-import {accountNameTypes, typeTypes} from './data.mock.js';
+import {accountNameTypes } from './data.mock.js';
 import {TimeSeries} from "pondjs";
 import _ from "lodash";
 
@@ -21,8 +20,6 @@ function applyName(name, input) {
     }
     return tmp;
 }
-
-const mapStateToProps = (name) => state => (newState(state[name]));
 
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
@@ -84,16 +81,16 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
 	    const tran = transactions[i];
 	    const targetDate = createDate(tran.scheduledDate);
 	    targetDate.setHours(0, 0, 0, 0);
-	    if (date - targetDate == 0) {
+	    if (date - targetDate === 0) {
 		var balanceIndex = 0;
-		if (tran.accountName == accountNameTypes[1]) {
+		if (tran.accountName === accountNameTypes[1]) {
 		    balanceIndex = 1;
 		}
-		if (tran.type == 'Expense') {
+		if (tran.type === 'Expense') {
 		    balance[balanceIndex] = balance[balanceIndex] - tran.amount;
 		} else {
-		    balance[balanceIndex] = balance[balanceIndex] + tran.amount;		
-		}	    
+		    balance[balanceIndex] = balance[balanceIndex] + tran.amount;
+		}
 	    }
 
 	}
@@ -119,4 +116,3 @@ function getBalanceSeriesStruct(transactions, balance, currentDate) {
 }
 
 export {generateReducer, newState, applyName, getBalanceSeriesStruct, formatDate, createDate, dateToday};
-

@@ -3,7 +3,7 @@ import {accountNameTypes} from '../util/data.mock';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import initSeries from '../actions/initSeries';
+import newProjection from '../actions/newProjection';
 
 import {
     Charts,
@@ -15,7 +15,7 @@ import {
     styler
 } from "react-timeseries-charts";
 
-import { TimeSeries } from 'pondjs';
+// import { TimeSeries } from 'pondjs';
 
 
 class DataChartView extends Component {
@@ -23,7 +23,11 @@ class DataChartView extends Component {
 
   constructor(props) {
 	   super(props);
-     console.log("props in DataChartView constructor\n", props)
+     console.log("props in DataChartView constructor\n", props);
+  };
+
+  componentWillReceiveProps(nextProps){
+    console.log("nextProps in DataChartView\n", nextProps);
   };
 
   render() {
@@ -36,6 +40,9 @@ class DataChartView extends Component {
       console.log(this.props);
       return null;
     };
+
+    // we're rendering a new projection....let every reducer know via an Action...
+    this.props.newProjection(this.props.projections);
 
     const style = styler([
         { key: accountNameTypes[0], color: "blue"},
@@ -80,14 +87,15 @@ function mapStateToProps(state){
   // state in this context is the root reducers
   // this function's only job is to map props to pieces of state that THIS component is interested in
   return{
-    projections: state.projections
+    projections: state.projections,
+    transactions: state.transactions
   };
 };
 
 // I don't think I need this.....
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    initSeries: initSeries
+    newProjection: newProjection
   }, dispatch);
 };
 

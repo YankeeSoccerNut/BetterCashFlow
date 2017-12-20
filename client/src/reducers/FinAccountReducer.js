@@ -24,8 +24,8 @@
         let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
         // console.log("newState:" , newState);
         return (newState);
-      }
-      break;
+      };
+
     case 'CELL-EDIT':
       // console.log("+++++++------- CELL-EDIT in FIN-ACCOUNT");
       // console.log("action payload", action.payload);
@@ -36,8 +36,7 @@
       }
       else {
         return (state);  // temp for now...
-      }
-      break;
+      };
 
     default:
       return state;

@@ -49,7 +49,7 @@ function addTransactions(quantity) {
 }
 
 function getTransactions() {
-    return addTransactions(20);
+    return addTransactions(30);
 }
 
 function getBalances() {

@@ -1,5 +1,5 @@
 import { TimeSeries } from 'pondjs';
-import {accountNameTypes, typeTypes} from './data.mock.js';
+import {accountNameTypes } from './data.mock.js';
 import _ from "lodash";
 
 Date.prototype.addDays = function(days) {
@@ -65,12 +65,12 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
 	    const tran = transactions[i];
 	    const targetDate = createDate(tran.scheduledDate);
 	    targetDate.setHours(0, 0, 0, 0);
-	    if (date - targetDate == 0) {
+	    if (date - targetDate === 0) {
 		var balanceIndex = 0;
-		if (tran.accountName == accountNameTypes[1]) {
+		if (tran.accountName === accountNameTypes[1]) {
 		    balanceIndex = 1;
 		}
-		if (tran.type == 'Expense') {
+		if (tran.type === 'Expense') {
 		    balance[balanceIndex] = balance[balanceIndex] - tran.amount;
 		} else {
 		    balance[balanceIndex] = balance[balanceIndex] + tran.amount;
@@ -97,7 +97,9 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
 	    points: points
 	}),
 	max: max,
-	min: min
+	min: min,
+  endingCash: points[points.length-1][1],
+  endingCredit: points[points.length-1][2]
     };
 }
 
