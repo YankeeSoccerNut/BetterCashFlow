@@ -50,7 +50,7 @@ class DataChartView extends Component {
 
     const colText = chartObject.column;
 
-    let hoverTextObjs = [{label: "Date: ", value: dateText},{label: "Acct: ", value: colText},{label: "Bal: ", value: balText}];
+    let hoverTextObjs = [{label: "Date", value: dateText},{label: "Acct", value: colText},{label: "Bal", value: balText}];
 
     this.setState({chartObject: chartObject,
                   chartInfoBox: hoverTextObjs});
@@ -108,8 +108,9 @@ class DataChartView extends Component {
                 highlighted={this.state.chartObject}
                 onHighlightChange={this.handleChartHighlight}
                 info={this.state.chartInfoBox}
-                infoHeight={28}
-                infoWidth={110}
+                infoStyle = {{ stroke: "black", fill: "yellow", opacity: 1, pointerEvents: "none" }}
+                infoHeight={60}
+                infoWidth={120}
               />
             </Charts>
           </ChartRow>

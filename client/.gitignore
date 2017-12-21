@@ -22,3 +22,7 @@ yarn-error.log*
 
 #our config
 /config
+/api/config
+
+#all of yodlee
+/yodlee
