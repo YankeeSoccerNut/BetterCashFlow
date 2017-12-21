@@ -5,5 +5,7 @@
   "userId": "98EJRHNVB2I8NYFFHT4921AY3mwiZD15VbawpyPlW1t26MvEY",
   "password": "bJPvBjUmTI8cb08Z7FOlEfDFio",
   "cert": "/Users/Scott/DigitalCrafts/BetterCashFlow/config/cert.pem",
-  "key": "/Users/Scott/DigitalCrafts/BetterCashFlow/config/key_df3d1985-e8fd-43fd-b6ca-3f8ee2f87bd9.pem"
+  "key": "/Users/Scott/DigitalCrafts/BetterCashFlow/config/key_df3d1985-e8fd-43fd-b6ca-3f8ee2f87bd9.pem",
+  "yodleeCobrand": "sbCobdd4083b3fbe3dc6f80968200f25a592cda",
+  "yodleePass": "27909540-fa65-4bd2-9bc7-b14b861d76c4"
 }
