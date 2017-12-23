@@ -20,11 +20,9 @@ class Register extends Component {
     let formData = {
       name: e.target[0].value,
       email: e.target[1].value,
-      accountType: e.target[2].value,
-      password: e.target[3].value,
-      city: e.target[4].value,
-      state: e.target[5].value,
-      salesRep: e.target[6].value
+      password: e.target[2].value,
+      phone: e.target[3].value,
+      company: e.target[4].value,
     }
 
     this.props.authAction(formData);
@@ -75,18 +73,18 @@ class Register extends Component {
         </FormGroup>
         <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-                City
+                Phone
             </Col>
             <Col sm={5}>
-                <FormControl type="text" name="city" placeholder="City" />
+                <FormControl type="text" name="phone" placeholder="Phone" />
             </Col>
         </FormGroup>
         <FormGroup controlId="formHorizontalName">
             <Col componentClass={ControlLabel} sm={2}>
-                State
+                Company Name
             </Col>
             <Col sm={5}>
-                <FormControl type="text" name="state" placeholder="State" />
+                <FormControl type="text" name="company" placeholder="Company Name" />
             </Col>
         </FormGroup>
         <FormGroup>

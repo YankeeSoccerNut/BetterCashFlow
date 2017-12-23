@@ -31,14 +31,12 @@ handleSubmit(e){
 
 componentWillReceiveProps(newProps){
   console.log("componentWillReceiveProps\n", newProps);
-  console.log(newProps.auth.msg);
-  if(newProps.auth.msg === "wrongPassword"){
-    this.setState({error: "Password doesn't match"});
-  } else if (newProps.auth.msg === "badUser") {
-    this.setState({error: "Password doesn't match"});
-  } else if (newProps.auth.msg === "loginSuccess") {
-    newProps.getCart(newProps.auth.token);
-    newProps.history.push('/');
+
+  if(newProps.auth.token === ''){
+    this.setState({error: newProps.auth.status});
+  } else {
+    console.log(newProps.auth.status);
+    newProps.history.push('/home');
   };
 };
 

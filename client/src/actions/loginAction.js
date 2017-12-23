@@ -18,11 +18,12 @@ export default function(formData){
     });
   } else {
     axiosPromise = axios({
-      url: `${window.apiHost}/login`,
+      url: `${window.apiHost}/api/login`,
       method: "POST",
       data: formData
     });
   };
+
 
 // using promise as payload will cause our middleware to kick in....
 // redux-promise won't dispatch the action (inform reducers) until the promise is fulfilled

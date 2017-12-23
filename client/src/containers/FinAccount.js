@@ -20,7 +20,7 @@ class FinAccount extends Component {
   }
 
   componentDidMount(props){
-    // console.log("+++++++++++++FinAccount.componentDidMount");
+    console.log("+++++++++++++FinAccount.componentDidMount");
     let accountObject = {
       finInstitution: '',
       accounts: []
@@ -47,13 +47,13 @@ class FinAccount extends Component {
   };
 
   getUSBankUserInfo(){
-    // console.log("in getUSBankUserInfo");
+    console.log("in getUSBankUserInfo");
 
     let getUSBankUserInfoPromise =
     new Promise(function(resolve, reject) {
       axios({
         method: "GET",
-        url: "http://localhost:3001/api/getUSBankUserInfo",
+        url: `${window.apiHost}/api/getUSBankUserInfo`,
         data:[]
       }).then((userInfo) => {
         resolve(userInfo.data);
@@ -67,13 +67,13 @@ class FinAccount extends Component {
   };
 
   getVisaVirtualAcctInfo(){
-    // console.log("in getUSBankUserInfo");
+    console.log("in getVisaVirtualAcctInfo");
 
     let getVisaVirtualAcctInfoPromise =
     new Promise(function(resolve, reject) {
       axios({
         method: "GET",
-        url: "http://localhost:3001/api/reqVisaB2BAccount",
+        url: `${window.apiHost}/api/reqVisaB2BAccount`,
         data:[]
       }).then((VisaB2BResponse) => {
         resolve(VisaB2BResponse.data);
@@ -119,8 +119,8 @@ class FinAccount extends Component {
 
 
   render() {
-    // console.log("RENDERING>>>>>>FinAccount props:")
-    // console.log(this.props);
+    console.log("RENDERING>>>>>>FinAccount props:")
+    console.log(this.props);
 
     // Initial render won't have anything....
     if (this.props.accountObjects === null){

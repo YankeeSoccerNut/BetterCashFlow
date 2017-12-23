@@ -8,6 +8,7 @@ import FinAccountReducer from './FinAccountReducer';
 import DataChartReducer from './DataChartReducer';
 import DataTableReducer from './DataTableReducer';
 import AnalyzerReducer from './AnalyzerReducer';
+import AuthReducer from './AuthReducer';
 
 // Build the rootReducer using the combineReducer function...1 arg {}
 // {} can have multiple properties..1 per reducer
@@ -15,7 +16,8 @@ const rootReducer = combineReducers(
   {accountObjects: FinAccountReducer,
   projections: DataChartReducer,
   observations: AnalyzerReducer,
-  transactions: DataTableReducer}
+  transactions: DataTableReducer,
+  auth: AuthReducer}
 );
 
 export default rootReducer;

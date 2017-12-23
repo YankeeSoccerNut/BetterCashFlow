@@ -1,30 +1,22 @@
-import React from 'react'
+import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 
+import { createStore, applyMiddleware } from 'redux';
 
-import { createStore } from 'redux';
+import RootReducer from './reducers/RootReducer';
+import reduxPromise from 'redux-promise';
+
+// React needs to know about it...Provider accomplishes this
 import { Provider } from 'react-redux';
 
-// this is the root of the Store...we define it!
-import reducers from './reducers/index';
+// using IIFE way to create theStore....
+const theStore = applyMiddleware(reduxPromise)(createStore)(RootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
-// now make theStore!
-const theStore = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-
-
-// import AppRedux from './app.redux.js';
-// import {createStore, combineReducers, applyMiddleware} from 'redux';
-// import PropTypes from 'prop-types';
-// import {connect, Provider} from 'react-redux';
-// import createLogger from 'redux-logger';
-// import DataTableView from './containers/DataTableView';
-// import DataChartView from './containers/DataChartView';
-// import FinAccount from './containers/FinAccount';
-
+// wrap the App with the Provider so everything in the App can use state
 ReactDOM.render(
-    <Provider store={theStore}>
-      <App/>
-    </Provider>,
-    document.getElementById('root'));
+	<Provider store={theStore}>
+		<App />
+	</Provider>,
+	document.getElementById('root'
+));

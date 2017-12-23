@@ -1,7 +1,7 @@
 var request = require('request');
 var fs = require('fs');
 var crypto = require('crypto');
-var config = require('../config/configuration.json');
+var config = require('../config/config');
 var randomstring = require('randomstring');
 
 function logRequest(requestBody, path) {

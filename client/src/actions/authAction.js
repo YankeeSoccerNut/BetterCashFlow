@@ -6,7 +6,7 @@ export default function(formData){
 
   console.log("authAction is running!!\n",formData);
   let axiosPromise = axios({
-    url: `${window.apiHost}/register`,
+    url: `${window.apiHost}/api/register`,
     method: "POST",
     data: formData
   });
