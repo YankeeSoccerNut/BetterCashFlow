@@ -36,7 +36,7 @@ componentWillReceiveProps(newProps){
     this.setState({error: newProps.auth.status});
   } else {
     console.log(newProps.auth.status);
-    newProps.history.push('/home');
+    newProps.history.push('/better-cash-flow');
   };
 };
 
