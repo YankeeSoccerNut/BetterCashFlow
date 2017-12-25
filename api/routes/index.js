@@ -18,7 +18,7 @@ const passport = require('passport');
 // const JwtStrategy = require('passport-jwt').Strategy;
 
 const bcrypt = require('bcrypt-nodejs');
-const jwtSimple = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 
 // for VISAB2B
 let  fs = require('fs');
@@ -32,7 +32,14 @@ let  password = config.password;
 let  keyFile = config.key;
 let  certificateFile = config.cert;
 
+router.get('/', (req, res) => {
+  console.log("req.user: ", req.user);
+  console.log("req.isAuthenticated: ", req.isAuthenticated());
+});
+
 router.get('/api', (req, res) => {
+  console.log("req.user: ", req.user);
+  console.log("req.isAuthenticated: ", req.isAuthenticated());
   res.send("Invalid API route")
 });
 
@@ -48,12 +55,14 @@ router.post('/api/register',(req, res) => {
       return;
     }
 
+    console.log(rows);
     if(rows.length > 0){
       res.json({msg: 'User already registered!'});
       return;
     };
 
-    const hash = bcrypt.hashSync(req.body.password);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
 
     const insertQuery = "INSERT INTO users (fullname,email,password,sms_phone,company_name) VALUES (?,?,?,?,?);";
 
@@ -63,11 +72,18 @@ router.post('/api/register',(req, res) => {
             res.json({msg: err});
             return;
           }
-          console.log(rows.insertId);
+          console.log("rows.insertId: ", rows.insertId);
           req.login(rows.insertId, function(err) {
+            // payload is encoded with token...
+            let payload = { uid: rows.insertId };
+
+            const token = jwt.sign(payload, mySecret)
+            console.log("token: ", token);
+
             console.log("req.session.passport", req.session.passport);
             console.log("req.user: ", req.user);
-            res.json({msg: 'User Registered!'});
+            res.json({status: 'User Registered!',
+                      token: token});
             return;
           });
     });
@@ -100,7 +116,7 @@ function ensureAuthenticated(req, res, next){
               msg: 'User Not Authorized'}));
 };
 
-router.post('/api/protected', function(req, res, next) {
+router.post('/api/protected', function(req, res) {
   console.log("hit /api/protected");
 
   passport.authenticate('jwt', function(err, user, info) {
@@ -108,14 +124,25 @@ router.post('/api/protected', function(req, res, next) {
     console.log("user\n", user);
     console.log("info\n", info);
 
-    if (err) return next(err);
-        if (user) {
-          req.user = user;
-          return next();
-        } else {
-          return res.status(401).json({ status: 'error', code: 'unauthorized for /api/protected' });
-        }
-      })(req, res, next);
+    if (err) {
+      console.log(err);
+      res.json({status: 'Error', msg: err});
+      return;
+    };
+
+    if (user) {
+      console.log("user:" , user)
+      console.log("req.user", req.user);
+      console.log("req.session.passport.user: ", req.session.passport);
+
+      // feels like I should be deserializing the user with the uid....req.user is undefined at this point...req.session.passport.user is also undefined
+
+      res.json({status: 'Authorized for /api/protected'})
+      return;
+    } else {
+      return res.status(401).json({ status: 'error', code: 'unauthorized for /api/protected' });
+    }
+  })(req, res);
 });
 
 // Passport's default behavior is to just send back a 401 unauthorized message IF it is used as middleware.  Override this default by authenticating within the route so a well-structured response can be sent back to client.
@@ -123,27 +150,25 @@ router.post('/api/protected', function(req, res, next) {
 router.post('/api/login', function(req, res, next) {
   console.log("hit /api/login");
   passport.authenticate('local', function(err, user, info) {
+
     if(err){
       res.json({token: '', status: err});
-    } else if (user) {
-      console.log(user);
+      return;
+    };
 
-      console.log("After deserialize...req.session: \n", req.session);
-      console.log("After deserialize...req.user: \n", req.user);
+    console.log("authenticated user: ")
 
+    req.login(user.id, function(err) {
 
-
-      //generate a JWT.....
-      // encode
-      let payload = { token: 'bar' };
-      const token = jwtSimple.encode(payload, mySecret)
+      const token = jwt.sign({ uid: user.id }, mySecret)
       console.log("token: ", token);
 
-      //send it back....
-      res.json({token: token, status: 'User Logged In'});
-    } else {
-      res.json({token: '', status: info});
-    };
+      console.log("req.session.passport", req.session.passport);
+      console.log("req.user: ", req.user);
+      res.json({status: 'User Logged In!',
+                token: token});
+      return;
+    });
   })(req, res, next);
 });
 
@@ -256,8 +281,17 @@ passport.serializeUser(function(uid, done){
     done(null, uid);
 });
 
-passport.deserializeUser(function(uid, done){
+passport.deserializeUser(function(uid, err, done){
     done(err, uid);
 });
 
+function authenticationMiddleware() {
+  return(req, res, next) => {
+    console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+
+    if (req.isAuthenticated()) return next();
+
+    res.json({status: 'User is not authenticated', token: ''});
+  }
+}
 module.exports = router;

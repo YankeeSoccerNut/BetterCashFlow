@@ -2,7 +2,6 @@ const config = require('./config/config');
 const mySecret = config.mySecret;
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 
 const request = require('request');
 
@@ -14,6 +13,9 @@ connection.connect();
 
 const session = require('express-session');
 const passport = require('passport');
+const MySQLSessionStore = require('express-mysql-session')(session);
+
+const sessionStore = new MySQLSessionStore(config.db);
 
 const LocalStrategy = require('passport-local').Strategy;
 
@@ -22,20 +24,23 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const jwtOpts = {};
 
-jwtOpts.jwtFromRequest = ExtractJwt.fromBodyField('token');
+jwtOpts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('JWT');
 jwtOpts.secretOrKey = mySecret;
-jwtOpts.tokenBodyField = 'token';
 
 const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
-app.use(session({ secret: mySecret, resave: false, saveUninitialized: false })); // cookie: {secure: true }
+app.use(session({ secret: mySecret,
+  resave: false,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {secure: false}})); // cookie: {secure: true }
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 // passport auth strategies.....
 passport.use('local', new LocalStrategy({
@@ -75,9 +80,9 @@ passport.use('local', new LocalStrategy({
     // match the token in the payload against the token in the session...if no match or err then return false to protect route...
 
     // for now...everything passes!
+    console.log("First line in JwtStrategy.......");
     console.log("jwtPayload: ", jwtPayload);
-    return done(null, user);
-
+    return done(null, jwtPayload);
     // User.findOne({id: jwt_payload.sub}, function(err, user) {
     //     if (err) {
     //         return done(err, false);
@@ -95,7 +100,8 @@ passport.use('local', new LocalStrategy({
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
 
