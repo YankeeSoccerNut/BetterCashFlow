@@ -1,7 +1,9 @@
 const config = require('./config/config');
-
+const mySecret = config.mySecret;
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 const request = require('request');
 
 const index = require('./routes/index');
@@ -10,22 +12,32 @@ const mysql = require('mysql');
 const connection = mysql.createConnection(config.db)
 connection.connect();
 
+const session = require('express-session');
 const passport = require('passport');
+
 const LocalStrategy = require('passport-local').Strategy;
+
+const JwtStrategy = require('passport-jwt').Strategy;
+
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const jwtOpts = {};
+
+jwtOpts.jwtFromRequest = ExtractJwt.fromBodyField('token');
+jwtOpts.secretOrKey = mySecret;
+jwtOpts.tokenBodyField = 'token';
 
 const bcrypt = require('bcrypt-nodejs');
 
 const app = express();
-
-// For passport and persistent sessions....
-// TODO: repalce secret with config.js property
-
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-
-//initialize passport...
+app.use(session({ secret: mySecret, resave: false, saveUninitialized: false })); // cookie: {secure: true }
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// passport auth strategies.....
 passport.use('local', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
@@ -35,7 +47,6 @@ passport.use('local', new LocalStrategy({
       if(!email || !password ) { return done(null, false, res.json({msg: 'Missing email or password'})); }
 
       connection.query("select * from users where email = ?;", [email], function(err, rows){
-
 
         if (err){
           console.log(err);
@@ -59,27 +70,34 @@ passport.use('local', new LocalStrategy({
 
   })); // passport.use('local'....
 
-passport.serializeUser(function(user, done){
-    done(null, user.email);
-});
+  passport.use('jwt', new JwtStrategy(jwtOpts, function (jwtPayload, done){
 
-passport.deserializeUser(function(email, done){
-    connection.query("select * from users where email = ?;", [email], function (err, rows){
-        done(err, rows[0]);
-    });
-});
+    // match the token in the payload against the token in the session...if no match or err then return false to protect route...
 
+    // for now...everything passes!
+    console.log("jwtPayload: ", jwtPayload);
+    return done(null, user);
+
+    // User.findOne({id: jwt_payload.sub}, function(err, user) {
+    //     if (err) {
+    //         return done(err, false);
+    //     }
+    //     if (user) {
+    //         return done(null, user);
+    //     } else {
+    //         return done(null, false);
+    //         // or you could create a new account
+    //     }
+    // });
+  }));
 
 // Allow cross-origin.....
+
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/', index);
 

@@ -1,5 +1,5 @@
 const config = require('../config/config');
-
+const mySecret = config.mySecret;
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -9,11 +9,16 @@ const mysql = require('mysql');
 const connection = mysql.createConnection(config.db)
 connection.connect();
 
+// need 2 passport strategies....
+// 1.  Local will use email/password for login
+// 2.  Jwt will use a bearer token to protect api routes
+
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
+// const JwtStrategy = require('passport-jwt').Strategy;
 
 const bcrypt = require('bcrypt-nodejs');
-
+const jwtSimple = require('jwt-simple');
 
 // for VISAB2B
 let  fs = require('fs');
@@ -39,11 +44,13 @@ router.post('/api/register',(req, res) => {
   connection.query("select * from users where email = ?;", [req.body.email], function(err, rows){
     if (err) {
       console.log(err);
-      res.json({msg: err})
+      res.json({msg: err});
+      return;
     }
 
     if(rows.length > 0){
       res.json({msg: 'User already registered!'});
+      return;
     };
 
     const hash = bcrypt.hashSync(req.body.password);
@@ -53,9 +60,16 @@ router.post('/api/register',(req, res) => {
     connection.query(insertQuery,[req.body.name, req.body.email, hash, req.body.phone, req.body.company], function(err, rows){
           if(err){
             console.log(err);
-            res.json({msg: err})
+            res.json({msg: err});
+            return;
           }
-          res.json({msg: 'User Registered!'});
+          console.log(rows.insertId);
+          req.login(rows.insertId, function(err) {
+            console.log("req.session.passport", req.session.passport);
+            console.log("req.user: ", req.user);
+            res.json({msg: 'User Registered!'});
+            return;
+          });
     });
   });
 });
@@ -64,7 +78,7 @@ router.post('/api/register',(req, res) => {
 router.get('/api/logout', function(req, res){
   console.log('logging out');
   req.logout();
-  res.json({msg: 'User Logged Out'});
+  res.json({token: '', status: 'User Logged Out'});
 });
 
 
@@ -73,31 +87,60 @@ router.get('/api/logout', function(req, res){
 // If the request is authenticated (typically via a persistent login session),
 // the request will proceed.  Otherwise, the user will be redirected to the
 // login page.
-function ensureAuthenticated(req, res, next) {
+function ensureAuthenticated(req, res, next){
+
+  console.log("req.user: ",req.user);
   if (req.isAuthenticated()) {
     // req.user is available for use here
     return next(); }
 
   // denied.
   console.log("ensureAuthenticated: Not Authorized");
-    return res(res.json({token: '',
+  return (res.json({token: '',
               msg: 'User Not Authorized'}));
 };
 
-// router.get('/protected', ensureAuthenticated, function(req, res) {
-//   res.send("access granted. secure stuff happens here");
-// });
+router.post('/api/protected', function(req, res, next) {
+  console.log("hit /api/protected");
+
+  passport.authenticate('jwt', function(err, user, info) {
+    console.log("err\n", err);
+    console.log("user\n", user);
+    console.log("info\n", info);
+
+    if (err) return next(err);
+        if (user) {
+          req.user = user;
+          return next();
+        } else {
+          return res.status(401).json({ status: 'error', code: 'unauthorized for /api/protected' });
+        }
+      })(req, res, next);
+});
 
 // Passport's default behavior is to just send back a 401 unauthorized message IF it is used as middleware.  Override this default by authenticating within the route so a well-structured response can be sent back to client.
 
 router.post('/api/login', function(req, res, next) {
   console.log("hit /api/login");
   passport.authenticate('local', function(err, user, info) {
-    console.log("req.session.id\n", req.session.id);
     if(err){
       res.json({token: '', status: err});
     } else if (user) {
-      res.json({token: req.session.id, status: 'User Logged In'});
+      console.log(user);
+
+      console.log("After deserialize...req.session: \n", req.session);
+      console.log("After deserialize...req.user: \n", req.user);
+
+
+
+      //generate a JWT.....
+      // encode
+      let payload = { token: 'bar' };
+      const token = jwtSimple.encode(payload, mySecret)
+      console.log("token: ", token);
+
+      //send it back....
+      res.json({token: token, status: 'User Logged In'});
     } else {
       res.json({token: '', status: info});
     };
@@ -207,6 +250,14 @@ router.get('/api/reqVisaB2BAccount', (req, res) => {
       });
     };
   });
+});
+
+passport.serializeUser(function(uid, done){
+    done(null, uid);
+});
+
+passport.deserializeUser(function(uid, done){
+    done(err, uid);
 });
 
 module.exports = router;
