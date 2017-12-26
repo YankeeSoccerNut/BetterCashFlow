@@ -30,7 +30,7 @@ function addTransactions(quantity) {
 	if (day < 10) {
 	    day = '0' + day;
 	}
-	const date = '2017-12-' + day;
+	const date = '2018-01-' + day;
 
 	// const date = '12/' + Math.floor(i) + '/2017';
 	if (createDate(date) >= dateToday()) {
@@ -49,11 +49,11 @@ function addTransactions(quantity) {
 }
 
 function getTransactions() {
-    return addTransactions(30);
+    return addTransactions(15);
 }
 
 function getBalances() {
-    return [10000, 8000];
+    return [10000, 15000];
 }
 
 export {getBalances, getTransactions, typeTypes, accountNameTypes, payeeTypes};

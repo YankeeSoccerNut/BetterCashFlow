@@ -8,7 +8,8 @@ export default function(formData){
   let axiosPromise = axios({
     url: `${window.apiHost}/api/register`,
     method: "POST",
-    data: formData
+    data: formData,
+    // withCredentials: true
   });
 
 // using promise as payload will cause our middleware to kick in....

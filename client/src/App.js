@@ -6,7 +6,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import BetterCashFlow from './containers/BetterCashFlow';
 
-import 'bootstrap/dist/css/bootstrap.css';
+// import 'bootstrap/dist/css/bootstrap.css';
 
 const App = () => {
   return (

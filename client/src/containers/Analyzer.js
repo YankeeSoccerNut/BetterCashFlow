@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { TimeSeries } from 'pondjs';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
@@ -15,10 +16,25 @@ class Analyzer extends Component {
 
     console.log("IN render() IN Analyzer*********", this.props);
 
+    if (this.props.projections === null){
+      console.log("this.props.projections === undefined...No RENDER")
+      return null;
+    };
+
+    console.log(this.props);
+    let factors = this.props.projections.timeSeries;
+
+    let timeSeriesJSON = factors.dailyBalances.toJSON();
+
+    console.log(timeSeriesJSON);
+    
+    console.log("\nfactors.endingCash: ", factors.endingCash);
+    console.log("\nfactors.endingCredit: ", factors.endingCredit);
 
     return (
       <div>
         <h4>Analyzer Component Goes Here</h4>
+
       </div>
     );
   }

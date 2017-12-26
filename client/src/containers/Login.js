@@ -3,6 +3,7 @@ import { Form, FormGroup, ControlLabel, FormControl, Button, Col } from 'react-b
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
+import axios from 'axios';
 
 class Login extends Component {
 
@@ -12,6 +13,21 @@ constructor(){
     error: ""
   };
   this.handleSubmit = this.handleSubmit.bind(this);
+  this.testButton = this.testButton.bind(this)
+};
+
+testButton(){
+  console.log("Test button pressed! state.auth: \n", this.props.auth);
+  let authToken = 'JWT ' + this.props.auth.token;
+  console.log("authToken: ", authToken);
+
+  axios.defaults.headers.common['Authorization'] = authToken;
+
+  axios(`${window.apiHost}/api/protected`, {
+    method: 'post',
+  }).then((response)=>{
+    console.log(response.data);
+  });
 };
 
 handleSubmit(e){
@@ -69,6 +85,9 @@ render(){
             </Col>
           </FormGroup>
         </Form>
+        <div>
+          <button onClick={this.testButton} className="btn btn-success">TEST</button>
+        </div>
       </div>
     )
   }
