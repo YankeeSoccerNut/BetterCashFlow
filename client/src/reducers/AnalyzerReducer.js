@@ -6,18 +6,33 @@
   //This reducer will look at these balances and set statuses accordingly....
 
 
-  export default function(state=null, action){
+  export default function(state=[], action){
 
     switch (action.type){
     case 'NEW-PROJECTION':
       console.log("NEW-PROJECTION in AnalyzerReducer....\n", action)
 
-      if (state === null){
-        return (state);
+      let newState = [];
+      let factors = action.payload.timeSeries;
+
+      let timeSeriesJSON = factors.dailyBalances.toJSON();
+      console.log(timeSeriesJSON);
+
+      console.log("\nfactors.endingCash: ", factors.endingCash);
+      console.log("\nfactors.endingCredit: ", factors.endingCredit);
+
+      if (factors.endingCash > 0){
+        newState.push({type: 'O', direction: 1, text: `You have a positive ending Cash Balance of $${factors.endingCash} for the period.`})
       };
 
-      let newState = {msg: "Appropriate Statuses"};
-
+      if (factors.endingCash + factors.endingCredit >= 0){
+        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash} covers your expenditures AND your current credit line for the period.`})
+      } else if (factors.endingCash < 0 ) {
+        newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period.`})
+        newState.push({type: 'R', direction: 0, text: `Monitor your credit line and see if you can generate or accelerate more receivables.`});
+      };
+      console.log("+++++++++++++++++ANALYZER STATE+++++++++++");
+      console.log(newState);
       return (newState);
 
     default:

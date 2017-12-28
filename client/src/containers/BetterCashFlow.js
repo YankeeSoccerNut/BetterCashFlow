@@ -11,8 +11,6 @@ class BetterCashFlow extends Component{
   render(){
     return(
     <div>
-      <BCFnavBar />
-      {/* <BCFsideNav /> */}
       <div className="container">
         <div className="col-sm-12">
           <Analyzer />

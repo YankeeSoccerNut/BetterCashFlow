@@ -17,8 +17,9 @@ export default function(state=null, action){
     // console.log(action.payload)
     if (state === null){   // initial and ONLY time through
       return (action.payload);
+    } else {
+      return(state);
     };
-    break;
   case 'CELL-EDIT':
     // console.log("=============== DataTableReducer CELL-EDIT =================");
     //

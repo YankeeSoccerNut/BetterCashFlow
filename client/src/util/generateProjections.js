@@ -80,13 +80,13 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
         // impact is different for cash v credit
         // expenses draw down on Cash (Asset), increase Credit (Liability)...
         if (tran.type === 'Expense' && balanceIndex === 0) {
-            balance[balanceIndex] = balance[balanceIndex] - tran.amount;
+            balance[balanceIndex] = balance[balanceIndex] - Number(tran.amount);
         } else if (tran.type === 'Income' && balanceIndex === 0){
-          balance[balanceIndex] = balance[balanceIndex] + tran.amount;
+          balance[balanceIndex] = balance[balanceIndex] + Number(tran.amount);
         } else if (tran.type === 'Expense' && balanceIndex === 1) {
-          balance[balanceIndex] = balance[balanceIndex] + tran.amount;
+          balance[balanceIndex] = balance[balanceIndex] + Number(tran.amount);
         } else if (tran.type === 'Income' && balanceIndex === 1){
-            balance[balanceIndex] = balance[balanceIndex] - tran.amount;
+            balance[balanceIndex] = balance[balanceIndex] - Number(tran.amount);
         } else {
           console.log("!!!!!!!! INVALID TRANS TYPE !!!!!!!!!!!!"); // should never happen :-)
         };

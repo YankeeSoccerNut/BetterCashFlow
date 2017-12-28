@@ -7,3 +7,12 @@ div #usbank-summary .panel-heading {
 div #visab2b-summary .panel-heading {
   color: red;
 }
+
+#coin-dollar {
+  padding-right: 5px;
+};
+
+#credit-card svg{
+  padding-right: 5px;
+  padding-left: 5px;
+}

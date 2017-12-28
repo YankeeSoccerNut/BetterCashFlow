@@ -16,16 +16,12 @@ import loadTransactions from '../actions/loadTransactions';
 import newDataTable from '../actions/newDataTable';
 
 
-
 class DataTableView extends Component {
 
   constructor(props) {
     super(props);
-    // this.onCellEdit = this.onCellEdit.bind(this);
-    // this.beforeSaveCell = this.beforeSaveCell.bind(this);
     this.afterSaveCell = this.afterSaveCell.bind(this);
     this.onModalAddRow = this.onModalAddRow.bind(this);
-    // this.onDeleteRow = this.onDeleteRow.bind(this);
   }
 
   componentWillReceiveProps(nextProps){
@@ -35,29 +31,16 @@ class DataTableView extends Component {
 
   };
   componentDidMount(){
+
+    if (this.props == null) {
+      return null;
+    };
+
     const transactions = getTransactions();
 
     this.props.loadTransactions(transactions);
   };
 
-  // beforeSaveCell(row, cellName, cellValue){
-  //   console.log("beforeSaveCell.........");
-  //   console.log(row, cellName, cellValue);
-  //   // this.props.onCellEdit({
-  //   //   row: row,
-  //   //   cellName: cellName,
-  //   //   cellValue: cellValue
-  //   // });
-  //
-  //   return(true);
-  // };
-
-  // onCellEdit(e){    // e is shorthand for event
-  //   console.log("onCellEdit");
-  //   console.log(e);
-  //   this.props.onCellEdit(e);
-  //   return;
-  // }
 
   afterSaveCell(row, cellName, cellValue){
     // console.log("afterSaveCell.........");
@@ -78,13 +61,6 @@ class DataTableView extends Component {
     return;
   }
 
-  //
-  // onDeleteRow(e){
-  //   console.log("onDeleteRow");
-  //   console.log(e);
-  //   this.props.onDeleteRow(e);
-  //   return;
-  // }
 
   remote(remoteObj) {
     remoteObj.cellEdit = true;
@@ -111,8 +87,8 @@ class DataTableView extends Component {
               onDeleteRow: this.props.onDeleteRow,
               onAddRow: this.onModalAddRow,
               exportCSVText: 'my_export',
-              insertText: 'my_insert',
-              deleteText: 'my_delete',
+              insertText: 'Insert Row',
+              deleteText: 'Delete Selected',
               saveText: 'my_save',
               closeText: 'my_close'
           };

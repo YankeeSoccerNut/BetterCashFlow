@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import newObservations from '../actions/newObservations';
+import Icon from 'react-icons-kit';
+import { cool } from 'react-icons-kit/icomoon';
+import Parser from 'html-react-parser';
+
 
 class Analyzer extends Component {
 
@@ -16,25 +20,40 @@ class Analyzer extends Component {
 
     console.log("IN render() IN Analyzer*********", this.props);
 
-    if (this.props.projections === null){
-      console.log("this.props.projections === undefined...No RENDER")
+    if (this.props.observations === null){
+      console.log("this.props.observations === undefined...No RENDER")
       return null;
     };
 
     console.log(this.props);
-    let factors = this.props.projections.timeSeries;
 
-    let timeSeriesJSON = factors.dailyBalances.toJSON();
+    let htmlObservations = '<ul className="observation-list">';
+    let htmlRecommendations = '<ul className="recommendation-list">';
 
-    console.log(timeSeriesJSON);
-    
-    console.log("\nfactors.endingCash: ", factors.endingCash);
-    console.log("\nfactors.endingCredit: ", factors.endingCredit);
+    this.props.observations.forEach((note) => {
+      if (note.type === "O") {
+        htmlObservations += `<li>${note.text}</li>`
+      } else if (note.type === "R") {
+        htmlRecommendations += `<li>${note.text}</li>`
+      } else {
+        console.log("Invalid note.type in observations: ", note);
+      };
+    });
+
+    htmlObservations += '</ul>';
+    htmlRecommendations += '</ul>';
 
     return (
       <div>
-        <h4>Analyzer Component Goes Here</h4>
-
+        <Icon size={64} icon={cool} className="col-sm-2"/>
+        <div id="analyzer-observations" className="panel panel-info col-sm-10">
+          <div className="panel-heading text-center">Observations and Recommendations
+          </div>
+          <div className="panel-content col-sm-6">{Parser(htmlObservations)}
+          </div>
+          <div className="panel-content col-sm-6">{Parser(htmlRecommendations)}
+          </div>
+        </div>
       </div>
     );
   }
@@ -44,10 +63,11 @@ function mapStateToProps(state){
   // this function's only job is to map props to pieces of state that THIS component is interested in
   return{
     projections: state.projections,
+    observations: state.observations
   };
 };
 
-// I don't think I need this.....
+// Will use this to inform NavBar to update...
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     newObservations: newObservations
