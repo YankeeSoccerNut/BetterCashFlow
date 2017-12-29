@@ -27,7 +27,7 @@ render(){
     let endingCash = 0;
     let endingCredit = 0;
 
-    if (this.props.projections !== null){
+    if (this.props.projections !== null && this.props.projections.timeSeries !== undefined){
       endingCash = this.props.projections.timeSeries.endingCash;
       endingCredit = this.props.projections.timeSeries.endingCredit;
     };

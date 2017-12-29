@@ -27,6 +27,7 @@ class FinAccount extends Component {
     if (this.props.institution === "USBANK"){
       this.getUSBankUserInfo().then((USBankUserInfo) => {
         accountObject.finInstitution = 'USBANK';
+        accountObject.type = 'CASH';
         accountObject.accounts = USBankUserInfo.AccessibleAccountDetailList.slice();
         this.props.initFinAccount(accountObject);
       })
@@ -36,6 +37,7 @@ class FinAccount extends Component {
     } else if (this.props.institution === "VISAB2B"){
       this.getVisaVirtualAcctInfo().then((VisaB2BResponse) => {
         accountObject.finInstitution = 'VISAB2B';
+        accountObject.type = 'CREDIT';
         accountObject.accounts.push(VisaB2BResponse);
         this.props.initFinAccount(accountObject);
       })
@@ -44,11 +46,13 @@ class FinAccount extends Component {
       });
     } else if (this.props.institution === "DEMO-CASH"){
         accountObject.finInstitution = 'DEMO-CASH';
+        accountObject.type = 'CASH';
         accountObject.accounts.push({beginning: 5000.10, available: 4000.10, scheduled: [{date: '2018-01-11', amount: 1000}]});
         this.props.initFinAccount(accountObject);
-    } else if (this.props.institution === "VISAB2B"){
+    } else if (this.props.institution === "DEMO-CREDIT"){
       accountObject.finInstitution = 'DEMO-CREDIT';
-      accountObject.accounts.push({total: 25000, available: 19500, scheduled: [{date: '2018-01-11', amount: 2000}]});
+      accountObject.type = 'CREDIT';
+      accountObject.accounts.push({total: 25000, used: 3500, available: 19500, scheduled: [{date: '2018-01-11', amount: 2000}]});
       this.props.initFinAccount(accountObject);
     };
   };
@@ -93,17 +97,22 @@ class FinAccount extends Component {
     return getVisaVirtualAcctInfoPromise;
   };
 
-  formatDemoCash(){
+  formatDemoCash(accountObject){
 
-    let demoCashHTML = "<div><div>Current Balance: <span className='curr-cash-bal'>$5000.10</span></div><div>Available Balance: <span className='avail-cash-bal'>$5000.10</span></div><div><Icon size={16} icon={info}/></div></div>";
+    let a = accountObject.accounts[0]; //shorthand
+
+    let demoCashHTML = `<div><div className='col-sm-6'>Current Balance: <span className='curr-cash-bal'>$${a.beginning}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available}</span></div><div><Icon size={16} icon={info}></Icon></div></div>`;
 
     return(
       demoCashHTML
     );
   };
 
-  formatDemoCredit(){
-    let demoCreditHTML = "<div><div>Current Balance: <span className='curr-cash-bal'>$5000.10</span></div><div>Available Balance: <span className='avail-cash-bal'>$5000.10</span></div><div><Icon size={16} icon={info}/></div></div>";
+  formatDemoCredit(accountObject){
+
+    let a = accountObject.accounts[0]; //shorthand
+
+    let demoCreditHTML = `<div><div className='col-sm-6'>Total Credit Line(s): <span className='curr-cash-bal'>$${a.total}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available}</span></div><div><Icon size={16} icon={info}/></div></div>`;
 
     return(
       demoCreditHTML
@@ -153,11 +162,18 @@ class FinAccount extends Component {
     };
 
     // use lodash function to find index of each financial instititution....
+    // TODO: change from hard-coding to something more dynamic...OK now for demo
     let USBANKindex = findIndex(this.props.accountObjects, { finInstitution: 'USBANK' });
     // console.log("USBANKindex: ", USBANKindex);
 
     let visaB2Bindex = findIndex(this.props.accountObjects, { finInstitution: 'VISAB2B' });
     // console.log("visaB2Bindex: ", visaB2Bindex);
+
+    let demoCashIndex = findIndex(this.props.accountObjects, { finInstitution: 'DEMO-CASH' });
+
+    let demoCreditIndex = findIndex(this.props.accountObjects, { finInstitution: 'DEMO-CREDIT' });
+
+    console.log("Demo indices.....", demoCashIndex, demoCreditIndex);
 
     if (USBANKindex >=0 && this.props.institution === 'USBANK'){
 
@@ -179,19 +195,18 @@ class FinAccount extends Component {
           <div className="panel-content">{Parser(VisaB2BHTML)}</div>
         </div>
       );
-    } else if (this.props.institution === 'DEMO-CASH') {
+    } else if (demoCashIndex >=0 && this.props.institution === 'DEMO-CASH') {
 
-      let demoCashHTML = this.formatDemoCash();
+      let demoCashHTML = this.formatDemoCash(this.props.accountObjects[demoCashIndex]);
 
       return(
-        <div id="credit-summary" className="panel panel-info col-sm-6">
+        <div id="cash-summary" className="panel panel-info col-sm-6">
           <div className="panel-heading">{this.props.institution}</div>
           <div className="panel-content">{Parser(demoCashHTML)}</div>
         </div>
       );
-    } else if (this.props.institution === 'DEMO-CREDIT') {
-
-      let demoCreditHTML = this.formatDemoCredit();
+    } else if (demoCreditIndex >=0 && this.props.institution === 'DEMO-CREDIT') {
+      let demoCreditHTML = this.formatDemoCredit(this.props.accountObjects[demoCreditIndex]);
 
       return(
         <div id="credit-summary" className="panel panel-info col-sm-6">

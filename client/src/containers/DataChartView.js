@@ -36,6 +36,13 @@ class DataChartView extends Component {
     console.log("nextProps in DataChartView\n", nextProps);
   };
 
+  componentDidUpdate(){
+    console.log("componentDidUpdate in DataChartView\n", this.props);
+    // we've rendered a new projection....let every reducer know via an Action...
+    this.props.newProjection(this.props.projections);
+  };
+
+
   handleChartHighlight(chartObject){
 
     if (chartObject === {} || chartObject === null){
@@ -62,17 +69,16 @@ class DataChartView extends Component {
 
     console.log("IN render() IN DatachartView*********", this.props);
 
-
-    if (this.props.projections === null){
-      console.log("this.props.projections === undefined...No RENDER")
+    if (this.props.projections === null  || this.props.projections.timeSeries == undefined){
+      console.log("No RENDER")
       console.log(this.props);
       return null;
     };
 
     console.log("chartObject: \n", this.state.chartObject);
 
-    // we're rendering a new projection....let every reducer know via an Action...
-    this.props.newProjection(this.props.projections);
+    // // we're rendering a new projection....let every reducer know via an Action...
+    // this.props.newProjection(this.props.projections);
 
     const style = styler([
         { key: accountNameTypes[0], color: "blue"},
@@ -124,7 +130,8 @@ function mapStateToProps(state){
   // this function's only job is to map props to pieces of state that THIS component is interested in
   return{
     projections: state.projections,
-    transactions: state.transactions
+    transactions: state.transactions,
+    accountObjects: state.accountObjects
   };
 };
 

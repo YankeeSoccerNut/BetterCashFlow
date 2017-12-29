@@ -10,7 +10,13 @@
 
     switch (action.type){
     case 'NEW-PROJECTION':
+
       console.log("NEW-PROJECTION in AnalyzerReducer....\n", action)
+
+      if(action.payload.timeSeries === undefined){
+        console.log("action.payload.timeSeries === undefined so returning state...no analysis")
+        return(state);
+      };
 
       let newState = [];
       let factors = action.payload.timeSeries;
