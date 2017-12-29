@@ -7,7 +7,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 
 // mock data
-import {getTransactions, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
+import {getTransactions, loadDemoTxns, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
 
 import onCellEdit from '../actions/onCellEdit';
 import onAddRow from '../actions/onAddRow';
@@ -36,9 +36,13 @@ class DataTableView extends Component {
       return null;
     };
 
+    console.log("loadDemoTxns: ################");
+    let demoTxns = loadDemoTxns();
+    console.log(demoTxns);
+
     const transactions = getTransactions();
 
-    this.props.loadTransactions(transactions);
+    this.props.loadTransactions(demoTxns);
   };
 
 

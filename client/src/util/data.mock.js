@@ -1,6 +1,7 @@
-import {dateToday, createDate} from './lib'
+import {formatDate, dateToday, createDate} from './lib';
+
 const typeTypes = ['Expense', 'Income'];
-const accountNameTypes = ['USBANK', 'VISAB2B'];
+const accountNameTypes = ['CASH', 'CREDIT'];
 const payeeTypes = [
     'MyLandlord',
     'MyContrator',
@@ -56,4 +57,115 @@ function getBalances() {
     return [10000, 15000];
 }
 
-export {getBalances, getTransactions, typeTypes, accountNameTypes, payeeTypes};
+function loadDemoTxns() {
+
+  let demoTransactions = [
+    {id: 1,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyLandlord',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 4000},
+    {id: 2,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyContractor',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 2000},
+    {id: 3,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MySupplier',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 1000},
+    {id: 4,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyElectricity',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 800},
+    {id: 5,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyWater',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 100},
+    {id: 6,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyCleaning',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 400},
+    {id: 7,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyPayroll',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 7000},
+    {id: 8,
+    type: 'Income',
+    accountName: 'CASH',
+    payee: 'FirstData',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 2000},
+    {id: 9,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'CompanyCar',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 575},
+    {id: 10,
+    type: 'Income',
+    accountName: 'CASH',
+    payee: 'CustomerRcvbl',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 975},
+    {id: 11,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyLandlord',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 4000},
+    {id: 12,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyElectricity',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 800},
+    {id: 13,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'MyWater',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 100},
+    {id: 14,
+    type: 'Expense',
+    accountName: 'CASH',
+    payee: 'CompanyCar',
+    scheduledDate:'',
+    dueDate:'',
+    amount: 575}
+  ];
+
+  demoTransactions.map((txn) => {
+    txn.scheduledDate = formatDate(dateToday());
+    txn.dueDate = formatDate(dateToday());
+  });
+
+  return(demoTransactions);
+};
+
+export {getBalances, getTransactions, loadDemoTxns, typeTypes, accountNameTypes, payeeTypes};
