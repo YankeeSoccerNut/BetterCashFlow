@@ -55,7 +55,9 @@ render(){
               <MenuItem eventKey={4.2}>Preferences</MenuItem>
               <MenuItem eventKey={4.3}>Logout</MenuItem>
             </NavDropdown>
-            <FinSummary endCash={endingCash} endCredit={endingCredit} />
+            <Navbar.Text>
+              <FinSummary endCash={endingCash} endCredit={endingCredit} />
+            </Navbar.Text>
           </Nav>
         </Navbar.Collapse>
     </Navbar>

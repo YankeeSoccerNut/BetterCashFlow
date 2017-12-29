@@ -7,16 +7,14 @@ import {accountNameTypes} from '../util/data.mock';
 import axios from 'axios';
 import findIndex from 'lodash.findindex';
 import Parser from 'html-react-parser';
+import Icon from 'react-icons-kit';
+import { info } from 'react-icons-kit/icomoon';
+
 
 class FinAccount extends Component {
 
-// Intending accountObjects to be an array of objects -- 1 enter per financial institution (finInstitution)
-// each finInstitution will have an array of accounts at that finInstitution
   constructor(props) {
      super(props);
-     // this.state = {
-     //   accountObjects: []
-     // };
   }
 
   componentDidMount(props){
@@ -24,7 +22,8 @@ class FinAccount extends Component {
     let accountObject = {
       finInstitution: '',
       accounts: []
-    }
+    };
+
     if (this.props.institution === "USBANK"){
       this.getUSBankUserInfo().then((USBankUserInfo) => {
         accountObject.finInstitution = 'USBANK';
@@ -43,6 +42,14 @@ class FinAccount extends Component {
       .catch((err) => {
         console.log(err);
       });
+    } else if (this.props.institution === "DEMO-CASH"){
+        accountObject.finInstitution = 'DEMO-CASH';
+        accountObject.accounts.push({beginning: 5000.10, available: 4000.10, scheduled: [{date: '2018-01-11', amount: 1000}]});
+        this.props.initFinAccount(accountObject);
+    } else if (this.props.institution === "VISAB2B"){
+      accountObject.finInstitution = 'DEMO-CREDIT';
+      accountObject.accounts.push({total: 25000, available: 19500, scheduled: [{date: '2018-01-11', amount: 2000}]});
+      this.props.initFinAccount(accountObject);
     };
   };
 
@@ -85,6 +92,24 @@ class FinAccount extends Component {
     });
     return getVisaVirtualAcctInfoPromise;
   };
+
+  formatDemoCash(){
+
+    let demoCashHTML = "<div><div>Current Balance: <span className='curr-cash-bal'>$5000.10</span></div><div>Available Balance: <span className='avail-cash-bal'>$5000.10</span></div><div><Icon size={16} icon={info}/></div></div>";
+
+    return(
+      demoCashHTML
+    );
+  };
+
+  formatDemoCredit(){
+    let demoCreditHTML = "<div><div>Current Balance: <span className='curr-cash-bal'>$5000.10</span></div><div>Available Balance: <span className='avail-cash-bal'>$5000.10</span></div><div><Icon size={16} icon={info}/></div></div>";
+
+    return(
+      demoCreditHTML
+    );
+  };
+
 
   formatUSBankDisplay(accountObject){
 
@@ -139,7 +164,7 @@ class FinAccount extends Component {
       let USBankHTML = this.formatUSBankDisplay(this.props.accountObjects[USBANKindex]);
 
       return(
-        <div id="usbank-summary" className="panel panel-info col-sm-6">
+        <div id="cash-summary" className="panel panel-info col-sm-6">
           <div className="panel-heading">{this.props.institution}</div>
           <div className="panel-body">{Parser(USBankHTML)}</div>
         </div>
@@ -149,18 +174,35 @@ class FinAccount extends Component {
       let VisaB2BHTML = this.formatVisaB2BDisplay(this.props.accountObjects[visaB2Bindex]);
 
       return(
-        <div id="visab2b-summary" className="panel panel-info col-sm-6">
+        <div id="credit-summary" className="panel panel-info col-sm-6">
           <div className="panel-heading">{this.props.institution}</div>
           <div className="panel-content">{Parser(VisaB2BHTML)}</div>
         </div>
       );
-    } else {
-      // console.log("returning NULLLLLLLL from Render FinAccount-------");
-      // console.log(this.props);
+    } else if (this.props.institution === 'DEMO-CASH') {
+
+      let demoCashHTML = this.formatDemoCash();
+
+      return(
+        <div id="credit-summary" className="panel panel-info col-sm-6">
+          <div className="panel-heading">{this.props.institution}</div>
+          <div className="panel-content">{Parser(demoCashHTML)}</div>
+        </div>
+      );
+    } else if (this.props.institution === 'DEMO-CREDIT') {
+
+      let demoCreditHTML = this.formatDemoCredit();
+
+      return(
+        <div id="credit-summary" className="panel panel-info col-sm-6">
+          <div className="panel-heading">{this.props.institution}</div>
+          <div className="panel-content">{Parser(demoCreditHTML)}</div>
+        </div>
+      );
+    } else {  // no valid props
       return null;
     };
   };
-
 };
 
 function mapStateToProps(state){

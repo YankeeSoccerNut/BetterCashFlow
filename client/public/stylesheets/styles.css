@@ -1,10 +1,10 @@
 body { padding-top: 70px; }
 
-div #usbank-summary .panel-heading {
-  color: blue;
+div #cash-summary .panel-heading {
+  color: black;
 }
 
-div #visab2b-summary .panel-heading {
+div #credit-summary .panel-heading {
   color: red;
 }
 

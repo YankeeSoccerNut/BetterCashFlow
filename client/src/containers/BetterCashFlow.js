@@ -16,8 +16,8 @@ class BetterCashFlow extends Component{
           <Analyzer />
         </div>
         <div className="col-sm-12">
-          <FinAccount institution="USBANK" />
-          <FinAccount institution="VISAB2B" />
+          <FinAccount institution="DEMO-CASH" />
+          <FinAccount institution="DEMO-CREDIT" />
         </div>
         <div>
           <DataChartView />

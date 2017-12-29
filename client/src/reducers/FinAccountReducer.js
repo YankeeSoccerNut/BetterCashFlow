@@ -11,16 +11,12 @@
 
     switch (action.type){
     case 'INIT-FIN-ACCT':
-      // console.log("################ new state in INIT-FIN-ACCT ################");
-      // console.log("action payload", action.payload);
-      // console.log("state", state);
 
       if (state === null){
         return ([action.payload]);
       }
       else {
         let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
-        // console.log("newState:" , newState);
         return (newState);
       };
 
