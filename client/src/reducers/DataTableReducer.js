@@ -21,24 +21,20 @@ export default function(state=null, action){
       return(state);
     };
   case 'CELL-EDIT':
-    // console.log("=============== DataTableReducer CELL-EDIT =================");
-    //
-    // console.log("action............\n", action);
+    console.log("=============== DataTableReducer CELL-EDIT =================");
+
+    console.log("action............\n", action);
 
     newState = [...state]; //es6 spread syntax -- aka destructuring
     // console.log("finding....", action.payload.row.id);
 
     rowIndex = findIndex(newState, { id: action.payload.row.id });
-    // console.log("rowIndex: ", rowIndex);
-    // console.log("BEFORE\n", newState[rowIndex]);
-
-    // let netChange = parseFloat(newState[rowIndex][action.payload.cellName]) - parseFloat(action.payload.cellValue)
-
-    // console.log("netChange: ", netChange);
+    console.log("rowIndex: ", rowIndex);
+    console.log("BEFORE\n", newState[rowIndex]);
 
     newState[rowIndex][action.payload.cellName] = action.payload.cellValue;
 
-    // console.log("AFTER\n", newState[rowIndex]);
+    console.log("AFTER\n", newState[rowIndex]);
     return(newState);
 
   case 'ADD-ROW':

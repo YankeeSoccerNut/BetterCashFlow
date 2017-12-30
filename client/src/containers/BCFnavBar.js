@@ -36,8 +36,9 @@ render(){
       <Navbar fixedTop={true}>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">BetterCashFlow</a>
+            <img id='bcf-logo' src='images/cashflow-logo.png'></img>
           </Navbar.Brand>
+          <Navbar.Text>Better Cash Flow</Navbar.Text>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
@@ -56,7 +57,7 @@ render(){
               <MenuItem eventKey={4.3}>Logout</MenuItem>
             </NavDropdown>
             <Navbar.Text>
-              <FinSummary endCash={endingCash} endCredit={endingCredit} />
+              <FinSummary endCash={endingCash.toFixed(2)} endCredit={endingCredit.toFixed(2)} />
             </Navbar.Text>
           </Nav>
         </Navbar.Collapse>

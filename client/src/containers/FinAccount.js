@@ -101,7 +101,7 @@ class FinAccount extends Component {
 
     let a = accountObject.accounts[0]; //shorthand
 
-    let demoCashHTML = `<div><div className='col-sm-6'>Current Balance: <span className='curr-cash-bal'>$${a.beginning}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available}</span></div><div><Icon size={16} icon={info}></Icon></div></div>`;
+    let demoCashHTML = `<div><div className='col-sm-6'>Current Balance: <span className='curr-cash-bal'>$${a.beginning.toFixed(2)}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available.toFixed(2)}</span></div><div><Icon size={16} icon={info}></Icon></div></div>`;
 
     return(
       demoCashHTML
@@ -112,7 +112,7 @@ class FinAccount extends Component {
 
     let a = accountObject.accounts[0]; //shorthand
 
-    let demoCreditHTML = `<div><div className='col-sm-6'>Total Credit Line(s): <span className='curr-cash-bal'>$${a.total}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available}</span></div><div><Icon size={16} icon={info}/></div></div>`;
+    let demoCreditHTML = `<div><div className='col-sm-6'>Total Credit Line(s): <span className='curr-cash-bal'>$${a.total.toFixed(2)}</span></div><div className='col-sm-6'>Available Balance: <span className='avail-cash-bal'>$${a.available.toFixed(2)}</span></div><div><Icon size={16} icon={info}/></div></div>`;
 
     return(
       demoCreditHTML

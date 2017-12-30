@@ -1,5 +1,4 @@
 import { TimeSeries } from 'pondjs';
-import {accountNameTypes } from './data.mock.js';
 import _ from "lodash";
 
 Date.prototype.addDays = function(days) {
@@ -46,77 +45,93 @@ function createDate(dateString) {
 
 function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
 
-  //balance[0] is Cash....balance[1] is Credit
+  // don't assume the transactions are sorted...
+  let sortedTransactions = _.sortBy(transactions,['scheduledDate']);
+
+  console.log("sorted Transactions: ", sortedTransactions);
+
   balance = balance.slice();
+
   const points = [];
   let i = 0;
+  let dateMatchCount = 0;
   let cashMin = 0;
   let cashMax = 0;
+  let netCashUsed = 0;
+  let netCreditUsed = 0;
   let creditMin = 0;
   let creditMax = 0;
+  let cashIndex = 0;
+  let creditIndex = 1;
 
-  _.forEach(getDates(currentDate, numDays), function(date) {
-    date.setHours(0, 0, 0, 0);
-    while(i < transactions.length - 1) {
-      const targetDate = createDate(transactions[i].scheduledDate);
-      targetDate.setHours(0, 0, 0, 0);
-      if(date - targetDate > 0) {
-        i++;
-      } else {
-        break;
-      };
-    };
+  //going to create a data point in the series for each day
+  _.forEach(getDates(currentDate, numDays), function(seriesDate) {
 
-    // calculate this transactions impact to appropriate balance (Cash or Credit)
-    if (i < transactions.length) {
-      const tran = transactions[i];
-      const targetDate = createDate(tran.scheduledDate);
-      targetDate.setHours(0, 0, 0, 0);
-      if (date - targetDate === 0) { //dates match
-        let balanceIndex = 0;  //assume Cash
-        if (tran.accountName === accountNameTypes[1]) {  // unless Credit!
-            balanceIndex = 1;
-        };
-        // impact is different for cash v credit
-        // expenses draw down on Cash (Asset), increase Credit (Liability)...
-        if (tran.type === 'Expense' && balanceIndex === 0) {
-            balance[balanceIndex] = balance[balanceIndex] - Number(tran.amount);
-        } else if (tran.type === 'Income' && balanceIndex === 0){
-          balance[balanceIndex] = balance[balanceIndex] + Number(tran.amount);
-        } else if (tran.type === 'Expense' && balanceIndex === 1) {
-          balance[balanceIndex] = balance[balanceIndex] + Number(tran.amount);
-        } else if (tran.type === 'Income' && balanceIndex === 1){
-            balance[balanceIndex] = balance[balanceIndex] - Number(tran.amount);
+    seriesDate.setHours(0, 0, 0, 0);
+    console.log("seriesDate: ", seriesDate);
+
+    //loop through the transactions...only transactions that match the current data point date have an impact to the balance for that point
+
+    while (i < sortedTransactions.length) {
+      let currTxn = sortedTransactions.slice(i,i+1);
+      console.log("currTxn: ", currTxn[0]);
+      const txnSchedDate = createDate(currTxn[0].scheduledDate);
+      txnSchedDate.setHours(0, 0, 0, 0);
+
+      // on matching dates keep going and update that series data point's balance....otherwise, break out and move on
+      console.log("txnSchedDate.getTime()", txnSchedDate.getTime())
+      console.log("seriesDate.getTime()", seriesDate.getTime())
+
+      if (txnSchedDate.getTime() === seriesDate.getTime()) {
+        dateMatchCount++  //for testing...
+        if (currTxn[0].type === 'Expense' && currTxn[0].accountName === 'CASH') {
+            balance[cashIndex] = balance[cashIndex] - Number(currTxn[0].amount);
+            netCashUsed += Number(currTxn[0].amount);
+        } else if (currTxn[0].type === 'Income' && currTxn[0].accountName === 'CASH'){
+          balance[cashIndex] = balance[cashIndex] + Number(currTxn[0].amount);
+          netCashUsed -= Number(currTxn[0].amount);
+        } else if (currTxn[0].type === 'Expense' && currTxn[0].accountName === 'CREDIT') {
+          balance[creditIndex] = balance[creditIndex] - Number(currTxn[0].amount);
+          netCreditUsed += Number(currTxn[0].amount);
+        } else if (currTxn[0].type === 'Income' && currTxn[0].accountName === 'CREDIT'){
+            balance[creditIndex] = balance[creditIndex] + Number(currTxn[0].amount);
+            netCreditUsed -= Number(currTxn[0].amount);
         } else {
           console.log("!!!!!!!! INVALID TRANS TYPE !!!!!!!!!!!!"); // should never happen :-)
         };
+
+        if (balance[cashIndex] > cashMax) {
+            cashMax = balance[cashIndex];
+        };
+        if (balance[cashIndex] < cashMin) {
+            cashMin = balance[cashIndex];
+        };
+        if (balance[creditIndex] > creditMax) {
+            creditMax = balance[creditIndex];
+        };
+        if (balance[creditIndex] < creditMin) {
+            creditMin = balance[creditIndex];
+        };
+
+      } else {
+        break;
       };
+      i++
     };
-  const total = balance[0] + balance[1];
-  if (balance[0] > cashMax) {
-      cashMax = balance[0];
-  };
-  if (balance[0] < cashMin) {
-      cashMin = balance[0];
-  };
 
-  if (balance[1] > creditMax) {
-      creditMax = balance[0];
-  };
-  if (balance[1] < creditMin) {
-      creditMin = balance[1];
-  };
+    //after while loop for sortedTransactions....
+    points.push([formatDate(seriesDate), balance[cashIndex], balance[creditIndex]])
+    console.log("On to next seriesDate")
+    console.log("Number of txn matches for this series: ", dateMatchCount);
+    // dateMatchCount = 0;
+  }); // forEach
 
-
-  points.push([formatDate(date), balance[0], (balance[1]*-1)]);
-  });
-
-  console.log("data points: \n", points);
+  console.log("number of data points: \n", points.length);
   return {
     dailyBalances: new TimeSeries({
       name: 'Balances',
       utc: false,
-      columns: ["index", accountNameTypes[0], accountNameTypes[1]],
+      columns: ["index", "CASH", "CREDIT"],
       points: points
     }),
     cashMax: cashMax,
@@ -124,7 +139,9 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
     creditMax: creditMax,
     creditMin: creditMin,
     endingCash: points[points.length-1][1],
-    endingCredit: points[points.length-1][2]
+    endingCredit: points[points.length-1][2],
+    netCashUsed: netCashUsed,
+    netCreditUsed: netCreditUsed
   };
 };
 

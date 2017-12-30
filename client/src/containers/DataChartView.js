@@ -49,7 +49,7 @@ class DataChartView extends Component {
       return
     };
 
-    const balText = (chartObject.event.get(chartObject.column)).toString();
+    const balText = ((chartObject.event.get(chartObject.column)).toFixed(2)).toString();
 
     let dateText = chartObject.event.indexAsString(chartObject.event);
 
