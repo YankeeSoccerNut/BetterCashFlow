@@ -10,7 +10,7 @@ const payeeTypes = [
     'MyWater',
     'MyCleaning',
     'MyPayroll',
-    'Elavon',
+    'FirstData',
     '+NewPayee'
 ];
 

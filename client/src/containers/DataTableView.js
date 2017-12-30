@@ -20,7 +20,7 @@ class DataTableView extends Component {
 
   constructor(props) {
     super(props);
-    this.afterSaveCell = this.afterSaveCell.bind(this);
+    this.beforeSaveCell = this.beforeSaveCell.bind(this);
     this.onModalAddRow = this.onModalAddRow.bind(this);
   }
 
@@ -45,18 +45,36 @@ class DataTableView extends Component {
     this.props.loadTransactions(demoTxns);
   };
 
+  beforeSaveCell(row, cellName, cellValue){
+    // react-bootstrap-table provides an opportunity to edit a change before the cell is saved to the table....
+    // use it here to prevent negative values in the amount field
 
-  afterSaveCell(row, cellName, cellValue){
-    // console.log("afterSaveCell.........");
-    // console.log(row, cellName, cellValue);
+    if (cellName === 'amount' && (Number(cellValue) < 0)){
+      console.log("User tried to enter negative amount...");
+      return(false);  // reject the change
+    };
+
     this.props.onCellEdit({
       row: row,
       cellName: cellName,
       cellValue: cellValue
     });
 
-    return(true);
+    return(true);  // accept the change
   };
+
+
+  // afterSaveCell(row, cellName, cellValue){
+  //   // console.log("afterSaveCell.........");
+  //   // console.log(row, cellName, cellValue);
+  //   this.props.onCellEdit({
+  //     row: row,
+  //     cellName: cellName,
+  //     cellValue: cellValue
+  //   });
+  //
+  //   return(true);
+  // };
 
 
   onModalAddRow(e){
@@ -76,7 +94,7 @@ class DataTableView extends Component {
   render() {
 
     const cellEditProp = {
-        mode: 'dbclick'
+        mode: 'click'
     };
 
     const selectRow = {
@@ -87,15 +105,19 @@ class DataTableView extends Component {
 
     const options={
               clearSearch: true,
-              onCellEdit: this.afterSaveCell,
+              onCellEdit: this.beforeSaveCell,
               onDeleteRow: this.props.onDeleteRow,
               onAddRow: this.onModalAddRow,
-              exportCSVText: 'my_export',
+              exportCSVText: 'Export',
               insertText: 'Insert Row',
               deleteText: 'Delete Selected',
               saveText: 'my_save',
               closeText: 'my_close'
           };
+
+    const keyBoardNav = {
+      enterToEdit: true
+    };
 
     // Initial render won't have anything....
     if (this.props.dataTable === null){
@@ -104,7 +126,7 @@ class DataTableView extends Component {
 
     return(
       <div id="payables-table" className="col-sm-12">
-        <BootstrapTable data={this.props.transactions} search={ true } options={ options }
+        <BootstrapTable data={this.props.transactions} search={ true } options={ options } exportCSV={true} keyBoardNav={keyBoardNav}
           selectRow={ selectRow }
                 remote={ this.remote }
                 insertRow={ true } deleteRow={ true }
