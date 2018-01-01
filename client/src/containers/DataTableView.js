@@ -7,7 +7,7 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 
 // mock data
-import {getTransactions, loadDemoTxns, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
+import {loadDemoTxns, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
 
 import onCellEdit from '../actions/onCellEdit';
 import onAddRow from '../actions/onAddRow';
@@ -40,7 +40,7 @@ class DataTableView extends Component {
     let demoTxns = loadDemoTxns();
     console.log(demoTxns);
 
-    const transactions = getTransactions();
+    // const transactions = getTransactions();
 
     this.props.loadTransactions(demoTxns);
   };
@@ -131,7 +131,7 @@ class DataTableView extends Component {
                 remote={ this.remote }
                 insertRow={ true } deleteRow={ true }
                 cellEdit={ cellEditProp }>
-        <TableHeaderColumn dataField='id' hidden={false} isKey={true} autoValue={true}>Transaction ID</TableHeaderColumn>
+        <TableHeaderColumn dataField='id' hidden={true} isKey={true} autoValue={true}>Transaction ID</TableHeaderColumn>
         <TableHeaderColumn dataField='type' hidden={false} editable={{
             type: 'select',
             options: {

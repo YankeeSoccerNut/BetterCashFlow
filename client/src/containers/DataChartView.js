@@ -23,13 +23,13 @@ class DataChartView extends Component {
 
 
   constructor(props) {
-	   super(props);
-     console.log("props in DataChartView constructor\n", props);
+    super(props);
+    console.log("props in DataChartView constructor\n", props);
 
-     this.handleChartHighlight = this.handleChartHighlight.bind(this);
+    this.handleChartHighlight = this.handleChartHighlight.bind(this);
 
-     this.state = {chartObject: {},
-                   chartInfoBox: []};
+    this.state = {chartObject: {},
+                  chartInfoBox: []};
   };
 
   componentWillReceiveProps(nextProps){

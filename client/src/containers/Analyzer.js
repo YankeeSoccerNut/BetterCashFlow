@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { TimeSeries } from 'pondjs';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
 import newObservations from '../actions/newObservations';
 import Icon from 'react-icons-kit';
 import { cool } from 'react-icons-kit/icomoon';
