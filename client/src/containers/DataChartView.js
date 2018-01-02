@@ -46,7 +46,9 @@ class DataChartView extends Component {
   handleChartHighlight(chartObject){
 
     if (chartObject === {} || chartObject === null){
-      return
+      this.setState({chartObject: {},
+                    chartInfoBox: []});
+      return;
     };
 
     const balText = ((chartObject.event.get(chartObject.column)).toFixed(2)).toString();
@@ -75,7 +77,6 @@ class DataChartView extends Component {
       return null;
     };
 
-    let maxYvalue = 0;
 
     console.log("chartObject: \n", this.state.chartObject);
 
@@ -90,9 +91,6 @@ class DataChartView extends Component {
     console.log("style: \n", style);
 
     let balances = this.props.projections.timeSeries;  //some shorthand
-    if (balances.endingCash > 0) {
-      maxYvalue = balances.endingCash;
-    };
 
     return (
       <Resizable>

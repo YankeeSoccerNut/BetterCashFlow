@@ -35,17 +35,18 @@
 
       if (factors.endingCash > 0){
         newState.push({type: 'O', direction: 1, text: `You have a positive ending Cash Balance of $${factors.endingCash.toFixed(2)} for the period`});
-      };
+        if (negativeCashPoints.length === 0){
+          newState.statusSummary = +1;
+        };
 
-      if (factors.endingCash - factors.netCreditUsed > 0){
-        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures AND your current credit line for the period`})
-        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash`})
       };
 
       if (factors.endingCash < 0 && factors.endingCredit > 0) {
         newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period`});
         newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
         newState.push({type: 'R', direction: 0, text: `Consider using your available credit instead of cash`});
+        newState.statusSummary = -1;
+
       };
 
       if (factors.endingCash < 0 && factors.endingCredit <= 0) {
@@ -55,6 +56,7 @@
 
         newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
         newState.push({type: 'R', direction: 0, text: `Consider addtional credit lines through alternative financing`});
+        newState.statusSummary = -2;
       };
 
       if (factors.endingCash === 0 && factors.endingCredit > 0) {
@@ -63,6 +65,13 @@
         newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
         newState.push({type: 'R', direction: 0, text: `Push out some cash payments to later dates if possible`});
         newState.push({type: 'R', direction: 0, text: `Consider using your available credit line instead of cash for some expenses`});
+        newState.statusSummary = 0;
+      };
+
+      if (factors.endingCash - factors.netCreditUsed > 0){
+        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures AND your current credit line for the period`})
+        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash`})
+        newState.statusSummary = +2;
       };
 
       console.log("+++++++++++++++++ANALYZER STATE+++++++++++");

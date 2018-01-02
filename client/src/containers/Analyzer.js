@@ -4,8 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import newObservations from '../actions/newObservations';
 import Icon from 'react-icons-kit';
-import { cool } from 'react-icons-kit/icomoon';
+import { neutral, smile, sad, wondering, cool } from 'react-icons-kit/icomoon';
 import Parser from 'html-react-parser';
+
+const iNEUTRAL = 0;
+const iSMILE = 1;
+const iCOOL = 2;
+const iWONDERING = -1;
+const iSAD = -2;
 
 
 class Analyzer extends Component {
@@ -28,6 +34,7 @@ class Analyzer extends Component {
 
     let htmlObservations = '<ul className="observation-list">';
     let htmlRecommendations = '<ul className="recommendation-list">';
+    let statusIcon = neutral;
 
     this.props.observations.forEach((note) => {
       if (note.type === "O") {
@@ -42,9 +49,31 @@ class Analyzer extends Component {
     htmlObservations += '</ul>';
     htmlRecommendations += '</ul>';
 
+    const iSMILE = 1;
+    const iCOOL = 2;
+    const iWONDERING = -1;
+    const iSAD = -2;
+
+    switch (this.props.observations.statusSummary) {
+      case iSMILE:
+        statusIcon = smile;
+        break;
+      case iCOOL:
+        statusIcon = cool;
+        break;
+      case iWONDERING:
+        statusIcon = wondering;
+        break;
+      case iSAD:
+        statusIcon = sad;
+        break;
+      default:
+        statusIcon = neutral;
+    };
+
     return (
       <div>
-        <Icon size={64} icon={cool} className="col-sm-2"/>
+        <Icon size={64} icon={statusIcon} className="col-sm-2"/>
         <div id="analyzer-observations" className="panel panel-info col-sm-10">
           <div className="panel-heading text-center">Observations and Recommendations
           </div>
