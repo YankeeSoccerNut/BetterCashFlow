@@ -24,36 +24,45 @@
       let timeSeriesJSON = factors.dailyBalances.toJSON();
       console.log(timeSeriesJSON);
 
+      let negativeCashPoints = [];
+      negativeCashPoints = timeSeriesJSON.points.filter(negativeCash);
+
+      console.log("negativeCashPoints: ", negativeCashPoints);
+
+      if(negativeCashPoints.length > 0){
+        newState.push({type: 'O', direction: -1, text: `Your first cash crunch occurs on ${negativeCashPoints[0][0]}`});
+      };
+
       if (factors.endingCash > 0){
-        newState.push({type: 'O', direction: 1, text: `You have a positive ending Cash Balance of $${factors.endingCash.toFixed(2)} for the period.`})
+        newState.push({type: 'O', direction: 1, text: `You have a positive ending Cash Balance of $${factors.endingCash.toFixed(2)} for the period`});
       };
 
       if (factors.endingCash - factors.netCreditUsed > 0){
-        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures AND your current credit line for the period.`})
-        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash.`})
+        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures AND your current credit line for the period`})
+        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash`})
       };
 
       if (factors.endingCash < 0 && factors.endingCredit > 0) {
-        newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period.`});
-        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables.`});
-        newState.push({type: 'R', direction: 0, text: `Consider using your available credit instead of cash.`});
+        newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period`});
+        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
+        newState.push({type: 'R', direction: 0, text: `Consider using your available credit instead of cash`});
       };
 
       if (factors.endingCash < 0 && factors.endingCredit <= 0) {
-        newState.push({type: 'O', direction: -1, text: `You are in a tough spot.`});
-        newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period.`});
-        newState.push({type: 'O', direction: -1, text: `You no available credit.`});
+        newState.push({type: 'O', direction: -1, text: `You are in a tough spot`});
+        newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period`});
+        newState.push({type: 'O', direction: -1, text: `You no available credit`});
 
-        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables.`});
-        newState.push({type: 'R', direction: 0, text: `Consider addtional credit lines through alternative financing.`});
+        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
+        newState.push({type: 'R', direction: 0, text: `Consider addtional credit lines through alternative financing`});
       };
 
       if (factors.endingCash === 0 && factors.endingCredit > 0) {
-        newState.push({type: 'O', direction: -1, text: `Your cash balance should be higher.`});
+        newState.push({type: 'O', direction: -1, text: `Your cash balance should be higher`});
 
-        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables.`});
-        newState.push({type: 'R', direction: 0, text: `Push out some cash payments to later dates if possible.`});
-        newState.push({type: 'R', direction: 0, text: `Consider using your available credit line instead of cash for some expenses.`});
+        newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
+        newState.push({type: 'R', direction: 0, text: `Push out some cash payments to later dates if possible`});
+        newState.push({type: 'R', direction: 0, text: `Consider using your available credit line instead of cash for some expenses`});
       };
 
       console.log("+++++++++++++++++ANALYZER STATE+++++++++++");
@@ -63,4 +72,8 @@
     default:
       return state;
     };
+  };
+
+  function negativeCash(point, index, array) {
+    return point[1] < 0;
   };

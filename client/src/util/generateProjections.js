@@ -1,5 +1,5 @@
 import { TimeSeries } from 'pondjs';
-import _ from "lodash";
+import _ from 'lodash';
 
 Date.prototype.addDays = function(days) {
     let date = new Date(this.valueOf());
@@ -67,23 +67,28 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
   //going to create a data point in the series for each day
   _.forEach(getDates(currentDate, numDays), function(seriesDate) {
 
-    seriesDate.setHours(0, 0, 0, 0);
+    // seriesDate.setHours(0, 0, 0, 0);
     console.log("seriesDate: ", seriesDate);
+
+    //Series date is a javascript date...put it into same format as txnSchedDate for comparison....
+    let gregSeriesDate = formatDate(seriesDate);
+    console.log("gregSeriesDate: ", gregSeriesDate);
 
     //loop through the transactions...only transactions that match the current data point date have an impact to the balance for that point
 
     while (i < sortedTransactions.length) {
       let currTxn = sortedTransactions.slice(i,i+1);
       console.log("currTxn: ", currTxn[0]);
-      const txnSchedDate = createDate(currTxn[0].scheduledDate);
-      txnSchedDate.setHours(0, 0, 0, 0);
+      const txnSchedDate = (currTxn[0].scheduledDate);
 
       // on matching dates keep going and update that series data point's balance....otherwise, break out and move on
-      console.log("txnSchedDate.getTime()", txnSchedDate.getTime())
-      console.log("seriesDate.getTime()", seriesDate.getTime())
 
-      if (txnSchedDate.getTime() === seriesDate.getTime()) {
+      if (txnSchedDate === gregSeriesDate) {
         dateMatchCount++  //for testing...
+        console.log("+++++Transaction Match with Series Date+++++++");
+        console.log("txnSchedDate: ", txnSchedDate);
+        console.log("seriesDate: ", seriesDate);
+
         if (currTxn[0].type === 'Expense' && currTxn[0].accountName === 'CASH') {
             balance[cashIndex] = balance[cashIndex] - Number(currTxn[0].amount);
             netCashUsed += Number(currTxn[0].amount);

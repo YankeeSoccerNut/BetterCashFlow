@@ -75,6 +75,8 @@ class DataChartView extends Component {
       return null;
     };
 
+    let maxYvalue = 0;
+
     console.log("chartObject: \n", this.state.chartObject);
 
     // // we're rendering a new projection....let every reducer know via an Action...
@@ -88,6 +90,9 @@ class DataChartView extends Component {
     console.log("style: \n", style);
 
     let balances = this.props.projections.timeSeries;  //some shorthand
+    if (balances.endingCash > 0) {
+      maxYvalue = balances.endingCash;
+    };
 
     return (
       <Resizable>
@@ -99,14 +104,15 @@ class DataChartView extends Component {
             <YAxis
               id="balances"
               label="Projected Balances"
-              min={balances.creditMin}
-              max={balances.endingCash}
+              min={-10000}
+              max={10000}
               width="70"
               type="linear"
             />
             <Charts>
               <BarChart
                 axis="balances"
+                display="range"
                 style={style}
                 spacing={2}
                 columns={[accountNameTypes[0],accountNameTypes[1]]}

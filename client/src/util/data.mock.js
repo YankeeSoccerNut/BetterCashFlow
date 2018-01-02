@@ -1,5 +1,5 @@
 import {formatDate, dateToday, createDate} from './lib';
-
+import _ from 'lodash'
 const typeTypes = ['Expense', 'Income'];
 const accountNameTypes = ['CASH', 'CREDIT'];
 const payeeTypes = [
@@ -18,33 +18,33 @@ function addTransactions(quantity) {
     const transactions = [];
     const startId = transactions.length;
     for (let i = 1; i < quantity; i++) {
-	const id = startId + i;
-	var type = typeTypes[0];
-	if (id % 2) {
-	    type = typeTypes[1];
-	}
-	var accountName = accountNameTypes[0];
-	if (id % 3) {
-	    accountName = accountNameTypes[1];
-	}
-	var day = Math.floor(i) % 30;
-	if (day < 10) {
-	    day = '0' + day;
-	}
-	const date = '2018-01-' + day;
+  const id = startId + i;
+  var type = typeTypes[0];
+  if (id % 2) {
+      type = typeTypes[1];
+  }
+  var accountName = accountNameTypes[0];
+  if (id % 3) {
+      accountName = accountNameTypes[1];
+  }
+  var day = Math.floor(i) % 30;
+  if (day < 10) {
+      day = '0' + day;
+  }
+  const date = '2018-01-' + day;
 
-	// const date = '12/' + Math.floor(i) + '/2017';
-	if (createDate(date) >= dateToday()) {
-	    transactions.push({
-		id: id,
-		type: type,
-		accountName: accountName,
-		payee: payeeTypes[i % (payeeTypes.length - 1)],
-		scheduledDate: date,
-		dueDate: date,
-		amount: i * 100
-	    });
-	}
+  // const date = '12/' + Math.floor(i) + '/2017';
+  if (createDate(date) >= dateToday()) {
+      transactions.push({
+    id: id,
+    type: type,
+    accountName: accountName,
+    payee: payeeTypes[i % (payeeTypes.length - 1)],
+    scheduledDate: date,
+    dueDate: date,
+    amount: i * 100
+      });
+  }
     }
     return transactions;
 }
@@ -161,11 +161,18 @@ function loadDemoTxns() {
   ];
 
   demoTransactions.map((txn) => {
-    txn.scheduledDate = formatDate(dateToday());
-    txn.dueDate = formatDate(dateToday());
+    // randomly disperse schedule/due dates across 60 days....
+    let numDays = Math.floor((Math.random() * 60) + 1);
+
+    let randomDate = (dateToday()).addDays(numDays);
+
+    txn.scheduledDate = formatDate(randomDate);
+    txn.dueDate = formatDate(randomDate);
+
   });
 
-  return(demoTransactions);
+  let sortedTransactions = _.sortBy(demoTransactions,['scheduledDate'])
+  return(sortedTransactions);
 };
 
 export {getBalances, getTransactions, loadDemoTxns, typeTypes, accountNameTypes, payeeTypes};
