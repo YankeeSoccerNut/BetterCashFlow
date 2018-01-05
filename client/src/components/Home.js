@@ -23,7 +23,8 @@ class Home extends Component{
         <div id="login-section">
           <Login history={this.props.history}/>
         </div>
-        <div className="text-center">
+        <hr></hr>
+        <div className="col-sm-offset-4">
           <Button onClick={this.registerClick} bsStyle="success">Register for New Account</Button>
         </div>
       </div>

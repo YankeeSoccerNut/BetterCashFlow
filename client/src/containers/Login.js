@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, ControlLabel, FormControl, Button, Col, Checkbox } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button, Col, Checkbox, InputGroup } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
@@ -61,7 +61,6 @@ componentWillReceiveProps(newProps){
 render(){
     return(
       <div className="container mylogin">
-        <h1 className="text-danger">{this.state.registerMessage}</h1>
         <Form horizontal onSubmit={this.handleSubmit}>
           <FormGroup controlId="formHorizontalEmail" validationState={this.state.nameError}>
             <Col componentClass={ControlLabel} sm={2}>
