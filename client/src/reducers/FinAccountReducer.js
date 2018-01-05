@@ -18,9 +18,9 @@
       else {
         let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
         return (newState);
-      };
+      }
 
     default:
       return state;
-    };
+    }
   };

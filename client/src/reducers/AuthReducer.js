@@ -2,8 +2,6 @@
 
 export default function (state={}, action){
 
-  console.log("AuthReducer....action: \n", action);
-
   switch (action.type) {
     case 'AUTH-ACTION':
       let newState = action.payload.data;

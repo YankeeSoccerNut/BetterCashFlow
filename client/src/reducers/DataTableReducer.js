@@ -6,6 +6,7 @@
 //I don't think any state calculations are required as the react bootstrap datatable component is doing that for us!
 
 import findIndex from 'lodash.findindex';
+import moment from 'moment';
 
 export default function(state=null, action){
 
@@ -13,13 +14,20 @@ export default function(state=null, action){
   let rowIndex = -1;
 
   switch (action.type){
+  case 'IMPORT-TXNS':
+    console.log("DataTableReducer IMPORT-TXNS: ", action.payload)
+    newState = action.payload.map(buildTxnObject);
+
+    console.log("newState: ", newState);
+
+    return (newState);
   case 'LOAD-TXNS':
     // console.log(action.payload)
     if (state === null){   // initial and ONLY time through
       return (action.payload);
     } else {
       return(state);
-    };
+    }
   case 'CELL-EDIT':
     console.log("=============== DataTableReducer CELL-EDIT =================");
 
@@ -56,9 +64,26 @@ export default function(state=null, action){
       newState.splice(rowIndex, 1);
       // console.log("newState length: ", newState.length);
     });
+
     return newState;
 
   default:
     return state;
-  };
+  }
+};
+
+function buildTxnObject(txn, index) {
+
+    let txnObject = {};
+
+    txnObject.id = index+1;
+    txnObject.type = txn.type;
+    txnObject.accountName = txn.accountName;
+    txnObject.payee = txn.payee;
+    txnObject.dueDate = moment(txn.dueDate).format('YYYY-MM-DD');
+    txnObject.scheduledDate = moment(txn.scheduledDate).format('YYYY-MM-DD');
+    txnObject.amount = txn.amount;
+    console.log("txnObject: ", txnObject)
+
+    return(txnObject);
 };

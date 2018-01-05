@@ -29,6 +29,14 @@ class DataTableView extends Component {
 
     nextProps.newDataTable(nextProps.transactions);
 
+    // kluge to fix bug? in react-bootstrap-table
+    // deleting rows doesn't seem to deselect them
+    if(nextProps.transactions.length === 0){
+      this.refs.table.setState({
+        selectedRowKeys: []
+      });
+    };
+
   };
 
 
@@ -119,18 +127,19 @@ class DataTableView extends Component {
 
     // Initial render won't have anything....
     if (this.props.dataTable === null){
-      console.log("this.props.dataTable === null NO RENDER in DataTableView");
-      return null;
+      this.props.dataTable = [];
+      // console.log("this.props.dataTable === null NO RENDER in DataTableView");
+      // return null;
     };
 
     return(
       <div id="payables-table" className="col-sm-12">
-        <BootstrapTable data={this.props.transactions} search={ true } options={ options } exportCSV={true} keyBoardNav={keyBoardNav}
+        <BootstrapTable ref='table' data={this.props.transactions} search={ true } options={ options } exportCSV={true} keyBoardNav={keyBoardNav}
           selectRow={ selectRow }
                 remote={ this.remote }
                 insertRow={ true } deleteRow={ true }
                 cellEdit={ cellEditProp }>
-        <TableHeaderColumn dataField='id' hidden={true} isKey={true} autoValue={true}>Transaction ID</TableHeaderColumn>
+        <TableHeaderColumn dataField='id' hidden={false} isKey={true} autoValue={true}>ID</TableHeaderColumn>
         <TableHeaderColumn dataField='type' hidden={false} editable={{
             type: 'select',
             options: {
