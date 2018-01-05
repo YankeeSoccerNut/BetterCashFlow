@@ -39,7 +39,7 @@ class ImportCSV extends Component {
       quoteChar: '"',
       header: true,
       dynamicTyping: false,
-      preview: 20, //for testing...change to 0
+      preview: 0, // limit number of rows...0 is no limit
       encoding: "",
       worker: false,
       comments: false,

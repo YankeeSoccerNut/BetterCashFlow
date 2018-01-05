@@ -53,7 +53,7 @@
       if (factors.endingCash < 0 && factors.endingCredit <= 0) {
         newState.push({type: 'O', direction: -1, text: `You are in a tough spot`});
         newState.push({type: 'O', direction: -1, text: `You have insufficient cash to cover your expenditures for the period`});
-        newState.push({type: 'O', direction: -1, text: `You no available credit`});
+        newState.push({type: 'O', direction: -1, text: `You have no available credit`});
 
         newState.push({type: 'R', direction: 0, text: `See if you can generate or accelerate more receivables`});
         newState.push({type: 'R', direction: 0, text: `Consider addtional credit lines through alternative financing`});

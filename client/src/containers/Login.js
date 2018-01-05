@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, FormGroup, ControlLabel, FormControl, Button, Col } from 'react-bootstrap';
+import { Form, FormGroup, ControlLabel, FormControl, Button, Col, Checkbox } from 'react-bootstrap';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
@@ -80,17 +80,21 @@ render(){
             </Col>
           </FormGroup>
           <FormGroup>
+            <Col smOffset={2} sm={10}>
+              <Checkbox>Remember me</Checkbox>
+            </Col>
+          </FormGroup>
+          <FormGroup>
             <Col smOffset={2} sm={5}>
-              <Button bsStyle="success" bsSize="large" type="submit">
+              <Button bsStyle="primary" type="submit">
                 Login
               </Button>
             </Col>
           </FormGroup>
         </Form>
         <div>
-          <button onClick={this.testButton} className="btn btn-success">TEST</button>
+          <button onClick={this.testButton} className="btn btn-primary">AUTH TEST</button>
         </div>
-        <ImportCSV />
       </div>
     )
   }

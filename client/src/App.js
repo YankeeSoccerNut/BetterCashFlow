@@ -19,11 +19,11 @@ const App = () => {
           {/* <BetterCashFlow /> */}
         </div>
         <Switch>
-          <Route path='/home' component={Login} />
+          <Route path='/home' component={Home} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path='/better-cash-flow' component={BetterCashFlow} />
-          <Route path='/' component={Login} />
+          <Route path='/' component={Home} />
         </Switch>
       </div>
     </BrowserRouter>
