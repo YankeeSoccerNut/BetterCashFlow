@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
 import axios from 'axios';
 
+import ImportCSV from './ImportCSV';
+
 class Login extends Component {
 
 constructor(){
@@ -46,13 +48,13 @@ handleSubmit(e){
 };
 
 componentWillReceiveProps(newProps){
-  console.log("componentWillReceiveProps\n", newProps);
+  console.log("componentWillReceiveProps Login.js\n", newProps);
 
   if(newProps.auth.token === ''){
     this.setState({error: newProps.auth.status});
   } else {
     console.log(newProps.auth.status);
-    // newProps.history.push('/better-cash-flow');
+    newProps.history.push('/better-cash-flow');
   };
 };
 
@@ -88,6 +90,7 @@ render(){
         <div>
           <button onClick={this.testButton} className="btn btn-success">TEST</button>
         </div>
+        <ImportCSV />
       </div>
     )
   }

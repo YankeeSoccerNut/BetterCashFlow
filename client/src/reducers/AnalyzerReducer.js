@@ -31,6 +31,7 @@
 
       if(negativeCashPoints.length > 0){
         newState.push({type: 'O', direction: -1, text: `Your first cash crunch occurs on ${negativeCashPoints[0][0]}`});
+        selectFirstCashCrunch(negativeCashPoints[0]);
       };
 
       if (factors.endingCash > 0){
@@ -69,8 +70,15 @@
       };
 
       if (factors.endingCash - factors.netCreditUsed > 0){
-        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures AND your current credit line for the period`})
-        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash`})
+        newState.push({type: 'O', direction: 1, text: `Great job!  Your ending cash balance of $${factors.endingCash.toFixed(2)} covers your expenditures for the period`});
+
+        if (factors.netCreditUsed > 0){
+          newState.push({type: 'O', direction: 1, text: `Your ending cash balance is sufficent to cover your credit used during the period`});
+
+          newState.push({type: 'R', direction: 0, text: `Evaluate your cost of credit and consider using cash instead of credit for some expenditures.`})
+        };
+        newState.push({type: 'R', direction: 0, text: `Start making plans for how you can use 'extra' cash`});
+
         newState.statusSummary = +2;
       };
 
@@ -85,4 +93,9 @@
 
   function negativeCash(point, index, array) {
     return point[1] < 0;
+  };
+
+  function selectFirstCashCrunch(firstCashCrunch) {
+    console.log("First Cash Crunch: ", firstCashCrunch);
+    return
   };

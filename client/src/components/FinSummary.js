@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 
-import Icon from 'react-icons-kit';
+import {Icon, withBaseIcon} from 'react-icons-kit';
 import { coinDollar, creditCard } from 'react-icons-kit/icomoon';
+
+const IconCrimson = withBaseIcon({style: {color: '#db1b32'}});
+
+const IconSeaGreen = withBaseIcon({style: {color: '#489c48'}});
+
+const IconRed = withBaseIcon({style: {color: 'red'}});
+
+const IconBlue = withBaseIcon({style: {color: 'blue'}});
 
 class FinSummary extends Component{
 
@@ -19,9 +27,9 @@ class FinSummary extends Component{
 
     return (
       <span>
-        <Icon id="coin-dollar" size={20} icon={coinDollar} />
+        <IconBlue id="coin-dollar" size={20} icon={coinDollar} />
         <span>{this.props.endCash}</span>
-        <Icon id="credit-card" size={20} icon={creditCard} />
+        <IconRed id="credit-card" size={20} icon={creditCard} />
         <span>  {this.props.endCredit}</span>
       </span>
     );

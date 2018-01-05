@@ -72,8 +72,8 @@ class Analyzer extends Component {
     };
 
     return (
-      <div>
-        <Icon size={64} icon={statusIcon} className="col-sm-2"/>
+      <div className="analyzer-container">
+        <Icon size={80} icon={statusIcon} id="status-icon" className="col-sm-2"/>
         <div id="analyzer-observations" className="panel panel-info col-sm-10">
           <div className="panel-heading text-center">Observations and Recommendations
           </div>

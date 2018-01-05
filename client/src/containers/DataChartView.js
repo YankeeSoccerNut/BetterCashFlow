@@ -84,7 +84,7 @@ class DataChartView extends Component {
     // this.props.newProjection(this.props.projections);
 
     const style = styler([
-        { key: accountNameTypes[0], color: "blue"},
+        { key: accountNameTypes[0], color: 'blue'},
         { key: accountNameTypes[1], color: "red"},
     ]);
 

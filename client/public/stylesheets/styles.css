@@ -1,11 +1,75 @@
-body { padding-top: 70px; }
+/* @media (min-width: @screen-sm-min) {
+  #status-icon svg{
+    transform: scale(.5);
+  }
+} */
+
+/* color scheme:
+Crimson Red (from Icon):
+SeaGreen (from Icon):
+DollarBill inspired background color:  #fcfdfb
+*/
+
+body { padding-top: 70px;
+       background-color:#fcfdfb;
+}
+
+#bcf-logo {
+  padding: 0px;
+}
+.navbar {
+  background-color: #f4f7ed;
+  text-decoration-color: black;
+}
+
+#credit-card {
+  margin-left: 20px;
+}
+
+
+/* .analyzer-container {
+  position: relative;
+}
+
+
+#status-icon {
+  align-items: flex-start;
+}
+
+
+#analyzer-observations {
+  float:right;
+}
+ */
+
+.bcf-cash {
+  color: blue;
+}
+
+.bcf-credit {
+  color: red;
+}
+
+.panel {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
 
 div #cash-summary .panel-heading {
-  color: black;
+  background-color: #f4f7ed;
+  color: blue;
 }
 
 div #credit-summary .panel-heading {
+  background-color: #f4f7ed;
   color: red;
+}
+
+div #analyzer-observations .panel-heading {
+  background-color: #f4f7ed;
+  color: black;
+  font-size: 110%;
 }
 
 #coin-dollar {

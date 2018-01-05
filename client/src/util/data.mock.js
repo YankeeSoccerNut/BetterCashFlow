@@ -169,6 +169,8 @@ function loadDemoTxns() {
     txn.scheduledDate = formatDate(randomDate);
     txn.dueDate = formatDate(randomDate);
 
+    console.log("demoTransactions.map dueDate: ", txn.dueDate);
+
   });
 
   let sortedTransactions = _.sortBy(demoTransactions,['scheduledDate'])

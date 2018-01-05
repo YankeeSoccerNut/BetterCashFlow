@@ -35,6 +35,7 @@ let  certificateFile = config.cert;
 router.get('/', (req, res) => {
   console.log("req.user: ", req.user);
   console.log("req.isAuthenticated: ", req.isAuthenticated());
+  res.send("Invalid API route")
 });
 
 router.get('/api', (req, res) => {

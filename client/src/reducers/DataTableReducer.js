@@ -38,8 +38,9 @@ export default function(state=null, action){
     return(newState);
 
   case 'ADD-ROW':
+    console.log("ADD-ROW DataTableReducer:", action.payload);
     newState = [...state, action.payload];  //es6 destructuring with new item
-    // console.log("reducer.ADD-ROW\n", action);
+    console.log("reducer.ADD-ROW newState\n", newState);
     return(newState);
 
   case 'DELETE-ROW':

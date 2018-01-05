@@ -8,6 +8,8 @@ import Login from './containers/Login';
 import BetterCashFlow from './containers/BetterCashFlow';
 import BCFnavBar from './containers/BCFnavBar';
 
+
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,11 +19,11 @@ const App = () => {
           {/* <BetterCashFlow /> */}
         </div>
         <Switch>
-          <Route path='/home' component={Home} />
+          <Route path='/home' component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/login" component={Login} />
           <Route path='/better-cash-flow' component={BetterCashFlow} />
-          <Route path='/' component={Home} />
+          <Route path='/' component={Login} />
         </Switch>
       </div>
     </BrowserRouter>

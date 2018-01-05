@@ -31,10 +31,17 @@ function getDates(startDate, days) {
 
 function formatDate(date) {
     let day = date.getDate();
+    let month = date.getMonth()+1;
+
     if (day < 10) {
-  day = '0' + day;
-    }
-    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + day;
+      day = '0' + day;
+    };
+
+    if (month < 10) {
+      month = '0' + month;
+    };
+
+    return date.getFullYear() + '-' + month + '-' + day;
 }
 
 function createDate(dateString) {

@@ -30,6 +30,8 @@ class DataTableView extends Component {
     nextProps.newDataTable(nextProps.transactions);
 
   };
+
+
   componentDidMount(){
 
     if (this.props == null) {
@@ -64,19 +66,6 @@ class DataTableView extends Component {
   };
 
 
-  // afterSaveCell(row, cellName, cellValue){
-  //   // console.log("afterSaveCell.........");
-  //   // console.log(row, cellName, cellValue);
-  //   this.props.onCellEdit({
-  //     row: row,
-  //     cellName: cellName,
-  //     cellValue: cellValue
-  //   });
-  //
-  //   return(true);
-  // };
-
-
   onModalAddRow(e){
     // This function gets invoked after the user adds a row via the default Add Modal.  There were issues with trying to invoke our action directly from the modal callback so invoke our action here....
     this.props.onAddRow(e);
@@ -99,7 +88,16 @@ class DataTableView extends Component {
 
     const selectRow = {
         mode: 'checkbox',
-        bgColor: 'pink',
+        bgColor: function(row, isSelect) {
+          return 'pink'
+           // if (isSelect) {
+           //   const { id } = row;
+           //   if (id < 2) return 'blue';
+           //   else if (id < 4) return 'red';
+           //   else return 'yellow';
+           // }
+           // return null;
+        },
         clickToSelect: true
     };
 
@@ -121,6 +119,7 @@ class DataTableView extends Component {
 
     // Initial render won't have anything....
     if (this.props.dataTable === null){
+      console.log("this.props.dataTable === null NO RENDER in DataTableView");
       return null;
     };
 
@@ -152,7 +151,10 @@ class DataTableView extends Component {
           values: payeeTypes
             }
         }}>Payee</TableHeaderColumn>
-        <TableHeaderColumn dataField='amount' editable={{
+        <TableHeaderColumn dataField='amount'
+          tdStyle={{ textAlign: 'right' }}
+          dataFormat={amountFormatter}
+          editable={{
             type: 'number'
         }}>Amount</TableHeaderColumn>
 
@@ -182,5 +184,19 @@ function mapDispatchToProps(dispatch){
     newDataTable: newDataTable
   }, dispatch);
 };
+
+
+function amountFormatter(cell, row) {
+  console.log ("\namountFormatter row: ", row);
+
+  let amountColorClass = 'bcf-cash';
+
+  if (row.accountName === 'CREDIT') {
+    amountColorClass = 'bcf-credit';
+  }
+  return (
+    <span className={amountColorClass}>{cell}</span>
+  );
+}
 
 export default connect(mapStateToProps,mapDispatchToProps)(DataTableView);

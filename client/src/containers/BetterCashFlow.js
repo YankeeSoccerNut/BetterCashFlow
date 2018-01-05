@@ -5,10 +5,25 @@ import FinAccount from './FinAccount';
 import Analyzer from './Analyzer';
 import BCFnavBar from './BCFnavBar';
 import BCFsideNav from './BCFsideNav';
+import {connect} from 'react-redux';
 
 class BetterCashFlow extends Component{
 
+  constructor(props) {
+    super(props);
+  };
+
   render(){
+
+    // how come this doesn't work?
+    // if ((typeof(this.props.auth.token) === undefined)){
+
+    if (this.props.auth.token === undefined){
+      console.log("no auth no render in BetterCashFlow");
+      this.props.history.push('/home');
+      return(null);
+    };
+
     return(
     <div>
       <div className="container">
@@ -31,4 +46,10 @@ class BetterCashFlow extends Component{
   };
 };
 
-export default BetterCashFlow;
+function mapStateToProps(state){
+  return{
+    auth: state.auth
+  };
+};
+
+export default connect(mapStateToProps)(BetterCashFlow);

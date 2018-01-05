@@ -197,10 +197,11 @@ class FinAccount extends Component {
       );
     } else if (demoCashIndex >=0 && this.props.institution === 'DEMO-CASH') {
 
+  // for the demo.......
       let demoCashHTML = this.formatDemoCash(this.props.accountObjects[demoCashIndex]);
 
       return(
-        <div id="cash-summary" className="panel panel-info col-sm-6">
+        <div id="cash-summary" className="panel panel-info col-lg-6">
           <div className="panel-heading">{this.props.institution}</div>
           <div className="panel-content">{Parser(demoCashHTML)}</div>
         </div>
@@ -209,7 +210,7 @@ class FinAccount extends Component {
       let demoCreditHTML = this.formatDemoCredit(this.props.accountObjects[demoCreditIndex]);
 
       return(
-        <div id="credit-summary" className="panel panel-info col-sm-6">
+        <div id="credit-summary" className="panel panel-info col-lg-6">
           <div className="panel-heading">{this.props.institution}</div>
           <div className="panel-content">{Parser(demoCreditHTML)}</div>
         </div>
