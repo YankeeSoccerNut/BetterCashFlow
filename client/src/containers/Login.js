@@ -15,22 +15,8 @@ constructor(){
     error: ""
   };
   this.handleSubmit = this.handleSubmit.bind(this);
-  this.testButton = this.testButton.bind(this)
 };
 
-testButton(){
-  console.log("Test button pressed! state.auth: \n", this.props.auth);
-  let authToken = 'JWT ' + this.props.auth.token;
-  console.log("authToken: ", authToken);
-
-  axios.defaults.headers.common['Authorization'] = authToken;
-
-  axios(`${window.apiHost}/api/protected`, {
-    method: 'post',
-  }).then((response)=>{
-    console.log(response.data);
-  });
-};
 
 handleSubmit(e){
   e.preventDefault();
@@ -53,7 +39,11 @@ componentWillReceiveProps(newProps){
   if(newProps.auth.token === ''){
     this.setState({error: newProps.auth.status});
   } else {
-    console.log(newProps.auth.status);
+    let bcfJWT = 'JWT ' + newProps.auth.token;
+
+    localStorage.setItem('bcfJWT', bcfJWT);
+    console.log(newProps.auth);
+
     newProps.history.push('/better-cash-flow');
   };
 };
@@ -91,9 +81,6 @@ render(){
             </Col>
           </FormGroup>
         </Form>
-        <div>
-          <button onClick={this.testButton} className="btn btn-primary">AUTH TEST</button>
-        </div>
       </div>
     )
   }

@@ -9,20 +9,11 @@ export default function(formData){
 
   let axiosPromise = null;
 
-  if (formData === 'fake'){
-    console.log("$$$$$$$$$$$$$$FAKE$$$$$$$$$$$$$$");
-    axiosPromise = axios({
-      url: `${window.apiHost}/fakelogin`,
-      method: "POST",
-      data: formData
-    });
-  } else {
-    axiosPromise = axios({
-      url: `${window.apiHost}/api/login`,
-      method: "POST",
-      data: formData
-    });
-  };
+  axiosPromise = axios({
+    url: `${window.apiHost}/api/login`,
+    method: "POST",
+    data: formData
+  });
 
 
 // using promise as payload will cause our middleware to kick in....

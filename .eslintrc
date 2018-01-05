@@ -9,7 +9,9 @@
     "globals": {
         "console": false,
         "require": false,
-        "alert": false
+        "alert": false,
+        "localStorage": false,
+        "window": false
     },
     "rules": {
         "constructor-super": 2,
