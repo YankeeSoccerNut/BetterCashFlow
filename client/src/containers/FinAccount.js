@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import axios from 'axios';
+
 import initFinAccount from '../actions/initFinAccount';
 
+import loadUserFinAccounts from '../actions/loadUserFinAccounts';
+
 import {accountNameTypes} from '../util/data.mock';
-import axios from 'axios';
+
 import findIndex from 'lodash.findindex';
 import Parser from 'html-react-parser';
 import Icon from 'react-icons-kit';
@@ -16,6 +20,16 @@ class FinAccount extends Component {
   constructor(props) {
      super(props);
   }
+
+  componentWillMount(){
+    console.log("componentWillMount FinAccount auth: ", this.props.auth);
+
+    // load up the user's financial accounts if there is a token which indicates that use has logged in....
+    if (this.props.auth.token !== ''){
+      this.props.loadUserFinAccounts(this.props.auth.token);
+    };
+
+  };
 
   componentDidMount(props){
     console.log("+++++++++++++FinAccount.componentDidMount");
@@ -228,13 +242,15 @@ function mapStateToProps(state){
   // console.log("mapStateToProps....FinAccount")
   // console.log(state);
   return{
-    accountObjects: state.accountObjects
+    accountObjects: state.accountObjects,
+    auth: state.auth
   }
 };
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    initFinAccount: initFinAccount
+    initFinAccount: initFinAccount,
+    loadUserFinAccounts: loadUserFinAccounts
   }, dispatch);
 };
 

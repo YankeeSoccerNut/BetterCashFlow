@@ -5,6 +5,8 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const request = require('request');
 
+const loadUserFinAccounts = require('../src/loadUserFinAccounts');
+
 const mysql = require('mysql');
 const connection = mysql.createConnection(config.db)
 connection.connect();
@@ -117,8 +119,10 @@ function ensureAuthenticated(req, res, next){
               msg: 'User Not Authorized'}));
 };
 
-router.post('/api/protected', function(req, res) {
-  console.log("hit /api/protected");
+// Passport's default behavior is to just send back a 401 unauthorized message IF it is used as middleware.  Override this default by authenticating within the route so a well-structured response can be sent back to client.
+
+router.post('/api/loadUserFinAccounts', function(req, res) {
+  console.log("hit /api/loadUserFinAccounts");
 
   passport.authenticate('jwt', function(err, user, info) {
     console.log("err\n", err);
@@ -136,17 +140,17 @@ router.post('/api/protected', function(req, res) {
       console.log("req.user", req.user);
       console.log("req.session.passport.user: ", req.session.passport);
 
-      // feels like I should be deserializing the user with the uid....req.user is undefined at this point...req.session.passport.user is also undefined
+      // feels like I should be deserializing the user with the uid....req.user is undefined at this point...req.session.passport.user is also undefined.  Note:  I don't think I even need sessions for this app!
 
-      res.json({status: 'Authorized for /api/protected'})
+      const userAccountsObj = loadUserFinAccounts(user.uid);
+
+      res.json(userAccountsObj)
       return;
     } else {
-      return res.status(401).json({ status: 'error', code: 'unauthorized for /api/protected' });
+      return res.status(401).json({ status: 'error', code: 'unauthorized for requested route' });
     }
   })(req, res);
 });
-
-// Passport's default behavior is to just send back a 401 unauthorized message IF it is used as middleware.  Override this default by authenticating within the route so a well-structured response can be sent back to client.
 
 router.post('/api/login', function(req, res, next) {
   console.log("hit /api/login");

@@ -19,6 +19,11 @@
         let newState = [...state, action.payload]; //es6 spread syntax -- aka destructuring
         return (newState);
       }
+    case 'LOAD-USER-FIN-ACCTS':
+      console.log ("LOAD-USER-FIN-ACCTS");
+      console.log("action: ", action);
+
+      return action.payload.data;
 
     default:
       return state;

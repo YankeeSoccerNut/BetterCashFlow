@@ -11,7 +11,8 @@
         "require": false,
         "alert": false,
         "localStorage": false,
-        "window": false
+        "window": false,
+        "module": false
     },
     "rules": {
         "constructor-super": 2,
