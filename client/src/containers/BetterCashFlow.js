@@ -31,14 +31,14 @@ class BetterCashFlow extends Component{
           <Analyzer />
         </div>
         <div className="col-sm-12">
-          <FinAccount institution="DEMO-CASH" />
-          <FinAccount institution="DEMO-CREDIT" />
+          <FinAccount category="CASH" />
+          <FinAccount category="CREDIT" />
         </div>
         <div>
           <DataChartView />
         </div>
-        <ImportCSV />
         <div>
+          <ImportCSV />
           <DataTableView />
         </div>
       </div>

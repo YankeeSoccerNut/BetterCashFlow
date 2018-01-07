@@ -26,7 +26,7 @@ function loadUserFinAccounts(uid){
     accountObjects.push(accountObject);
 
     return accountObjects;
-  } else {
+  } else if (uid < 44 ){
     accountObject.finInstitution = 'OTHER-CASH';
     accountObject.type = 'CASH';
     accountObject.accounts.push({beginning: 50.10, available: 40.10, scheduled: [{date: '2018-01-11', amount: 10}]});
@@ -43,6 +43,8 @@ function loadUserFinAccounts(uid){
     accountObjects.push(accountObject);
 
     return accountObjects;
+  } else {
+    return [];
   }
 };
 

@@ -60,34 +60,26 @@ class ImportCSV extends Component {
     console.log(typeof(parseReturn));
     console.log("parseReturn: ", parseReturn);
 
-    alert(
-      `Selected file - ${
-        this.fileInput.files[0].name
-      }`
-    );
   }
 
   render() {
 
-    console.log("ImportCSV: ################");
+    console.log("ImportCSV: ################ ");
 
     return (
-      <form
+      <div className="container">
+      <form className="form-horizontal" id="importcsv"
         onSubmit={this.handleSubmit}>
-        <label>
-          Upload file:
           <input
             type="file"
             ref={input => {
               this.fileInput = input;
-            }}
-          />
-        </label>
-        <br />
-        <button type="submit">
-          Submit
-        </button>
+            }}>
+          </input>
+          <button id="btnimport" type="submit" className="btn btn-danger btn-sm"> <span><i className="fa glyphicon glyphicon-import fa-import"></i> Import</span>
+          </button>
       </form>
+      </div>
     );
   }
 }

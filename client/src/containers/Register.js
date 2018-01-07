@@ -78,13 +78,15 @@ class Register extends Component {
 
   componentWillReceiveProps(newProps){
 
-    if(newProps.auth.msg === "registerSuccess"){
-          // the user was inserted.
-          // We have the token and name safely in the auth reducer.
-          // Move them to the main page.
-          this.props.history.push('/better-cash-flow');
-    } else if (newProps.auth.msg === "userExists") {
-      this.setState( {error: "This email is already registered.  Please login or use different email"} );
+    if(newProps.auth.token === ''){
+      this.setState({error: newProps.auth.status});
+    } else {
+      let bcfJWT = 'JWT ' + newProps.auth.token;
+
+      localStorage.setItem('bcfJWT', bcfJWT);
+      console.log(newProps.auth);
+
+      newProps.history.push('/better-cash-flow');
     };
   };
 

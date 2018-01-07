@@ -18,6 +18,7 @@ class Home extends Component{
 
   render(){
     console.log("rendering Home component");
+    
     return (
       <div id="homepage">
         <div id="login-section">

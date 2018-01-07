@@ -52,7 +52,7 @@ class DataTableView extends Component {
 
     // const transactions = getTransactions();
 
-    this.props.loadTransactions(demoTxns);
+    // this.props.loadTransactions(demoTxns);
   };
 
   beforeSaveCell(row, cellName, cellValue){

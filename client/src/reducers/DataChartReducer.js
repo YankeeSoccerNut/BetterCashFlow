@@ -14,8 +14,8 @@ export default function(state=null, action){
 
   switch (action.type){
 
-  case 'INIT-FIN-ACCT':
-    console.log('INIT-FIN-ACCT  payload', action.payload);
+  case 'LOAD-USER-FIN-ACCTS':
+    console.log('LOAD-USER-FIN-ACCTS  payload.data', action.payload.data);
 
     if(state === null){
       newState = {beginningCash: 0,
@@ -24,17 +24,34 @@ export default function(state=null, action){
       newState = {...state};
     };
 
-    let a = action.payload.accounts[0];  //shorthand
+    newState.beginningCash = 0;
+    newState.beginningCredit = 0
 
-    if(action.payload.type === 'CASH'){
-      newState.beginningCash = a.available;
-    } else if(action.payload.type === 'CREDIT'){
-      newState.beginningCredit = a.available;
-    } else {
-      console.log('Invalid type: ', action.payload);
+    let a = action.payload.data;  //shorthand
+
+    let cashIndex = findIndex(a, { type: 'CASH' });
+    let creditIndex = findIndex(a, { type: 'CREDIT' });
+
+    console.log('cashIndex ', cashIndex);
+    console.log('creditIndex ', creditIndex);
+
+    if(cashIndex < 0 && creditIndex < 0){
+      console.log("No Cash && No Credit Accounts");
     };
 
-    console.log('newState in INIT-FIN-ACCT for DataChart: ', newState);
+    if (cashIndex > -1){
+      console.log("a[cashIndex]", a[cashIndex]);
+      console.log("a[cashIndex].accounts[0]", a[cashIndex].accounts[0]);
+
+      newState.beginningCash = a[cashIndex].accounts[0].available;
+    };
+
+    if (creditIndex > -1){
+      console.log("a[creditIndex]", a[creditIndex]);
+      newState.beginningCredit = a[creditIndex].accounts[0].available;
+    };
+
+    console.log('newState in LOAD-USER-FIN-ACCTS for DataChart: ', newState);
     return(newState);
 
   case 'NEW-DATATABLE':
