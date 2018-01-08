@@ -80,7 +80,7 @@ router.post('/api/register',(req, res) => {
             // payload is encoded with token...
             let payload = { uid: rows.insertId };
 
-            const token = jwt.sign(payload, mySecret)
+            const token = jwt.sign(payload, mySecret, {expiresIn: "1d"});
             console.log("token: ", token);
 
             console.log("req.session.passport", req.session.passport);
@@ -165,7 +165,7 @@ router.post('/api/login', function(req, res, next) {
 
     req.login(user.id, function(err) {
 
-      const token = jwt.sign({ uid: user.id }, mySecret)
+      const token = jwt.sign({ uid: user.id }, mySecret, {expiresIn: "1d"})
       console.log("token: ", token);
 
       console.log("req.session.passport", req.session.passport);
