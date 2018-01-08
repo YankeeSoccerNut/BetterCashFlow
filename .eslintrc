@@ -12,7 +12,8 @@
         "alert": false,
         "localStorage": false,
         "window": false,
-        "module": false
+        "module": false,
+        "Promise": false
     },
     "rules": {
         "constructor-super": 2,

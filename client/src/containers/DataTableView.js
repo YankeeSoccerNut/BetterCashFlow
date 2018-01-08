@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // react-bootstrap-table...
-import {BootstrapTable, TableHeaderColumn, ButtonGroup } from 'react-bootstrap-table';
+import {BootstrapTable, TableHeaderColumn, ButtonGroup, Button } from 'react-bootstrap-table';
 
 import moment from 'moment';
 
@@ -15,6 +15,7 @@ import onAddRow from '../actions/onAddRow';
 import onDeleteRow from '../actions/onDeleteRow';
 import newDataTable from '../actions/newDataTable';
 import saveUserPlan from '../actions/saveUserPlan';
+import realSavePlan from '../actions/realSavePlan';
 
 
 
@@ -24,6 +25,7 @@ class DataTableView extends Component {
     super(props);
     this.beforeSaveCell = this.beforeSaveCell.bind(this);
     this.onModalAddRow = this.onModalAddRow.bind(this);
+    this.clickSaveUserPlan = this.clickSaveUserPlan.bind(this);
   }
 
   componentWillReceiveProps(nextProps){
@@ -40,6 +42,11 @@ class DataTableView extends Component {
 
   };
 
+  clickSaveUserPlan(e){
+    console.log("event ", e);
+    console.log("user clicked save");
+    // this.props.saveUserPlan(this.props);
+  }
 
   beforeSaveCell(row, cellName, cellValue){
     // react-bootstrap-table provides an opportunity to edit a change before the cell is saved to the table....
@@ -67,6 +74,10 @@ class DataTableView extends Component {
   }
 
   createCustomButtonGroup(props){
+    console.log("createCustomButtonGroup props: ", props);
+
+    console.log ("Button ", Button);
+
     return (
       <ButtonGroup className='my-custom-class' sizeClass='btn-group-md'>
         { props.showSelectedOnlyBtn }
@@ -111,7 +122,7 @@ class DataTableView extends Component {
     };
 
     const options={
-              btnGroup: this.createCustomButtonGroup,
+              // btnGroup: this.createCustomButtonGroup,
               clearSearch: true,
               onCellEdit: this.beforeSaveCell,
               onDeleteRow: this.props.onDeleteRow,

@@ -3,7 +3,6 @@
 
 //Here we are dealing with changes to the Datatable that represents a potential payment schedule...the Datatable is being used to model the impact to various account balances over time
 
-//I don't think any state calculations are required as the react bootstrap datatable component is doing that for us!
 
 import findIndex from 'lodash.findindex';
 import moment from 'moment';
@@ -14,7 +13,7 @@ export default function(state=null, action){
   let rowIndex = -1;
 
   console.log("action in DataTableReducer ", action);
-  
+
   switch (action.type){
   case 'IMPORT-TXNS':
     console.log("DataTableReducer IMPORT-TXNS: ", action.payload)
@@ -68,11 +67,6 @@ export default function(state=null, action){
     });
 
     return newState;
-  case 'SAVE-USER-PLAN':
-
-    console.log("SAVE-USER-PLAN in DataTableReducer");
-
-    return state;  // for now...need to update stats for transactions...planId, lastUpdate
 
   case 'LOGOUT':
     return [];

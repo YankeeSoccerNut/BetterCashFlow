@@ -165,7 +165,7 @@ router.post('/api/saveUserPlan', function(req, res, next) {
   console.log("hit /api/saveUserPlan");
 
   passport.authenticate('jwt', function(err, user, info) {
-    console.log("err\n", err);
+
     console.log("user\n", user);
     console.log("info\n", info);
 
@@ -176,19 +176,20 @@ router.post('/api/saveUserPlan', function(req, res, next) {
     };
 
     if (user) {
-      console.log("user:" , user)
-      console.log("req.user", req.user);
-      console.log("req.session.passport.user: ", req.session.passport);
 
-      if(saveUserPlan()){
-      res.json({message: "return from saveUserPlan"});
-      return
+      let saveSuccess = saveUserPlan(user.uid, connection, req.body.planObject, req.body.transactions);
+
+      if(saveSuccess) {
+        console.log("returning success to client...")
+        res.json({message: "return from saveUserPlan"});
+        return
       };
 
+      console.log("returning fail to client");
       res.json({message: "fail in saveUserPlan"});
-
       return;
     } else {
+      console.log("returning 401 to client");
       return res.status(401).json({ status: 'error', code: 'unauthorized for requested route' });
     }
   })(req, res, next);

@@ -1,25 +1,21 @@
 import axios from 'axios';
 
 export default function saveUserPlan(props){
-  console.log("saveUserPlan action is running");
+  console.log("saveUserPlan is running...props: ", props);
+
 
   let axiosPromise = null;
 
-  let authToken =     localStorage.getItem('bcfJWT');
+  let authToken = localStorage.getItem('bcfJWT');
 
   axios.defaults.headers.common['Authorization'] = authToken;
 
   axiosPromise = axios({
     url: `${window.apiHost}/api/saveUserPlan`,
     method: "POST",
-    data: {}
+    data: {planObject: props.planObject,
+          transactions: props.transactions}
   });
-
-  console.log ("axiosPromise: ", axiosPromise);
-
-
-// using promise as payload will cause our middleware to kick in....
-// redux-promise won't dispatch the action (inform reducers) until the promise is fulfilled
 
   return (
     {
@@ -27,4 +23,9 @@ export default function saveUserPlan(props){
       payload: axiosPromise
     }
   );
+
+// using promise as payload will cause our middleware to kick in....
+// redux-promise won't dispatch the action (inform reducers) until the promise is fulfilled
+
+
 };

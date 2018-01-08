@@ -5,6 +5,8 @@ import FinAccount from './FinAccount';
 import Analyzer from './Analyzer';
 import BCFnavBar from './BCFnavBar';
 import ImportCSV from './ImportCSV';
+import SaveUserPlan from './SaveUserPlan';
+
 import {connect} from 'react-redux';
 
 class BetterCashFlow extends Component{
@@ -34,8 +36,11 @@ class BetterCashFlow extends Component{
         <div>
           <DataChartView />
         </div>
-        <div>
+        <div className="row">
           <ImportCSV />
+          <SaveUserPlan />
+        </div>
+        <div>
           <DataTableView />
         </div>
       </div>
