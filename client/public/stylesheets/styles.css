@@ -101,3 +101,7 @@ input[type=file] {
 #btnimport {
   margin-bottom: 5px;
 }
+
+.glyphicon-floppy-disk {
+  margin-right: 5px;
+}

@@ -13,6 +13,8 @@ export default function(state=null, action){
   let newState = []
   let rowIndex = -1;
 
+  console.log("action in DataTableReducer ", action);
+  
   switch (action.type){
   case 'IMPORT-TXNS':
     console.log("DataTableReducer IMPORT-TXNS: ", action.payload)
@@ -66,6 +68,11 @@ export default function(state=null, action){
     });
 
     return newState;
+  case 'SAVE-USER-PLAN':
+
+    console.log("SAVE-USER-PLAN in DataTableReducer");
+
+    return state;  // for now...need to update stats for transactions...planId, lastUpdate
 
   case 'LOGOUT':
     return [];

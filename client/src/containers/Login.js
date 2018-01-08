@@ -3,7 +3,6 @@ import { Form, FormGroup, ControlLabel, FormControl, Button, Col, Checkbox, Inpu
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
-import axios from 'axios';
 
 import ImportCSV from './ImportCSV';
 

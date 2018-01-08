@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // react-bootstrap-table...
-import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import {BootstrapTable, TableHeaderColumn, ButtonGroup } from 'react-bootstrap-table';
 
 import moment from 'moment';
 
@@ -14,6 +14,8 @@ import onCellEdit from '../actions/onCellEdit';
 import onAddRow from '../actions/onAddRow';
 import onDeleteRow from '../actions/onDeleteRow';
 import newDataTable from '../actions/newDataTable';
+import saveUserPlan from '../actions/saveUserPlan';
+
 
 
 class DataTableView extends Component {
@@ -64,6 +66,21 @@ class DataTableView extends Component {
     return;
   }
 
+  createCustomButtonGroup(props){
+    return (
+      <ButtonGroup className='my-custom-class' sizeClass='btn-group-md'>
+        { props.showSelectedOnlyBtn }
+        { props.exportCSVBtn }
+        { props.insertBtn }
+        { props.deleteBtn }
+        <button type='button' id="btnsave" onClick={ saveUserPlan }
+          className={ "btn btn-primary" }><span><i className="fa glyphicon glyphicon-floppy-disk fa-floppy-disk"></i></span>
+          Save Plan
+        </button>
+      </ButtonGroup>
+    );
+  };
+
 
   remote(remoteObj) {
     remoteObj.cellEdit = true;
@@ -94,6 +111,7 @@ class DataTableView extends Component {
     };
 
     const options={
+              btnGroup: this.createCustomButtonGroup,
               clearSearch: true,
               onCellEdit: this.beforeSaveCell,
               onDeleteRow: this.props.onDeleteRow,
@@ -116,12 +134,12 @@ class DataTableView extends Component {
 
     return(
       <div id="payables-table" className="col-sm-12">
-        <BootstrapTable ref='table' data={this.props.transactions} search={ true } options={ options } exportCSV={true} keyBoardNav={keyBoardNav}
+        <BootstrapTable ref='table' data={this.props.transactions} search={ true } options={ options } exportCSV={true}  keyBoardNav={keyBoardNav}
           selectRow={ selectRow }
                 remote={ this.remote }
                 insertRow={ true } deleteRow={ true }
                 cellEdit={ cellEditProp }>
-        <TableHeaderColumn dataField='id' hidden={false} isKey={true} autoValue={true}>ID</TableHeaderColumn>
+        <TableHeaderColumn dataField='id' hidden={true} isKey={true} autoValue={true}>ID</TableHeaderColumn>
         <TableHeaderColumn dataField='type' hidden={false} editable={{
             type: 'select',
             options: {
@@ -171,7 +189,8 @@ function mapDispatchToProps(dispatch){
     onCellEdit: onCellEdit,
     onAddRow: onAddRow,
     onDeleteRow: onDeleteRow,
-    newDataTable: newDataTable
+    newDataTable: newDataTable,
+    saveUserPlan: saveUserPlan
   }, dispatch);
 };
 

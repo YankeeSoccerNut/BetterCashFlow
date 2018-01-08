@@ -7,6 +7,8 @@ const request = require('request');
 
 const loadUserFinAccounts = require('../src/loadUserFinAccounts');
 
+const saveUserPlan = require('../src/saveUserPlan');
+
 const mysql = require('mysql');
 const connection = mysql.createConnection(config.db)
 connection.connect();
@@ -93,6 +95,31 @@ router.post('/api/register',(req, res) => {
   });
 });
 
+router.post('/api/login', function(req, res, next) {
+  console.log("hit /api/login");
+  passport.authenticate('local', function(err, user, info) {
+
+    if(err){
+      res.json({token: '', status: err});
+      return;
+    };
+
+    console.log("authenticated user: ")
+
+    req.login(user.id, function(err) {
+
+      const token = jwt.sign({ uid: user.id }, mySecret, {expiresIn: "1d"})
+      console.log("token: ", token);
+
+      console.log("req.session.passport", req.session.passport);
+      console.log("req.user: ", req.user);
+      res.json({status: 'User Logged In!',
+                token: token});
+      return;
+    });
+  })(req, res, next);
+});
+
 
 router.get('/api/logout', function(req, res){
   console.log('logging out');
@@ -100,24 +127,6 @@ router.get('/api/logout', function(req, res){
   res.json({token: '', status: 'User Logged Out'});
 });
 
-
-// Simple middleware to ensure user is authenticated.
-// Use this middleware on any resource that needs to be protected.
-// If the request is authenticated (typically via a persistent login session),
-// the request will proceed.  Otherwise, the user will be redirected to the
-// login page.
-function ensureAuthenticated(req, res, next){
-
-  console.log("req.user: ",req.user);
-  if (req.isAuthenticated()) {
-    // req.user is available for use here
-    return next(); }
-
-  // denied.
-  console.log("ensureAuthenticated: Not Authorized");
-  return (res.json({token: '',
-              msg: 'User Not Authorized'}));
-};
 
 // Passport's default behavior is to just send back a 401 unauthorized message IF it is used as middleware.  Override this default by authenticating within the route so a well-structured response can be sent back to client.
 
@@ -152,30 +161,39 @@ router.post('/api/loadUserFinAccounts', function(req, res) {
   })(req, res);
 });
 
-router.post('/api/login', function(req, res, next) {
-  console.log("hit /api/login");
-  passport.authenticate('local', function(err, user, info) {
+router.post('/api/saveUserPlan', function(req, res, next) {
+  console.log("hit /api/saveUserPlan");
 
-    if(err){
-      res.json({token: '', status: err});
+  passport.authenticate('jwt', function(err, user, info) {
+    console.log("err\n", err);
+    console.log("user\n", user);
+    console.log("info\n", info);
+
+    if (err) {
+      console.log(err);
+      res.json({status: 'Error', msg: err});
       return;
     };
 
-    console.log("authenticated user: ")
+    if (user) {
+      console.log("user:" , user)
+      console.log("req.user", req.user);
+      console.log("req.session.passport.user: ", req.session.passport);
 
-    req.login(user.id, function(err) {
+      if(saveUserPlan()){
+      res.json({message: "return from saveUserPlan"});
+      return
+      };
 
-      const token = jwt.sign({ uid: user.id }, mySecret, {expiresIn: "1d"})
-      console.log("token: ", token);
+      res.json({message: "fail in saveUserPlan"});
 
-      console.log("req.session.passport", req.session.passport);
-      console.log("req.user: ", req.user);
-      res.json({status: 'User Logged In!',
-                token: token});
       return;
-    });
+    } else {
+      return res.status(401).json({ status: 'error', code: 'unauthorized for requested route' });
+    }
   })(req, res, next);
 });
+
 
 router.get('/api/getUSBankUserInfo', (req, res) => {
   console.log("hit /getUSBankUserInfo route");
