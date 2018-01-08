@@ -15,10 +15,7 @@ class BetterCashFlow extends Component{
 
   render(){
 
-    // how come this doesn't work?
-    // if ((typeof(this.props.auth.token) === undefined)){
-
-    if (this.props.auth.token === undefined){
+    if (!this.props.auth.userLoggedIn){
       console.log("no auth no render in BetterCashFlow");
       this.props.history.push('/home');
       return(null);

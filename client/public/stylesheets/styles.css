@@ -56,7 +56,7 @@ hr {
   color: blue;
 }
 
-.bcf-credit {
+.bcf-credit, .bcf-date-error {
   color: red;
 }
 

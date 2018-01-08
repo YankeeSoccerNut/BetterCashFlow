@@ -86,6 +86,9 @@
       console.log(newState);
       return (newState);
 
+    case 'LOGOUT':
+      return [];
+
     default:
       return state;
     };

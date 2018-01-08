@@ -25,6 +25,9 @@
 
       return action.payload.data;
 
+    case 'LOGOUT':
+      return [];
+        
     default:
       return state;
     }

@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 // react-bootstrap-table...
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
+import moment from 'moment';
 
 // mock data
-import {loadDemoTxns, payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
+import {payeeTypes, accountNameTypes, typeTypes} from '../util/data.mock.js';
 
 import onCellEdit from '../actions/onCellEdit';
 import onAddRow from '../actions/onAddRow';
 import onDeleteRow from '../actions/onDeleteRow';
-import loadTransactions from '../actions/loadTransactions';
 import newDataTable from '../actions/newDataTable';
 
 
@@ -25,7 +25,6 @@ class DataTableView extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log("DataTableView nextProps\n", nextProps);
 
     nextProps.newDataTable(nextProps.transactions);
 
@@ -39,21 +38,6 @@ class DataTableView extends Component {
 
   };
 
-
-  componentDidMount(){
-
-    if (this.props == null) {
-      return null;
-    };
-
-    console.log("loadDemoTxns: ################");
-    let demoTxns = loadDemoTxns();
-    console.log(demoTxns);
-
-    // const transactions = getTransactions();
-
-    // this.props.loadTransactions(demoTxns);
-  };
 
   beforeSaveCell(row, cellName, cellValue){
     // react-bootstrap-table provides an opportunity to edit a change before the cell is saved to the table....
@@ -128,8 +112,6 @@ class DataTableView extends Component {
     // Initial render won't have anything....
     if (this.props.dataTable === null){
       this.props.dataTable = [];
-      // console.log("this.props.dataTable === null NO RENDER in DataTableView");
-      // return null;
     };
 
     return(
@@ -167,7 +149,7 @@ class DataTableView extends Component {
             type: 'number'
         }}>Amount</TableHeaderColumn>
 
-        <TableHeaderColumn dataField='scheduledDate' editable={{
+        <TableHeaderColumn dataField='scheduledDate' dataFormat={schedDateFormatter} editable={{
             type: 'date'
         }}>Scheduled Date</TableHeaderColumn>
         </BootstrapTable>
@@ -186,7 +168,6 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
-    loadTransactions: loadTransactions,
     onCellEdit: onCellEdit,
     onAddRow: onAddRow,
     onDeleteRow: onDeleteRow,
@@ -207,5 +188,21 @@ function amountFormatter(cell, row) {
     <span className={amountColorClass}>{cell}</span>
   );
 }
+
+function schedDateFormatter(cell, row) {
+
+  let gregToday = moment().format("YYYY-MM-DD");
+
+  if(cell < gregToday){
+    return (
+      <span className='bcf-date-error'>{cell}</span>
+    );
+  } else {
+    return (
+      <span>{cell}</span>
+    );
+  }
+};
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(DataTableView);

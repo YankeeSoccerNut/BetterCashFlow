@@ -20,9 +20,9 @@ componentWillReceiveProps(newProps){
 
 render(){
 
-    if (this.props === null){
-      return;
-    };
+    // if (this.props === null){
+    //   return;
+    // };
 
     let endingCash = 0;
     let endingCredit = 0;
@@ -49,12 +49,12 @@ render(){
               <MenuItem eventKey={2.1} onClick={ e => this.props.history.push("/better-cash-flow") }>Dashboard</MenuItem>
               <MenuItem eventKey={2.2}>Plan History</MenuItem>
               <MenuItem divider />
-              <MenuItem eventKey={3.3}>Linked Accounts</MenuItem>
+              <MenuItem eventKey={3.3} onClick={ e => this.props.history.push("/link-fin-accts") }>Linked Accounts</MenuItem>
             </NavDropdown>
             <NavDropdown eventKey={4} title="Welcome" id="user-dropdown" pullRight={true}>
               <MenuItem eventKey={4.1}>Profile</MenuItem>
               <MenuItem eventKey={4.2}>Preferences</MenuItem>
-              <MenuItem eventKey={4.3}>Logout</MenuItem>
+              <MenuItem eventKey={4.3} onClick={ e => this.props.history.push("/logout") }>Logout</MenuItem>
             </NavDropdown>
             <Navbar.Text>
               <FinSummary endCash={endingCash.toFixed(2)} endCredit={endingCredit.toFixed(2)} />
@@ -68,7 +68,8 @@ render(){
 
 function mapStateToProps(state){
   return{
-    projections: state.projections
+    projections: state.projections,
+    auth: state.auth
   };
 };
 

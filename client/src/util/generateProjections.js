@@ -1,5 +1,6 @@
 import { TimeSeries } from 'pondjs';
 import _ from 'lodash';
+import moment from 'moment';
 
 Date.prototype.addDays = function(days) {
     let date = new Date(this.valueOf());
@@ -57,6 +58,8 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
 
   console.log("sorted Transactions: ", sortedTransactions);
 
+  let gregCurrentDate = moment(currentDate).format("YYYY-MM-DD");
+
   balance = balance.slice();
 
   const points = [];
@@ -77,7 +80,7 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
     // seriesDate.setHours(0, 0, 0, 0);
     console.log("seriesDate: ", seriesDate);
 
-    //Series date is a javascript date...put it into same format as txnSchedDate for comparison....
+    //Series date is a javascript date...put it into same format as planSchedDate for comparison....
     let gregSeriesDate = formatDate(seriesDate);
     console.log("gregSeriesDate: ", gregSeriesDate);
 
@@ -86,14 +89,20 @@ function getBalanceSeriesStruct(transactions, balance, currentDate, numDays) {
     while (i < sortedTransactions.length) {
       let currTxn = sortedTransactions.slice(i,i+1);
       console.log("currTxn: ", currTxn[0]);
-      const txnSchedDate = (currTxn[0].scheduledDate);
+      let planSchedDate = (currTxn[0].scheduledDate);
+
+      //Need to handle situation where planschedDate is BEFORE today's date.  This can easily happen if old CSV are imported.  The solution is going to be to assume prior dates are TODAY.  They will still show up as input and will be highlighted for the user.
+
+      if(planSchedDate < gregCurrentDate){
+        planSchedDate = gregCurrentDate;
+      };
 
       // on matching dates keep going and update that series data point's balance....otherwise, break out and move on
 
-      if (txnSchedDate === gregSeriesDate) {
+      if (planSchedDate === gregSeriesDate) {
         dateMatchCount++  //for testing...
         console.log("+++++Transaction Match with Series Date+++++++");
-        console.log("txnSchedDate: ", txnSchedDate);
+        console.log("planSchedDate: ", planSchedDate);
         console.log("seriesDate: ", seriesDate);
 
         if (currTxn[0].type === 'Expense' && currTxn[0].accountName === 'CASH') {

@@ -76,6 +76,9 @@ export default function(state=null, action){
 
     return newState;
 
+  case 'LOGOUT':
+    return {};
+
   default:
     return state;
   };
