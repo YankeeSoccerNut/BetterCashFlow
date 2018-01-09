@@ -21,6 +21,7 @@ function saveUserPlan(uid, db, plan, txns){
     // array.reduce(function(total, currentValue, currentIndex, arr), initialValue);
 
     let planPromises = [];
+    let returnPlanId = null;
 
     if(plan.planId === null){
       planPromises.push(new Promise (function(resolve, reject) {
@@ -31,11 +32,13 @@ function saveUserPlan(uid, db, plan, txns){
             reject(err);
           } else {
             console.log("Plan record inserted", result.insertId);
+            returnPlanId = result.insertId;
             resolve(result.insertId);
           };
         }); // insert query
       })); // planPromise
     } else {
+      returnPlanId = plan.planId;
       console.log("delete txns, update plan");
       console.log("plan: ", plan);
 
@@ -79,7 +82,7 @@ function saveUserPlan(uid, db, plan, txns){
         txnPromise = new Promise (function(resolve, reject) {
           const insertTxnSQL = `INSERT into plan_details (plan_id, txn_type, txn_account_name, txn_payee, txn_due_date, txn_sched_date, txn_amount) VALUES (?,?,?,?,?,?,?);`;
 
-          db.query(insertTxnSQL,[planId, txn.type, txn.accountName, txn.payee,txn.dueDate,txn.scheduledDate,txnFloatAmount], function (err) {
+          db.query(insertTxnSQL,[returnPlanId, txn.type, txn.accountName, txn.payee,txn.dueDate,txn.scheduledDate,txnFloatAmount], function (err) {
             if (err){
               reject(err);
             } else {
@@ -92,8 +95,8 @@ function saveUserPlan(uid, db, plan, txns){
       });
 
       Promise.all(txnPromises).then((planId) => {
-        console.log("All txnPromises resolved for plan: ", planId);
-        resolve (planId);
+        console.log("All txnPromises resolved for plan: ", returnPlanId);
+        resolve (returnPlanId);
       })
       .catch((err) => {
         console.log(err);

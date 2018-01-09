@@ -176,8 +176,8 @@ router.post('/api/saveUserPlan', function(req, res, next) {
     };
 
     if (user) {
-      console.log("req.body in saveUserPlan:", req.body);
-      
+      console.log("req.body.planObject in saveUserPlan:", req.body.planObject);
+
       saveUserPlan(user.uid, connection, req.body.planObject, req.body.transactions).then((planId) => {
         console.log("returning success to client...")
         res.json({success: true, planId: planId});
