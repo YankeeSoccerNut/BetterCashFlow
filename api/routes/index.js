@@ -176,18 +176,18 @@ router.post('/api/saveUserPlan', function(req, res, next) {
     };
 
     if (user) {
-
-      let saveSuccess = saveUserPlan(user.uid, connection, req.body.planObject, req.body.transactions);
-
-      if(saveSuccess) {
+      console.log("req.body in saveUserPlan:", req.body);
+      
+      saveUserPlan(user.uid, connection, req.body.planObject, req.body.transactions).then((planId) => {
         console.log("returning success to client...")
-        res.json({message: "return from saveUserPlan"});
-        return
-      };
-
-      console.log("returning fail to client");
-      res.json({message: "fail in saveUserPlan"});
-      return;
+        res.json({success: true, planId: planId});
+        return;
+      })
+      .catch((err) => {
+        console.log("returning fail to client", err);
+        res.json({success: false, planId: null, message: err});
+        return;
+      });
     } else {
       console.log("returning 401 to client");
       return res.status(401).json({ status: 'error', code: 'unauthorized for requested route' });

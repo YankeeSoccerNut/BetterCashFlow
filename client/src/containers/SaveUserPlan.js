@@ -16,6 +16,7 @@ class SaveUserPlan extends Component {
   handleClick(event) {
 
     console.log("user clicked save: ", event);
+    console.log("this.props in click SaveUserPlan: ", this.props);
     this.props.saveUserPlan(this.props);
 
   }
