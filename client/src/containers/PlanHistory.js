@@ -30,20 +30,15 @@ class PlanHistory extends Component {
     console.log("RENDERING>>>>>>Plan History this.props: ", this.props)
 
     // Don't render if no token....
-    // if (!this.props.auth.userLoggedIn){
-    //   console.log("no render...not logged in")
-    //   return null;
-    // };
-
-    let authMsg = 'Not Authorized';
-    if(this.props.auth.userLoggedIn){
-      authMsg = 'Authorized'
+    if (!this.props.auth.userLoggedIn){
+      console.log("no render...not logged in")
+      this.props.history.push("/");
+      return null;
     };
 
     return(
       <div>
         <h1>Plan History</h1>
-        <p>{authMsg}</p>
       </div>
     );
   };

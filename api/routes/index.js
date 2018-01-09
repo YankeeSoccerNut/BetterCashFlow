@@ -8,6 +8,7 @@ const request = require('request');
 const loadUserFinAccounts = require('../src/loadUserFinAccounts');
 
 const saveUserPlan = require('../src/saveUserPlan');
+const getUserPlans = require('../src/getUserPlans');
 
 const mysql = require('mysql');
 const connection = mysql.createConnection(config.db)
@@ -186,6 +187,40 @@ router.post('/api/saveUserPlan', function(req, res, next) {
       .catch((err) => {
         console.log("returning fail to client", err);
         res.json({success: false, planId: null, message: err});
+        return;
+      });
+    } else {
+      console.log("returning 401 to client");
+      return res.status(401).json({ status: 'error', code: 'unauthorized for requested route' });
+    }
+  })(req, res, next);
+});
+
+
+router.post('/api/getUserPlanHistory', function(req, res, next) {
+  console.log("hit /api/getUserPlanHistory");
+
+  passport.authenticate('jwt', function(err, user, info) {
+
+    console.log("user\n", user);
+    console.log("info\n", info);
+
+    if (err) {
+      console.log(err);
+      res.json({status: 'Error', msg: err});
+      return;
+    };
+
+    if (user) {
+
+      getUserPlans(user.uid, connection).then((planHistory) => {
+        console.log("returning success to client...")
+        res.json({success: true, planHistory: planHistory});
+        return;
+      })
+      .catch((err) => {
+        console.log("returning fail to client", err);
+        res.json({success: false, planHistory: null, message: err});
         return;
       });
     } else {
