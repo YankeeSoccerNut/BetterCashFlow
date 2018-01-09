@@ -47,7 +47,7 @@ render(){
 
             <NavDropdown eventKey={2} title="Planning" id="basic-nav-dropdown">
               <MenuItem eventKey={2.1} onClick={ e => this.props.history.push("/better-cash-flow") }>Dashboard</MenuItem>
-              <MenuItem eventKey={2.2}>Plan History</MenuItem>
+              <MenuItem eventKey={2.2} onClick={ e => this.props.history.push("/plan-history") }>Plan History</MenuItem>
               <MenuItem divider />
               <MenuItem eventKey={3.3} onClick={ e => this.props.history.push("/link-fin-accts") }>Linked Accounts</MenuItem>
             </NavDropdown>

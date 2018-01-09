@@ -2,33 +2,38 @@ import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import getUserPlanHistory from '../actions/getUserPlanHistory';
+import planSelected from '../actions/planSelected';
 
-class LinkFinAccounts extends Component {
+class PlanHistory extends Component {
 
   constructor(props) {
      super(props);
   }
 
   componentWillMount(){
-    console.log("componentWillMount linkFinAccounts auth: ", this.props.auth);
+    console.log("componentWillMount PlanHistory auth: ", this.props.auth);
 
-    // load up the user's financial accounts if there is a token which indicates that use has logged in....
-    if (this.props.auth.token !== ''){
-      this.props.linkFinAccounts(this.props.auth.token);
+    // Don't do anything if the user is not logged in...
+    if (!this.props.auth.userLoggedIn){
+      return(null);
     };
+
+    //otherwise, we can get the user_plans (Plan History)...
+    this.props.getUserPlanHistory();
 
   };
 
 
 
   render() {
-    console.log("RENDERING>>>>>>linkFinAccounts props:")
-    console.log(this.props);
+    console.log("RENDERING>>>>>>Plan History this.props: ", this.props)
 
     // Don't render if no token....
-    if (this.props.auth.token === null){
-      return null;
-    };
+    // if (!this.props.auth.userLoggedIn){
+    //   console.log("no render...not logged in")
+    //   return null;
+    // };
 
     let authMsg = 'Not Authorized';
     if(this.props.auth.userLoggedIn){
@@ -37,7 +42,7 @@ class LinkFinAccounts extends Component {
 
     return(
       <div>
-        <h1>Link User Accounts</h1>
+        <h1>Plan History</h1>
         <p>{authMsg}</p>
       </div>
     );
@@ -53,14 +58,15 @@ function mapStateToProps(state){
   // console.log(state);
   return{
     auth: state.auth,
-    transactions: state.transactions
+    planHistory: state.planHistory
   }
 };
 
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
+    getUserPlanHistory: getUserPlanHistory,
     planSelected: planSelected
   }, dispatch);
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(LinkFinAccounts);
+export default connect(mapStateToProps,mapDispatchToProps)(PlanHistory);
