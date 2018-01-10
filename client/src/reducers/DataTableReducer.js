@@ -29,6 +29,11 @@ export default function(state=null, action){
     } else {
       return(state);
     }
+  case 'GET-PLAN-DETAILS':
+    // console.log(action.payload)
+    newState = action.payload.data.planDetails.planDetails.map(buildTxnObjectFromDB);
+
+    return(newState);
   case 'CELL-EDIT':
     console.log("=============== DataTableReducer CELL-EDIT =================");
 
@@ -87,6 +92,22 @@ function buildTxnObject(txn, index) {
     txnObject.dueDate = moment(txn.dueDate).format('YYYY-MM-DD');
     txnObject.scheduledDate = moment(txn.scheduledDate).format('YYYY-MM-DD');
     txnObject.amount = txn.amount;
+    console.log("txnObject: ", txnObject)
+
+    return(txnObject);
+};
+
+function buildTxnObjectFromDB(txn) {
+
+    let txnObject = {};
+
+    txnObject.id = txn.id;
+    txnObject.type = txn.txn_type;
+    txnObject.accountName = txn.txn_account_name;
+    txnObject.payee = txn.txn_payee;
+    txnObject.dueDate = moment(txn.txn_due_date).format('YYYY-MM-DD');
+    txnObject.scheduledDate = moment(txn.txn_sched_date).format('YYYY-MM-DD');
+    txnObject.amount = txn.txn_amount;
     console.log("txnObject: ", txnObject)
 
     return(txnObject);

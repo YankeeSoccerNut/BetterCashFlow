@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export default function saveUserPlan(props){
-  console.log("planSelected is running...props: ", props);
+export default function planSelected(planId){
+  console.log("planSelected is running...planKey: ", planId);
 
 
   let axiosPromise = null;
@@ -13,7 +13,7 @@ export default function saveUserPlan(props){
   axiosPromise = axios({
     url: `${window.apiHost}/api/getPlanDetails`,
     method: "POST",
-    data: {planObject: props.planObject}
+    data: {planId: planId}
   });
 
   return (

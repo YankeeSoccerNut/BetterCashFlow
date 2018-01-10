@@ -12,6 +12,9 @@ export default function (state=null, action){
       return newState;
     case 'GET-USER-PLAN':
       return state;
+    case 'GET-PLAN-DETAILS':
+      newState = {planId: action.payload.data.planDetails.planId}
+      return newState;
     default:
       return state;
   }

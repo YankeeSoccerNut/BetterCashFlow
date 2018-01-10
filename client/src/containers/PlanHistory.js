@@ -14,10 +14,14 @@ class PlanHistory extends Component {
 
   constructor(props) {
      super(props);
+     this.onRowDoubleClick = this.onRowDoubleClick.bind(this);
   }
 
   onRowDoubleClick(row) {
     console.log("user doubleclicked row: ", row);
+
+    this.props.planSelected(row.id);
+    this.props.history.push("/better-cash-flow");
   };
 
   componentWillMount(){

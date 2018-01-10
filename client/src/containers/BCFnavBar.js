@@ -48,13 +48,14 @@ render(){
             <NavDropdown eventKey={2} title="Planning" id="basic-nav-dropdown">
               <MenuItem eventKey={2.1} onClick={ e => this.props.history.push("/better-cash-flow") }>Dashboard</MenuItem>
               <MenuItem eventKey={2.2} onClick={ e => this.props.history.push("/plan-history") }>Plan History</MenuItem>
-              <MenuItem divider />
-              <MenuItem eventKey={3.3} onClick={ e => this.props.history.push("/link-fin-accts") }>Linked Accounts</MenuItem>
             </NavDropdown>
-            <NavDropdown eventKey={4} title="Welcome" id="user-dropdown" pullRight={true}>
-              <MenuItem eventKey={4.1}>Profile</MenuItem>
-              <MenuItem eventKey={4.2}>Preferences</MenuItem>
-              <MenuItem eventKey={4.3} onClick={ e => this.props.history.push("/logout") }>Logout</MenuItem>
+            <NavDropdown eventKey={4} title="Account" id="user-dropdown" pullRight={true}>
+              <MenuItem eventKey={4.1} onClick={ e => this.props.history.push("/link-fin-accts") }>Link Accounts</MenuItem>
+              <MenuItem divider />
+              <MenuItem eventKey={4.2}>Profile</MenuItem>
+              <MenuItem eventKey={4.3}>Preferences</MenuItem>
+              <MenuItem divider />
+              <MenuItem eventKey={4.4} onClick={ e => this.props.history.push("/logout") }>Logout</MenuItem>
             </NavDropdown>
             <Navbar.Text>
               <FinSummary endCash={endingCash.toFixed(2)} endCredit={endingCredit.toFixed(2)} />

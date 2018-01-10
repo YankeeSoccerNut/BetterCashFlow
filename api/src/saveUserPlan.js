@@ -22,12 +22,25 @@ function saveUserPlan(uid, db, plan, txns){
 
     let planPromises = [];
     let returnPlanId = null;
+    let cashUsed = 0;
+    let creditUsed = 0;
+
+    for (let i = 0; i < txns.length; i++) {
+      if(txns[i].accountName === 'CASH')
+        cashUsed += txns[i].amount
+      else {
+        creditUsed += txns[i].amount
+      };
+    };
+
+    console.log("cashUsed: ", cashUsed);
+    console.log("creditUsed: ", creditUsed);
 
     if(plan.planId === null){
       planPromises.push(new Promise (function(resolve, reject) {
         const insertPlanSQL = `INSERT into user_plans (uid, status_cd, user_plan_name, cash_available, credit_available, num_txns, cash_used, credit_used) VALUES (?,?,?,?,?,?,?,?);`;
 
-        db.query(insertPlanSQL,[uid, 0, "test", 0,0,txns.length, 0, 0], function (err, result) {
+        db.query(insertPlanSQL,[uid, 0, "test", 0,0,txns.length, cashUsed, creditUsed], function (err, result) {
           if (err){
             reject(err);
           } else {
@@ -56,9 +69,9 @@ function saveUserPlan(uid, db, plan, txns){
       })); // delete promise
 
       planPromises.push(new Promise (function(resolve, reject) {
-        const updatePlanSQL = `UPDATE user_plans SET status_cd = ?, user_plan_name = ?, cash_available = ?, credit_available = ?, num_txns = ? WHERE id = ? AND uid = ?;`;
+        const updatePlanSQL = `UPDATE user_plans SET status_cd = ?, user_plan_name = ?, cash_available = ?, credit_available = ?, num_txns = ?, cash_used = ?, credit_used = ?  WHERE id = ? AND uid = ?;`;
 
-        db.query(updatePlanSQL,[0, "updated name", 0,0,txns.length, plan.planId, uid], function (err, result) {
+        db.query(updatePlanSQL,[0, "updated name", 0,0,txns.length, cashUsed, creditUsed, plan.planId, uid], function (err, result) {
           if (err){
             reject(err);
           } else {
