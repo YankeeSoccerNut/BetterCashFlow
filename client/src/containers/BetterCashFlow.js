@@ -36,9 +36,9 @@ class BetterCashFlow extends Component{
         <div>
           <DataChartView />
         </div>
-        <div className="row">
-          <ImportCSV />
+        <div className="col-sm-12">
           <SaveUserPlan />
+          <ImportCSV />
         </div>
         <div>
           <DataTableView />

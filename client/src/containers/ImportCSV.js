@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import importTransactions from '../actions/importTransactions';
 
+
 import Papa from 'papaparse';
 
 class ImportCSV extends Component {
@@ -15,6 +16,15 @@ class ImportCSV extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleParseResults = this.handleParseResults.bind(this);
     this.handleParseError = this.handleParseError.bind(this);
+
+
+  }
+
+  handleClick(event) {
+
+    console.log("user clicked save: ", event);
+    console.log("this.props in click SaveUserPlan: ", this.props);
+    // this.props.saveUserPlan(this.props);
 
   }
 
@@ -67,7 +77,6 @@ class ImportCSV extends Component {
     console.log("ImportCSV: ################ ");
 
     return (
-      <div className="container">
       <form className="form-horizontal" id="importcsv"
         onSubmit={this.handleSubmit}>
           <input
@@ -79,7 +88,6 @@ class ImportCSV extends Component {
           <button id="btnimport" type="submit" className="btn btn-danger btn-sm"> <span><i className="fa glyphicon glyphicon-import fa-import"></i> Import</span>
           </button>
       </form>
-      </div>
     );
   }
 }

@@ -10,6 +10,7 @@ import DataTableReducer from './DataTableReducer';
 import AnalyzerReducer from './AnalyzerReducer';
 import AuthReducer from './AuthReducer';
 import PlanReducer from './PlanReducer';
+import PlanHistoryReducer from './PlanHistoryReducer';
 
 
 // Build the rootReducer using the combineReducer function...1 arg {}
@@ -20,7 +21,8 @@ const rootReducer = combineReducers(
   observations: AnalyzerReducer,
   transactions: DataTableReducer,
   auth: AuthReducer,
-  planObject: PlanReducer}
+  planObject: PlanReducer,
+  planHistory: PlanHistoryReducer}
 );
 
 export default rootReducer;

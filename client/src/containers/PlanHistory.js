@@ -2,6 +2,11 @@ import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+// react-bootstrap-table...
+import {BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
+import moment from 'moment';
+
 import getUserPlanHistory from '../actions/getUserPlanHistory';
 import planSelected from '../actions/planSelected';
 
@@ -10,6 +15,10 @@ class PlanHistory extends Component {
   constructor(props) {
      super(props);
   }
+
+  onRowDoubleClick(row) {
+    console.log("user doubleclicked row: ", row);
+  };
 
   componentWillMount(){
     console.log("componentWillMount PlanHistory auth: ", this.props.auth);
@@ -21,10 +30,22 @@ class PlanHistory extends Component {
 
     //otherwise, we can get the user_plans (Plan History)...
     this.props.getUserPlanHistory();
+  };
+
+
+  componentWillReceiveProps(nextProps){
+
+    console.log("PlanHistory componentWillReceiveProps", nextProps);
 
   };
 
 
+  remote(remoteObj) {
+    remoteObj.cellEdit = false;
+    remoteObj.insertRow = false;
+    remoteObj.dropRow = true;
+    return(remoteObj);
+  };
 
   render() {
     console.log("RENDERING>>>>>>Plan History this.props: ", this.props)
@@ -36,9 +57,45 @@ class PlanHistory extends Component {
       return null;
     };
 
+    if (this.props.planHistory === null){
+      return null;
+    }
+
+    const selectRow = {
+      mode: 'checkbox',
+      bgColor: function(row, isSelect) {
+        return 'pink'
+      },
+      clickToSelect: false
+    };
+
+    const options={
+      onRowDoubleClick: this.onRowDoubleClick,
+      clearSearch: true,
+      deleteText: 'Delete Selected',
+      saveText: 'my_save',
+      closeText: 'my_close'
+  };
+
     return(
-      <div>
+      <div className="container">
+        <div className="col-sm-12">
         <h1>Plan History</h1>
+        <div id="plan-history-table" className="col-sm-12">
+          <BootstrapTable data={this.props.planHistory.planHistory} search={ true } options={ options }
+            selectRow={ selectRow }
+                  remote={ this.remote }
+                  insertRow={ false } deleteRow={ true }>
+          <TableHeaderColumn dataField='id' hidden={true} isKey={true} autoValue={false}>ID</TableHeaderColumn>
+          <TableHeaderColumn dataField='user_plan_name'>Plan Name</TableHeaderColumn>
+          <TableHeaderColumn dataField='num_txns' >Txn Count</TableHeaderColumn>
+          <TableHeaderColumn className='bcf-cash' dataField='cash_used' dataFormat={cashFormatter}>Cash Used</TableHeaderColumn>
+          <TableHeaderColumn className = 'bcf-credit' dataField='credit_used' dataFormat={creditFormatter}>Credit Used</TableHeaderColumn>
+          <TableHeaderColumn dataField='updated' className="text-right" dataFormat={dateFormatter}>Last Update</TableHeaderColumn>
+          <TableHeaderColumn dataField='created' dataFormat={dateFormatter} hidden={true}>Created</TableHeaderColumn>
+          </BootstrapTable>
+        </div>
+        </div>
       </div>
     );
   };
@@ -62,6 +119,36 @@ function mapDispatchToProps(dispatch){
     getUserPlanHistory: getUserPlanHistory,
     planSelected: planSelected
   }, dispatch);
+};
+
+function cashFormatter(cell) {
+
+    return (
+      <span className='bcf-cash'>{cell}</span>
+    );
+}
+
+function creditFormatter(cell) {
+
+    return (
+      <span className='bcf-credit'>{cell}</span>
+    );
+}
+
+
+function dateFormatter(cell) {
+
+  if (cell === null){
+    return (
+      <span></span>
+    )
+  };
+
+  let formattedDate = moment(cell).format("YYYY-MM-DD hh:mm:ss");
+
+  return (
+    <span>{formattedDate}</span>
+  );
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(PlanHistory);
