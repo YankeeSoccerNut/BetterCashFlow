@@ -17,17 +17,30 @@ class SaveUserPlan extends Component {
 
     console.log("user clicked save: ", event);
     console.log("this.props in click SaveUserPlan: ", this.props);
+
+    if (this.props.transactions === null || this.props.transactions.length <= 0){
+      return;
+    };
+
     this.props.saveUserPlan(this.props);
 
   }
 
   render() {
 
-    console.log("SaveUserPlan: ################ ");
+    console.log("Rendering....SaveUserPlan: ################ ");
+
+    let saveBtnState = '';
+
+    if (this.props.transactions === null || this.props.transactions.length <= 0){
+      saveBtnState = 'disabled';
+    } else {
+      saveBtnState = 'active';
+    };
 
     return (
       <button type='button' id="btnsave" onClick={ this.handleClick }
-        className={ "btn btn-primary btn-sm" }><span><i className="fa glyphicon glyphicon-floppy-disk fa-floppy-disk"></i></span>
+        className={ `btn btn-primary btn-sm ${saveBtnState}` }><span><i className="fa glyphicon glyphicon-floppy-disk fa-floppy-disk"></i></span>
         Save Plan
       </button>
     );

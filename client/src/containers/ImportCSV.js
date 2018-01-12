@@ -13,23 +13,26 @@ class ImportCSV extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {fileSelected: false};
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChooseFile = this.handleChooseFile.bind(this);
     this.handleParseResults = this.handleParseResults.bind(this);
     this.handleParseError = this.handleParseError.bind(this);
-
-
   }
 
-  handleClick(event) {
+  handleChooseFile(e){
 
-    console.log("user clicked save: ", event);
-    console.log("this.props in click SaveUserPlan: ", this.props);
-    // this.props.saveUserPlan(this.props);
-
-  }
+    if (e.target.value.length > 0){
+      console.log("file selected: ", e.target.value);
+      this.setState({fileSelected: true});
+    } else {
+      this.setState({fileSelected: false});
+    };
+  };
 
   handleParseResults(results, file){
     console.log("Parsing complete:", results, file);
+
     this.props.importTransactions(results.data);
   };
 
@@ -42,6 +45,10 @@ class ImportCSV extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+
+    if(!this.state.fileSelected){
+      return;
+    };
 
     const parserObject = {
       delimiter: "",  // auto-detect
@@ -76,16 +83,24 @@ class ImportCSV extends Component {
 
     console.log("ImportCSV: ################ ");
 
+    let importBtnState = 'disabled';
+
+    if (this.state.fileSelected){
+      importBtnState = 'active';
+    };
+
+    let jsxImportBtnClassName = `btn btn-danger btn-sm ${importBtnState}`;
+
     return (
       <form className="form-horizontal" id="importcsv"
-        onSubmit={this.handleSubmit}>
+        onChange={this.handleChooseFile} onSubmit={this.handleSubmit}>
           <input
             type="file"
             ref={input => {
               this.fileInput = input;
             }}>
           </input>
-          <button id="btnimport" type="submit" className="btn btn-danger btn-sm"> <span><i className="fa glyphicon glyphicon-import fa-import"></i> Import</span>
+          <button id="btnimport" type="submit" className={jsxImportBtnClassName}><span><i className="fa glyphicon glyphicon-import fa-import"></i> Import</span>
           </button>
       </form>
     );
