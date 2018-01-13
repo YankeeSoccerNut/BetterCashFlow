@@ -36,7 +36,6 @@ hr {
   margin-left: 20px;
 }
 
-
 /* .analyzer-container {
   position: relative;
 }
@@ -104,4 +103,11 @@ input[type=file] {
 
 .glyphicon-floppy-disk {
   margin-right: 5px;
+}
+
+.modal-container {
+  position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
 }
