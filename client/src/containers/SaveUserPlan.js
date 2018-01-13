@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // react-bootstrap
-import { Button, Modal, Form, FormGroup, FormControl, ControlLabel, Label, Checkbox } from 'react-bootstrap';
+import { Button, Modal, InputGroup, Form, FormGroup, FormControl, ControlLabel, Label, Checkbox } from 'react-bootstrap';
 
 import saveUserPlan from '../actions/saveUserPlan';
 
@@ -12,38 +12,41 @@ class SaveUserPlan extends Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    this.handleUserChoice = this.handleUserChoice.bind(this);
+    this.handleUserSave = this.handleUserSave.bind(this);
+    this.handleUserCancel = this.handleUserCancel.bind(this);
 
     this.state = {
       hasOpenModal: false
     };
   }
 
-  handleClick(event) {
+  handleClick(e) {
 
-    console.log("user clicked save: ", event);
-    console.log("this.props in click SaveUserPlan: ", this.props);
-
+    // All we want to do is open the modal that captures the Plan Name and Comments.....
     this.setState({hasOpenModal: true});
-
-    //put together async request...promise?  .then would capture modal inputs and then initiate the save.
-
-    // This probably where you would have an `ajax` call
-    // setTimeout(() => {
-    //   // Completed of async action, set loading state back
-    //   this.setState({ isLoading: false });
-    // }, 2000);
-
   }
 
-  handleUserChoice(event) {
+  handleUserSave(e) {
 
-    console.log("user clicked save: ", event.target);
-    console.log("this.props in click handleUserChoice: ", this.props);
+    e.preventDefault();
+
+    console.log("user clicked save: ", e.target);
+
+    let formData = {planName: e.target[0].value,
+                    planComments: e.target[1].value,
+                    planUpdateExisting: e.target[2].checked};
+
+    console.log("formData: ", formData);
+
     this.setState({hasOpenModal: false});
 
-    // this.props.saveUserPlan(this.props);  //if save!
+    this.props.saveUserPlan(this.props, formData);
+  }
 
+  handleUserCancel(e) {
+
+    console.log("user clicked cancel: ", e.target);
+    this.setState({hasOpenModal: false});
   }
 
 
@@ -69,14 +72,14 @@ class SaveUserPlan extends Component {
         <div className="modal-container">
           <Modal
             show={this.state.hasOpenModal}
-            onHide={this.handleUserChoice}
             container={this}
-            aria-lablelledby="contained-modal-container">
+            aria-labelledby="contained-modal-container">
             <Modal.Header>
               <Modal.Title id="contained-modal-title">Please enter Plan Name.  Comments are optional.</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form inline>
+              <InputGroup>
+              <Form inline onSubmit={this.handleUserSave}>
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>Plan Name:</ControlLabel>{' '}
                   <FormControl required type="text" placeholder="Plan Name" />
@@ -88,11 +91,12 @@ class SaveUserPlan extends Component {
                 <FormGroup controlId="new-version">
                   <Checkbox defaultChecked inline>Replace existing?</Checkbox>{' '}
                 </FormGroup>
+                <Button id="btn-save-plan" bsStyle="success" type="submit">Save Plan</Button>
               </Form>
+            </InputGroup>
             </Modal.Body>
             <Modal.Footer>
-              <Button id="btn-save-plan" bsStyle="success" type="submit" onClick={this.handleUserChoice}>Save Plan</Button>
-              <Button id="btn-cancel" bsStyle="danger" type="submit" onClick={this.handleUserChoice}>Cancel</Button>
+              <Button id="btn-cancel" bsStyle="danger" type="submit" onClick={this.handleUserCancel}>Cancel</Button>
             </Modal.Footer>
           </Modal>
         </div>

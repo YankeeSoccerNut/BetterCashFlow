@@ -26,21 +26,22 @@ function saveUserPlan(uid, db, plan, txns){
     let creditUsed = 0;
 
     for (let i = 0; i < txns.length; i++) {
+      console.log(txns[i].accountName, txns[i].amount);
       if(txns[i].accountName === 'CASH')
-        cashUsed += txns[i].amount
+        cashUsed += parseFloat(txns[i].amount);
       else {
-        creditUsed += txns[i].amount
+        creditUsed += parseFloat(txns[i].amount);
       };
     };
 
     console.log("cashUsed: ", cashUsed);
     console.log("creditUsed: ", creditUsed);
 
-    if(plan.planId === null){
+    if(plan.planId === null || !plan.planUpdateExisting){   // user wants insert
       planPromises.push(new Promise (function(resolve, reject) {
-        const insertPlanSQL = `INSERT into user_plans (uid, status_cd, user_plan_name, cash_available, credit_available, num_txns, cash_used, credit_used) VALUES (?,?,?,?,?,?,?,?);`;
+        const insertPlanSQL = `INSERT into user_plans (uid, status_cd, user_plan_name, cash_available, credit_available, num_txns, cash_used, credit_used, comments) VALUES (?,?,?,?,?,?,?,?,?);`;
 
-        db.query(insertPlanSQL,[uid, 0, "test", 0,0,txns.length, cashUsed, creditUsed], function (err, result) {
+        db.query(insertPlanSQL,[uid, 0, plan.planName, 0,0,txns.length, cashUsed, creditUsed, plan.planComments], function (err, result) {
           if (err){
             reject(err);
           } else {
@@ -69,9 +70,9 @@ function saveUserPlan(uid, db, plan, txns){
       })); // delete promise
 
       planPromises.push(new Promise (function(resolve, reject) {
-        const updatePlanSQL = `UPDATE user_plans SET status_cd = ?, user_plan_name = ?, cash_available = ?, credit_available = ?, num_txns = ?, cash_used = ?, credit_used = ?  WHERE id = ? AND uid = ?;`;
+        const updatePlanSQL = `UPDATE user_plans SET status_cd = ?, user_plan_name = ?, cash_available = ?, credit_available = ?, num_txns = ?, cash_used = ?, credit_used = ?, comments = ?  WHERE id = ? AND uid = ?;`;
 
-        db.query(updatePlanSQL,[0, "updated name", 0,0,txns.length, cashUsed, creditUsed, plan.planId, uid], function (err, result) {
+        db.query(updatePlanSQL,[0, plan.planName, 0,0,txns.length, cashUsed, creditUsed, plan.planComments, plan.planId, uid], function (err, result) {
           if (err){
             reject(err);
           } else {

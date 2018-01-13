@@ -1,17 +1,21 @@
 import axios from 'axios';
 
-export default function saveUserPlan(props){
+export default function saveUserPlan(props, formData){
   console.log("saveUserPlan is running...props: ", props);
 
+  console.log("formData: ", formData);
 
   let axiosPromise = null;
-  let planObject = {planId: null};
+  let planObject = {planId: null,
+                    planName:  formData.planName,
+                    planComments: formData.planComments,
+                    planUpdateExisting:  formData.planUpdateExisting};
 
   let authToken = localStorage.getItem('bcfJWT');
 
 // TODO: replace this workaround to bug on 1st save click after initial page load....
   if (props.planObject !== null) {
-    planObject = {...props.planObject};
+    planObject.planId = props.planObject.planId;
   };
 
   axios.defaults.headers.common['Authorization'] = authToken;
