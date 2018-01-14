@@ -30,7 +30,7 @@ export default function(state=null, action){
       return(state);
     }
   case 'GET-PLAN-DETAILS':
-    // console.log(action.payload)
+    console.log(action.payload)
     newState = action.payload.data.planDetails.planDetails.map(buildTxnObjectFromDB);
 
     return(newState);

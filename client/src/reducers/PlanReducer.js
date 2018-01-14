@@ -7,13 +7,20 @@ export default function (state=null, action){
 
   switch (action.type) {
     case 'SAVE-USER-PLAN':
-      newState = {planId: action.payload.data.planId};
+      newState = {planId: action.payload.data.planId.planId,
+      planSummary: {
+        user_plan_name: action.payload.data.planId.planName,
+        comments:  action.payload.data.planId.planName
+        }
+      };
       console.log("newState from PlanReducer: ", newState);
       return newState;
     case 'GET-USER-PLAN':
       return state;
     case 'GET-PLAN-DETAILS':
-      newState = {planId: action.payload.data.planDetails.planId}
+      newState = {planId: action.payload.data.planDetails.planId,
+      planSummary: action.payload.data.planDetails.planSummary[0]}
+      console.log("newState GET-PLAN-DETAILS: ", newState);
       return newState;
     default:
       return state;

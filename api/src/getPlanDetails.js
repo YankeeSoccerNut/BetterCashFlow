@@ -4,24 +4,40 @@
 function getPlanDetails(planId, db){
 
   console.log("getPlanDetails for: ", planId);
-  // we're returning a promise to get the plan history...
+  // we're returning a promise to get the plan history...and summary plan information
 
-  let planDetailsPromise = new Promise(function(resolve, reject) {
+  let dbPromise = new Promise(function(resolve, reject) {
 
     const selectPlanSQL = `SELECT * FROM plan_details WHERE plan_id = ?;`;
 
-    db.query(selectPlanSQL,[planId], function (err, results) {
-      if (err){
-        reject(err);
-      } else {
-        console.log("Plan details retrieved\n:", results);
-        resolve({planId: planId,
-                planDetails: results});
-      };
-    }); // select query
-  }); // planPromise
+    let planPromise = new Promise(function(resolve, reject) {
+      db.query(selectPlanSQL,[planId], function (err, results) {
+        if (err){
+          reject(err);
+        } else {
+          console.log("Plan details retrieved\n:", results);
+          resolve({planId: planId,
+                  planDetails: results});
+        };
+      });
+    });
 
-  return planDetailsPromise;
-};
+    planPromise.then((planObject) => {
+        const selectPlanSQL = `SELECT * FROM user_plans WHERE id = ?;`;
+
+        db.query(selectPlanSQL,[planObject.planId], function (err, results) {
+          if (err){
+            reject(err);
+          } else {
+            planObject.planSummary = results;
+            console.log("resolve(planObject): ",planObject);
+            resolve(planObject);
+          };
+        }); // select query
+      }); // dbPromise
+    });
+    return(dbPromise);
+  };
+
 
 module.exports = getPlanDetails;

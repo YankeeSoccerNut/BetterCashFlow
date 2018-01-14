@@ -109,8 +109,8 @@ function saveUserPlan(uid, db, plan, txns){
       });
 
       Promise.all(txnPromises).then((planId) => {
-        console.log("All txnPromises resolved for plan: ", returnPlanId);
-        resolve (returnPlanId);
+        console.log("All txnPromises resolved for plan: ", plan);
+        resolve (plan);
       })
       .catch((err) => {
         console.log(err);

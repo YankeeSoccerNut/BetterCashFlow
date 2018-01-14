@@ -54,6 +54,8 @@ class SaveUserPlan extends Component {
 
     console.log("Rendering....SaveUserPlan: ################ ");
 
+    console.log("SaveUserPlan props: ", this.props);
+
     let saveBtnState = '';
     let isActive = false;
 
@@ -82,7 +84,7 @@ class SaveUserPlan extends Component {
               <Form inline onSubmit={this.handleUserSave}>
                 <FormGroup controlId="formInlineName">
                   <ControlLabel>Plan Name:</ControlLabel>{' '}
-                  <FormControl required type="text" placeholder="Plan Name" />
+                  <FormControl required type="text" placeholder="Plan Name" defaultValue={this.props.planObject ? this.props.planObject.planSummary.user_plan_name : ''} />
                 </FormGroup>{' '}
                 <FormGroup controlId="formInlineComments">
                   <ControlLabel>Comments:</ControlLabel>{' '}
