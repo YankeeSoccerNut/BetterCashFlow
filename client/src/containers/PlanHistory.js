@@ -9,6 +9,7 @@ import moment from 'moment';
 
 import getUserPlanHistory from '../actions/getUserPlanHistory';
 import planSelected from '../actions/planSelected';
+import deletePlanHistory from '../actions/deletePlanHistory';
 
 class PlanHistory extends Component {
 
@@ -75,6 +76,7 @@ class PlanHistory extends Component {
 
     const options={
       onRowDoubleClick: this.onRowDoubleClick,
+      onDeleteRow: this.props.deletePlanHistory,
       clearSearch: true,
       deleteText: 'Delete Selected',
       saveText: 'my_save',
@@ -121,7 +123,8 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return bindActionCreators({
     getUserPlanHistory: getUserPlanHistory,
-    planSelected: planSelected
+    planSelected: planSelected,
+    deletePlanHistory: deletePlanHistory
   }, dispatch);
 };
 
