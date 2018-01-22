@@ -58,8 +58,8 @@ passport.use('local', new LocalStrategy({
           return done({token: '', status: err});
         }
 
-        if(!rows.length){
-          console.log("Invalid username or password.")
+        if (rows.length === 0) {
+          console.log("Didn't find user/password on db")
           return done(null, false, {token: '', status: 'Invalid username or password.'});
         };
 
@@ -70,7 +70,7 @@ passport.use('local', new LocalStrategy({
             return done(null, false, {token: '', status: 'Invalid username or password.'});
          };
 
-        return done(null, rows[0]);
+        return done(null, true, rows[0]);
       });
 
   })); // passport.use('local'....
@@ -83,17 +83,6 @@ passport.use('local', new LocalStrategy({
     console.log("First line in JwtStrategy.......");
     console.log("jwtPayload: ", jwtPayload);
     return done(null, jwtPayload);
-    // User.findOne({id: jwt_payload.sub}, function(err, user) {
-    //     if (err) {
-    //         return done(err, false);
-    //     }
-    //     if (user) {
-    //         return done(null, user);
-    //     } else {
-    //         return done(null, false);
-    //         // or you could create a new account
-    //     }
-    // });
   }));
 
 // Allow cross-origin.....

@@ -101,17 +101,23 @@ router.post('/api/register',(req, res) => {
 router.post('/api/login', function(req, res, next) {
   console.log("hit /api/login");
   passport.authenticate('local', function(err, user, info) {
+    console.log("user info", user, info);
 
     if(err){
       res.json({token: '', status: err});
       return;
     };
 
-    console.log("authenticated user: ")
+    if(!user){
+      res.json({token: '', status: info})
+      return;
+    };
 
-    req.login(user.id, function(err) {
+    console.log("authenticated user: ", info.id);
 
-      const token = jwt.sign({ uid: user.id }, mySecret, {expiresIn: "1d"})
+    req.login(info.id, function(err) {
+
+      const token = jwt.sign({ uid: info.id }, mySecret, {expiresIn: "1d"})
       console.log("token: ", token);
 
       console.log("req.session.passport", req.session.passport);
