@@ -32,14 +32,60 @@ class ImportCSV extends Component {
 
   handleParseResults(results, file){
     console.log("Parsing complete:", results, file);
+    let matchCount = 0;
+    //confirm that the source file has 1 and only 1 of the required named columns.  If not, then alert and abort the import...
+
+    const requiredColumns = ["type", "dueDate", "accountName", "payee", "amount", "scheduledDate"];
+
+    if (results.meta.fields.length < requiredColumns.length) {
+      alert(
+        `Parser error on selected file - ${file.name} \n Error: insufficient columns.  Required columns are: ${requiredColumns}`
+      );
+
+      return(null);
+    };
+
+    //have a few choices here....I decided to loop through the requiredColumns array and alert for every missing column versus breaking out on first error...
+    
+    requiredColumns.forEach((column) => {
+
+      let matchIndex = results.meta.fields.indexOf(column);
+
+      if (matchIndex >= 0){
+        matchCount += 1;
+      } else {
+        alert(
+          `Parser error on selected file - ${file.name} \n Error: Missing required column ${column}.  Required columns are: ${requiredColumns}`
+        );
+        return(null);
+      };
+
+      if (matchIndex < results.meta.fields.length) {
+        let startIndex = matchIndex + 1;
+        matchIndex = results.meta.fields.indexOf(column, startIndex);
+        if (matchIndex >= startIndex) {
+          alert(
+            `Parser error on selected file - ${file.name} \n Error: duplicate column name ${column}.  Required columns are: ${requiredColumns}`
+          );
+          return(null);
+        };
+      };
+    });
+
+    if (matchCount !== requiredColumns.length) {
+      alert(
+        `Parser error on selected file - ${file.name} \n Only matched ${matchCount} columns. Required columns are: ${requiredColumns}`
+      );
+      return(null);
+    };
 
     this.props.importTransactions(results.data);
   };
 
   handleParseError(error, file){
-    console.log("Parse error:", error, file);
+    console.log("Parse error:", error, file.name);
     alert(
-      `Parser error on selected file - ${file} \n Error: ${error}`
+      `Parser error on selected file - ${file.name} \n Error: ${error}`
     );
   };
 
