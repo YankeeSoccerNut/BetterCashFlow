@@ -17,6 +17,7 @@ I developed Better Cash Flow as a tool to reinforce React/Redux skills acquired 
 - [Redux](https://reduxjs.org)
 - [React-Bootstrap](https://react-bootstrap.github.io/)
 - [MySQL](https://mysql.com)
+- [react-timeseries-charts](http://software.es.net/react-timeseries-charts/)
 
 ## Features
 * Simple, Fast UI:  the data table has the familiar look and feel of a spreadsheet
@@ -31,3 +32,5 @@ I developed Better Cash Flow as a tool to reinforce React/Redux skills acquired 
 - [Neil Zhang](https://www.linkedin.com/in/chufengzhang/) - our other designer.  Your storyboard "slideware" and clean aesthetic were inspirational.
 
 <b>A big thank you to [Allen Fang](https://github.com/AllenFang)<b>! Allen's bootstrap-react-table is at the core of this application.
+
+<b>And thanks to the folks at [ESnet](http://www.es.net) for making [react-timeseries-charts](http://software.es.net/react-timeseries-charts/).  They helped make the responsive stacked-bar possible.
