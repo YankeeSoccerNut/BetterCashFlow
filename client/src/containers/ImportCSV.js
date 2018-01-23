@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 
 // react-bootstrap-table...
 
@@ -38,15 +39,18 @@ class ImportCSV extends Component {
     const requiredColumns = ["type", "dueDate", "accountName", "payee", "amount", "scheduledDate"];
 
     if (results.meta.fields.length < requiredColumns.length) {
-      alert(
-        `Parser error on selected file - ${file.name} \n Error: insufficient columns.  Required columns are: ${requiredColumns}`
-      );
+
+      Alert.error(`Parser error on selected file - ${file.name} \n Error: insufficient columns.  Required columns are: ${requiredColumns}`, {effect: 'stackslide', stack:{limit:3}, position:'top-right', offset: 150, timeout: 5000});
+
+      // alert(
+      //   `Parser error on selected file - ${file.name} \n Error: insufficient columns.  Required columns are: ${requiredColumns}`
+      // );
 
       return(null);
     };
 
     //have a few choices here....I decided to loop through the requiredColumns array and alert for every missing column versus breaking out on first error...
-    
+
     requiredColumns.forEach((column) => {
 
       let matchIndex = results.meta.fields.indexOf(column);
@@ -54,9 +58,12 @@ class ImportCSV extends Component {
       if (matchIndex >= 0){
         matchCount += 1;
       } else {
-        alert(
-          `Parser error on selected file - ${file.name} \n Error: Missing required column ${column}.  Required columns are: ${requiredColumns}`
-        );
+        Alert.error(`Parser error on selected file - ${file.name} \n Error: Missing required column ${column}.`, {effect: 'stackslide', stack:{limit:3}, position:'top-right', offset: 150, timeout: 5000});
+
+        // alert(
+        //   `Parser error on selected file - ${file.name} \n Error: Missing required column ${column}.  Required columns are: ${requiredColumns}`
+        // );
+
         return(null);
       };
 
@@ -64,18 +71,22 @@ class ImportCSV extends Component {
         let startIndex = matchIndex + 1;
         matchIndex = results.meta.fields.indexOf(column, startIndex);
         if (matchIndex >= startIndex) {
-          alert(
-            `Parser error on selected file - ${file.name} \n Error: duplicate column name ${column}.  Required columns are: ${requiredColumns}`
-          );
+          Alert.error(`Parser error on selected file - ${file.name} \n Error: duplicate column name ${column}.`, {effect: 'stackslide', stack:{limit:3}, position:'top-right', offset: 150, timeout: 5000});
+
+          // alert(
+          //   `Parser error on selected file - ${file.name} \n Error: duplicate column name ${column}.  Required columns are: ${requiredColumns}`
+          // );
           return(null);
         };
       };
     });
 
     if (matchCount !== requiredColumns.length) {
-      alert(
-        `Parser error on selected file - ${file.name} \n Only matched ${matchCount} columns. Required columns are: ${requiredColumns}`
-      );
+      Alert.error(`Parser error on selected file - ${file.name} \n Matched ${matchCount} of ${requiredColumns.length} required columns. Required columns are: \n ${requiredColumns}.`, {effect: 'stackslide', stack:{limit:3}, position:'top-right', offset: 150, timeout: 'none'});
+
+      // alert(
+      //   `Parser error on selected file - ${file.name} \n Only matched ${matchCount} of ${requiredColumns.length}. Required columns are: ${requiredColumns}.`
+      // );
       return(null);
     };
 
@@ -84,8 +95,8 @@ class ImportCSV extends Component {
 
   handleParseError(error, file){
     console.log("Parse error:", error, file.name);
-    alert(
-      `Parser error on selected file - ${file.name} \n Error: ${error}`
+    Alert.error(
+      `Parser error on selected file - ${file.name} \n Error: ${error}`, {effect: 'stackslide', stack:{limit:3}, position:'top-right', offset: 150, timeout: 5000}
     );
   };
 

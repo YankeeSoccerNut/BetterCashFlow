@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import loginAction from '../actions/loginAction';
 
-import ImportCSV from './ImportCSV';
+import Alert from 'react-s-alert';
 
 class Login extends Component {
 
@@ -58,6 +58,9 @@ componentWillReceiveProps(newProps){
 
   if(newProps.auth.token === ''){
     this.setState({error: newProps.auth.status});
+
+    Alert.error(`Login failed.\n Error: ${newProps.auth.status.status}`, {effect: 'stackslide', stack:{limit:3}, position:'top', offset: 100, timeout: 2000});
+
   } else {
     let bcfJWT = 'JWT ' + newProps.auth.token;
 
@@ -113,6 +116,7 @@ render(){
             </Col>
           </FormGroup>
         </Form>
+        <Alert />
       </div>
     )
   }
