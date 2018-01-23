@@ -8,7 +8,7 @@ I chose this application as my final, full-stack project at DigitalCrafts becaus
 I developed Better Cash Flow as a tool to reinforce React/Redux skills acquired in my coding bootcamp experience and to meet the final project requirements.  I intend to expand it further by integrating a financial services aggregator (Yodlee?) to replace the 'dead' code tied to USBank and Visa (hackathon sponsors).
 
 ## Screenshots
-![BetterCashFlow Logo](/client/public/images/cashflow-logo.png  =100x100)
+![BetterCashFlow Logo](/client/public/images/BCFScreenshot.png)
 
 ## Tech/framework used
 
