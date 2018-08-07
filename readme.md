@@ -11,7 +11,7 @@ I developed Better Cash Flow as a tool to reinforce React/Redux skills acquired 
 ![BetterCashFlow Logo](/client/public/images/BCFScreenshot.png)
 
 ## See it in action on YouTube
-[![BetterCashFlow](http://img.youtube.com/vi/YMWlJcrNcJJw/0.jpg)](http://www.youtube.com/watch?v=MWlJcrNcJJw "Better Cash Flow Demo")
+[![BetterCashFlow](http://img.youtube.com/vi/MWlJcrNcJJw/0.jpg)](http://www.youtube.com/watch?v=MWlJcrNcJJw "Better Cash Flow Demo")
 
 ## Tech/framework used
 
